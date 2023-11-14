@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useLogin } from '@/lib/mutations/users'
+import { useLogin, useGetMe } from '@/lib/mutations/users'
 import {
 	Form,
 	FormControl,
@@ -28,14 +28,16 @@ export const SignInForm = () => {
 		},
 	})
 
+	const getMe = useGetMe()
 	const login = useLogin()
 
 	const onSubmit = async (values: IFormSchema) => {
 		await login.mutateAsync(values)
+		getMe.refetch()
 	}
 
 	if (login.data?.status === 200) {
-		router.push('/')
+		// router.push('/')
 	}
 
 	return (

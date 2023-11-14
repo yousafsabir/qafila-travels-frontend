@@ -1,7 +1,11 @@
 import { http } from '@/lib/config'
 import { apiUrls } from '@/lib/apis'
-import { UserLogin, UserInResponse } from '@/lib/interfaces/users'
+import { UserLogin, LoginResponse, GetUserResponse } from '@/lib/interfaces/users'
 
 export function userLogin(data: UserLogin) {
-	return http.post<UserInResponse>(apiUrls.users.login, data)
+	return http.post<LoginResponse>(apiUrls.users.login, data)
+}
+
+export function getMe() {
+	return http.get<GetUserResponse>(apiUrls.users.me)
 }

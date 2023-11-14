@@ -1,26 +1,28 @@
 import ky from 'ky'
+import axios from 'axios'
 
 import { env } from './env'
 import { HttpError } from '@/lib/interfaces'
 
-export const httpClient = ky.create({
-	prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api`
+// export const httpClient = ky.create({
+// 	prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api`
+// })
+export const httpClient = axios.create({
+	baseURL: `${env.NEXT_PUBLIC_API_URL}/api`,
 })
 
 class Http {
 	constructor() {}
 
-	private send<T>(
+	private async send<T>(
 		type: 'get' | 'post' | 'put' | 'patch' | 'delete',
 		url: string,
 		data?: any | undefined,
 	): Promise<T & HttpError> {
 		if (['get', 'delete'].includes(type)) {
-			return httpClient.get(url).json() as Promise<T & HttpError>
+			return (await httpClient.get(url)).data as Promise<T & HttpError>
 		}
-		return httpClient[type](url, {
-			json: data,
-		}).json() as Promise<T & HttpError>
+		return (await httpClient[type](url, data)).data as Promise<T & HttpError>
 	}
 
 	get<T>(url: string) {
