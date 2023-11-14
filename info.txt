@@ -1,0 +1,6 @@
+requirements: https://docs.google.com/presentation/d/1VU9fPo2bOd4003acfYzC_DL1vJlnD7by9d0E2KCngfc/edit?usp=sharing
+
+api: https://qafia-be-server-xgm7t.ondigitalocean.app/swagger/
+
+creds: vawaro4681@mkurg.com
+       12345678
