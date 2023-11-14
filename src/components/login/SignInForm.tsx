@@ -14,14 +14,15 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/common/ui/form'
-import { FormSchema, type IFormSchema } from '@/lib/validations'
+import { UserLogin } from '@/lib/interfaces'
+import { FormSchema } from '@/lib/validations'
 import { Input } from '@/components/common/ui/input'
 import { Button } from '@/components/common/ui/button'
 
 export const SignInForm = () => {
 	const router = useRouter()
 
-	const form = useForm<IFormSchema>({
+	const form = useForm<UserLogin>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			email: '',
@@ -31,20 +32,13 @@ export const SignInForm = () => {
 
 	const login = useLogin()
 
-	const onSubmit = async (values: IFormSchema) => {
-		const loadingToast = toast.loading('Logging In')
-		try {
-			await login.mutateAsync(values)
-			if (login.data?.status === 200) {
-				toast.success("Logged In")
-				router.push('/')
-			} else {
-				throw new Error(login.data?.message)
-			}
-		} catch (error) {
-			toast.error(String(error))
-		} finally {
-			toast.dismiss(loadingToast)
+	const onSubmit = async (values: UserLogin) => {
+		await login.mutateAsync(values)
+		if (login.data?.status === 200) {
+			router.push('/dashboard')
+		}
+		if (login.isError) {
+			toast.error(String(login.data))
 		}
 	}
 
