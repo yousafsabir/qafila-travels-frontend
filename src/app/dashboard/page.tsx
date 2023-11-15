@@ -13,7 +13,7 @@ export default function Dashboard() {
 		if (!store.admin) return router.push('/')
 	}, [])
 	return (
-		<div className='flex flex-1'>
+		<div className='flex flex-1 flex-col'>
 			<DataTableDemo className='flex-1' />
 		</div>
 	)

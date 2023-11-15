@@ -19,9 +19,11 @@ import {
 
 import { TableUser } from '@/lib/interfaces'
 import { useGetUsers } from '@/lib/mutations/users'
+import { FormModal } from '@/components/dashboard/users/FormModal'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
+import { UploadGuideModal } from '@/components/common/Dialog'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -65,7 +67,7 @@ export const columns: ColumnDef<TableUser>[] = [
 	{
 		accessorKey: 'username',
 		header: 'Username',
-		cell: ({ row }) => <div>{row.getValue('user')}</div>,
+		cell: ({ row }) => <div>{row.getValue('username')}</div>,
 	},
 	{
 		accessorKey: 'email',
@@ -168,6 +170,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = React.useState({})
+	const formRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const table = useReactTable({
 		data: users.data || [],
@@ -224,6 +227,12 @@ export function DataTableDemo({ className }: { className?: string }) {
 							})}
 					</DropdownMenuContent>
 				</DropdownMenu>
+				<Button
+					variant={'outline'}
+					onClick={() => formRef?.current?.click()}
+					className='ml-4'>
+					Create
+				</Button>
 			</div>
 			<div className='rounded-md border'>
 				<Table>
@@ -293,6 +302,9 @@ export function DataTableDemo({ className }: { className?: string }) {
 					</Button>
 				</div>
 			</div>
+			<UploadGuideModal ref={formRef}>
+				<FormModal closeModal={() => formRef.current?.click()} />
+			</UploadGuideModal>
 		</div>
 	)
 }

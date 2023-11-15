@@ -1,10 +1,11 @@
 import toast from 'react-hot-toast'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import { queryClient } from '@/lib/config'
 import { httpClient } from '@/lib/config'
 import { getCookie, setCookie } from '@/lib/utils'
-import { userLogin, getMe, getUsers } from '@/lib/apis/users'
-import { type UserLogin } from '@/lib/interfaces/users'
+import { userLogin, getMe, getUsers, createUser } from '@/lib/apis/users'
+import { type UserLogin, type CreateUser } from '@/lib/interfaces/users'
 
 export function useLogin() {
 	let loadingToast: any
@@ -23,6 +24,27 @@ export function useLogin() {
 				httpClient.defaults.headers.common[
 					'Authorization'
 				] = `Bearer ${response.access_token}`
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+	})
+}
+
+export function useCreateUser() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['create_user'],
+		mutationFn: async (params: CreateUser) => {
+			loadingToast = toast.loading('Adding User')
+			const res = await createUser(params)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('User Added')
+				queryClient.invalidateQueries({ queryKey: ['get_users'] })
 			} else {
 				toast.error(`Error: ${response.message}`)
 			}

@@ -19,6 +19,16 @@ export interface User {
 	updated_at: string
 }
 
+export interface CreateUser {
+	user_name: string
+	name: string
+	email: string
+	phone: string
+	password: string
+	access_level: 'create' | 'create,read' | 'create,read,update' | 'create,read,update,delete'
+	role: 'user' | 'admin'
+}
+
 export interface TableUser extends Omit<User, 'transactionIds' | 'updated_at' | '_id'> {}
 
 export interface LoginResponse extends HttpCommonResponse {
