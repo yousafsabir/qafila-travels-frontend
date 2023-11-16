@@ -1,6 +1,12 @@
 import { http } from '@/lib/config'
 import { apiUrls } from '@/lib/apis'
-import { UserLogin, LoginResponse, GetUserResponse, TableUser, CreateUser } from '@/lib/interfaces/users'
+import {
+	UserLogin,
+	LoginResponse,
+	GetUserResponse,
+	TableUser,
+	CreateUser,
+} from '@/lib/interfaces/users'
 
 export function userLogin(data: UserLogin) {
 	return http.post<LoginResponse>(apiUrls.users.login, data)

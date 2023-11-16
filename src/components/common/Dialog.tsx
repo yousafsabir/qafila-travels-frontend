@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/common/ui/dialog'
 import { forwardRef } from 'react'
 
-export const UploadGuideModal = forwardRef<
+export const CommonModal = forwardRef<
 	HTMLButtonElement,
 	{ closeModal?: (...args: any[]) => void; children: React.ReactNode }
 >((props, triggerRef) => {
@@ -14,3 +14,5 @@ export const UploadGuideModal = forwardRef<
 		</>
 	)
 })
+
+CommonModal.displayName = "CommonModal"

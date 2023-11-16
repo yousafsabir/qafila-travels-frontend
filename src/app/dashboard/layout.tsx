@@ -1,12 +1,21 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
+import useStore from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { Navbar } from '@/components/dashboard'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+	const router = useRouter()
+
+	const store = useStore()
+	useEffect(() => {
+		if (!store.admin) return router.push('/')
+	}, [])
+
 	const path = usePathname()
 	const routes = [
 		{
@@ -27,18 +36,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				<nav className='min-w-[250px]'>
 					<ul className='space-y-2 p-3'>
 						{routes.map((route, i) => (
-							<li
-								key={i}
-								className={cn(
-									{ 'bg-gray-100': path.includes(route.path) },
-									'cursor-pointer rounded-md p-3 transition-colors  hover:bg-gray-100',
-								)}>
-								<Link href={route.path}>{route.name}</Link>
+							<li key={i}>
+								<Link
+									className={cn(
+										{ 'bg-gray-100': path === route.path },
+										'cursor-pointer block rounded-md p-3 transition-colors  hover:bg-gray-100',
+									)}
+									href={route.path}>
+									{route.name}
+								</Link>
 							</li>
 						))}
 					</ul>
 				</nav>
-				<main className='flex-1 border-l flex border-gray-300 p-4'>{children}</main>
+				<main className='flex flex-1 border-l border-gray-300 p-4'>{children}</main>
 			</main>
 		</main>
 	)

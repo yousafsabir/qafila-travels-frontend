@@ -1,17 +1,8 @@
 'use client'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 
-import useStore from '@/lib/store'
-import { DataTableDemo } from '@/components/dashboard'
+import { DataTableDemo } from '@/components/dashboard/users/Table'
 
 export default function Dashboard() {
-	const router = useRouter()
-
-	const store = useStore()
-	useEffect(() => {
-		if (!store.admin) return router.push('/')
-	}, [])
 	return (
 		<div className='flex flex-1 flex-col'>
 			<DataTableDemo className='flex-1' />

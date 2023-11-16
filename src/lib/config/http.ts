@@ -3,11 +3,8 @@ import axios from 'axios'
 import { env } from './env'
 import { HttpError } from '@/lib/interfaces'
 
-// export const httpClient = ky.create({
-// 	prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api`
-// })
 export const httpClient = axios.create({
-	baseURL: `${env.NEXT_PUBLIC_API_URL}/api`,
+	baseURL: `${env.NEXT_PUBLIC_API_URL}`,
 })
 
 class Http {

@@ -17,8 +17,9 @@ import {
 	useReactTable,
 } from '@tanstack/react-table'
 
-import { TableUser } from '@/lib/interfaces'
+import { TableHotel } from '@/lib/interfaces/hotels'
 import { useGetUsers } from '@/lib/mutations/users'
+import { useGetHotels } from '@/lib/mutations/hotels'
 import { FormModal } from '@/components/dashboard/users/FormModal'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
@@ -44,7 +45,7 @@ import {
 } from '@/components/common/ui/table'
 import { getUsers } from '@/lib/apis/users'
 
-export const columns: ColumnDef<TableUser>[] = [
+export const columns: ColumnDef<TableHotel>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (
@@ -65,106 +66,33 @@ export const columns: ColumnDef<TableUser>[] = [
 		enableHiding: false,
 	},
 	{
-		accessorKey: 'username',
-		header: 'Username',
-		cell: ({ row }) => <div>{row.getValue('username')}</div>,
+		accessorKey: 'client_name',
+		header: 'Client Name',
+		cell: ({ row }) => <div>{row.getValue('client_name')}</div>,
 	},
 	{
-		accessorKey: 'email',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant='ghost'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-					Email
-					<CaretSortIcon className='ml-2 h-4 w-4' />
-				</Button>
-			)
-		},
-		cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>,
+		accessorKey: 'hotel_name',
+		header: 'Hotel Name',
+		cell: ({ row }) => <div className='lowercase'>{row.getValue('hotel_name')}</div>,
 	},
 	{
-		accessorKey: 'isVerified',
-		header: () => <div className='text-center'>Is Verified</div>,
+		accessorKey: 'hotel_sr_no',
+		header: () => <div className='text-center'>Hotel Sr No.</div>,
 		cell: ({ row }) => (
-			<div className='flex justify-center font-medium'>
-				{row.getValue('isVerified') ? (
-					<CheckCircle2 className='h-4 w-4 text-green-500' />
-				) : (
-					<XCircle className='h-4 w-4 text-red-500' />
-				)}
-			</div>
+			<div className='flex justify-center font-medium'>{row.getValue('hotel_sr_no')}</div>
 		),
 	},
 	{
-		accessorKey: 'isCreator',
-		header: () => <div className='text-center'>Is Creator</div>,
+		accessorKey: 'hcn_number',
+		header: () => <div className='text-center'>HCN No.</div>,
 		cell: ({ row }) => (
-			<div className='flex justify-center font-medium'>
-				{row.getValue('isCreator') ? (
-					<CheckCircle2 className='h-4 w-4 text-green-500' />
-				) : (
-					<XCircle className='h-4 w-4 text-red-500' />
-				)}
-			</div>
+			<div className='flex justify-center font-medium'>{row.getValue('hcn_number')}</div>
 		),
-	},
-	{
-		accessorKey: 'isBanned',
-		header: () => <div className='text-center'>Is Banned</div>,
-		cell: ({ row }) => (
-			<div className='flex justify-center font-medium'>
-				{row.getValue('isBanned') ? (
-					<CheckCircle2 className='h-4 w-4 text-green-500' />
-				) : (
-					<XCircle className='h-4 w-4 text-red-500' />
-				)}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'role',
-		header: 'Role',
-		cell: ({ row }) => <div className='font-medium'>{row.getValue('role')}</div>,
-	},
-	{
-		accessorKey: 'created_at',
-		header: () => <div className='text-right'>Created At</div>,
-		cell: ({ row }) => (
-			<div className='text-right font-medium'>{row.getValue('created_at')}</div>
-		),
-	},
-	{
-		id: 'actions',
-		enableHiding: false,
-		cell: ({ row }) => {
-			const user = row.original
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='ghost' className='h-8 w-8 p-0'>
-							<span className='sr-only'>Open menu</span>
-							<DotsHorizontalIcon className='h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
-							Copy User Email
-						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			)
-		},
 	},
 ]
 
-export function DataTableDemo({ className }: { className?: string }) {
-	const users = useGetUsers()
+export function HotelsTable({ className }: { className?: string }) {
+	const hotels = useGetHotels()
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -173,7 +101,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 	const formRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const table = useReactTable({
-		data: users.data || [],
+		data: hotels.data?.hotels || [],
 		columns,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
@@ -303,7 +231,11 @@ export function DataTableDemo({ className }: { className?: string }) {
 				</div>
 			</div>
 			<CommonModal ref={formRef}>
-				<FormModal closeModal={() => formRef.current?.click()} />
+				<div className='flex h-[100px] w-[100px] items-center justify-center'>
+					<Button variant={'default'} onClick={() => formRef.current?.click()}>
+						Close
+					</Button>
+				</div>
 			</CommonModal>
 		</div>
 	)
