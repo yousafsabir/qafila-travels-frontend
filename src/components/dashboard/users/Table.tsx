@@ -24,7 +24,7 @@ import { FormModal } from '@/components/dashboard/users/FormModal'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
-import { CommonModal } from '@/components/common/Dialog'
+import { CommonModal, ShowDetails } from '@/components/common'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -59,15 +59,10 @@ export function DataTableDemo({ className }: { className?: string }) {
 		{
 			if (users.data && users.data[index]) {
 				setDetailUser(users.data[index] as User)
+				detailsRef.current?.click()
 			}
 		}
 	}
-
-	React.useEffect(() => {
-		if (detailUser) {
-			detailsRef.current?.click()
-		}
-	}, [detailUser])
 
 	const columns: ColumnDef<TableUser>[] = [
 		{
@@ -326,51 +321,10 @@ export function DataTableDemo({ className }: { className?: string }) {
 				<FormModal closeModal={() => formRef.current?.click()} />
 			</CommonModal>
 			<CommonModal ref={detailsRef}>
-				<div className='relative rounded-sm p-8'>
-					{/* close */}
-					<div className='absolute right-2 top-2'>
-						<X
-							className='h-4 w-4 cursor-pointer'
-							onClick={() => detailsRef.current?.click()}
-						/>
-					</div>
-					<div className='grid grid-cols-2 gap-x-2 gap-y-4'>
-						{detailUser &&
-							Object.entries(detailUser).map(([key, value]) => (
-								<div className='flex flex-col'>
-									<label className='capitalize'>
-										{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}
-									</label>
-									{typeof value === 'boolean' ? (
-										<p className='flex-1 rounded bg-gray-200 p-2'>
-											{value ? (
-												<CheckCircle2 className='h-4 w-4 text-green-500' />
-											) : (
-												<XCircle className='h-4 w-4 text-red-500' />
-											)}
-										</p>
-									) : typeof value === 'object' && value[0] ? (
-										<p className='flex-1 space-y-1 rounded bg-gray-200 p-2'>
-											{(value as Array<any>).map((item, i) => (
-												<p>
-													{i}. {item}
-												</p>
-											))}{' '}
-										</p>
-									) : (
-										<p
-											className='flex-1 rounded bg-gray-200 p-2'
-											onClick={() => {
-												navigator.clipboard.writeText(value)
-												toast.success('Copied')
-											}}>
-											{value}
-										</p>
-									)}
-								</div>
-							))}
-					</div>
-				</div>
+				<ShowDetails
+					obj={detailUser ? detailUser : {}}
+					close={() => detailsRef.current?.click()}
+				/>
 			</CommonModal>
 		</div>
 	)
