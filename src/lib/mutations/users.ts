@@ -4,8 +4,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { queryClient } from '@/lib/config'
 import { httpClient } from '@/lib/config'
 import { getCookie, setCookie } from '@/lib/utils'
-import { userLogin, getMe, getUsers, createUser } from '@/lib/apis/users'
-import { type UserLogin, type CreateUser } from '@/lib/interfaces/users'
+import { userLogin, getMe, getUsers, createUser, updateUser, deleteUser } from '@/lib/apis/users'
+import { type UserLogin, type CreateUser, type User } from '@/lib/interfaces/users'
 
 export function useLogin() {
 	let loadingToast: any
@@ -28,6 +28,10 @@ export function useLogin() {
 				toast.error(`Error: ${response.message}`)
 			}
 		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
 	})
 }
 
@@ -49,6 +53,10 @@ export function useCreateUser() {
 				toast.error(`Error: ${response.message}`)
 			}
 		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
 	})
 }
 
@@ -67,6 +75,56 @@ export function useGetUsers() {
 	return useQuery({
 		queryKey: ['get_users'],
 		queryFn: () => getUsers(),
+	})
+}
+
+export function useUpdateUser() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['update_user'],
+		mutationFn: async (params: User) => {
+			loadingToast = toast.loading('Updating User')
+			const res = await updateUser(params)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('User Updated')
+				queryClient.invalidateQueries({ queryKey: ['get_users'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
+	})
+}
+
+export function useDeleteUser() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['delete_user'],
+		mutationFn: async (params: { user_name: string }) => {
+			loadingToast = toast.loading('Deleting User')
+			const res = await deleteUser(params)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('User Deleted')
+				queryClient.invalidateQueries({ queryKey: ['get_users'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
 	})
 }
 

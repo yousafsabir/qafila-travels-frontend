@@ -15,7 +15,7 @@ class Http {
 		url: string,
 		data?: any | undefined,
 	): Promise<T & HttpError> {
-		if (['get', 'delete'].includes(type)) {
+		if (['get'].includes(type)) {
 			return (await httpClient.get(url)).data as Promise<T & HttpError>
 		}
 		return (await httpClient[type](url, data)).data as Promise<T & HttpError>
@@ -33,8 +33,8 @@ class Http {
 	patch<T>(url: string, data: any) {
 		return this.send<T>('patch', url, data)
 	}
-	delete<T>(url: string) {
-		return this.send<T>('delete', url)
+	delete<T>(url: string, data?: any) {
+		return this.send<T>('delete', url, data)
 	}
 }
 

@@ -6,6 +6,7 @@ import {
 	GetUserResponse,
 	TableUser,
 	CreateUser,
+	User,
 } from '@/lib/interfaces/users'
 
 export function userLogin(data: UserLogin) {
@@ -22,4 +23,12 @@ export function getMe() {
 
 export function getUsers() {
 	return http.get<TableUser[]>(apiUrls.users.getAll)
+}
+
+export function updateUser(data: User) {
+	return http.put<TableUser[]>(apiUrls.users.update, data)
+}
+
+export function deleteUser(data: { user_name: string }) {
+	return http.delete<TableUser[]>(apiUrls.users.delete, data)
 }

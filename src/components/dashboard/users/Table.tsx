@@ -1,8 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { format } from 'fecha'
-import { CheckCircle2, XCircle, X } from 'lucide-react'
+import { CheckCircle2, XCircle } from 'lucide-react'
 import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
 	ColumnDef,
@@ -16,11 +15,9 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
-import toast from 'react-hot-toast'
 
-import { TableUser, User } from '@/lib/interfaces/users'
-import { useGetUsers } from '@/lib/mutations/users'
-import { FormModal } from '@/components/dashboard/users/FormModal'
+import { type TableUser, type User, type CreateUser } from '@/lib/interfaces/users'
+import { useCreateUser, useGetUsers, useUpdateUser } from '@/lib/mutations/users'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
@@ -35,6 +32,8 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
 import { Input } from '@/components/common/ui/input'
+import { CommonForm } from '@/components/common'
+import { createUserForm, updateUserForm } from '@/components/dashboard/users/forms'
 import {
 	Table,
 	TableBody,
@@ -46,9 +45,26 @@ import {
 
 export function DataTableDemo({ className }: { className?: string }) {
 	const users = useGetUsers()
+	const createUser = useCreateUser()
+
+	const updateUser = useUpdateUser()
+
+	const onSubmit = async (values: CreateUser) => {
+		await createUser.mutateAsync(values)
+	}
+
+	const onUpdate = async (values: any) => {
+		let filteredObj: Record<string, any> = {}
+		Object.entries(values).forEach(([key, value]) => {
+			if (value) filteredObj[key] = value
+		})
+
+		await updateUser.mutateAsync(filteredObj as User)
+	}
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [detailUser, setDetailUser] = React.useState<User | null>(null)
+	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = React.useState({})
@@ -56,11 +72,17 @@ export function DataTableDemo({ className }: { className?: string }) {
 	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const viewCustomerDetails = (index: number) => {
-		{
-			if (users.data && users.data[index]) {
-				setDetailUser(users.data[index] as User)
-				detailsRef.current?.click()
-			}
+		if (users.data && users.data[index]) {
+			setDetailUser(users.data[index] as User)
+			detailsRef.current?.click()
+		}
+	}
+
+	const onEditUser = (index: number) => {
+		if (users.data && users.data[index]) {
+			setFormType('edit')
+			setDetailUser(users.data[index] as User)
+			formRef.current?.click()
 		}
 	}
 
@@ -177,9 +199,11 @@ export function DataTableDemo({ className }: { className?: string }) {
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem onClick={() => viewCustomerDetails(index)}>
-								View customer
+								View User
 							</DropdownMenuItem>
-							<DropdownMenuItem>View payment details</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => onEditUser(index)}>
+								Edit User
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				)
@@ -244,7 +268,10 @@ export function DataTableDemo({ className }: { className?: string }) {
 				</DropdownMenu>
 				<Button
 					variant={'outline'}
-					onClick={() => formRef?.current?.click()}
+					onClick={() => {
+						setFormType('create')
+						formRef?.current?.click()
+					}}
 					className='ml-4'>
 					Create
 				</Button>
@@ -318,7 +345,18 @@ export function DataTableDemo({ className }: { className?: string }) {
 				</div>
 			</div>
 			<CommonModal ref={formRef}>
-				<FormModal closeModal={() => formRef.current?.click()} />
+				{/* <FormModal closeModal={() => formRef.current?.click()} /> */}
+				<CommonForm
+					updateObj={detailUser}
+					formType={formType}
+					closeModal={() => formRef.current?.click()}
+					formFields={formType === 'create' ? createUserForm : updateUserForm}
+					submitFunc={(values) =>
+						formType === 'create'
+							? onSubmit(values as CreateUser)
+							: onUpdate(values as any)
+					}
+				/>
 			</CommonModal>
 			<CommonModal ref={detailsRef}>
 				<ShowDetails
