@@ -17,7 +17,6 @@ import {
 
 import { TableHotel, Hotel } from '@/lib/interfaces/hotels'
 import { useGetHotels } from '@/lib/mutations/hotels'
-import { FormModal } from '@/components/dashboard/users/FormModal'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'

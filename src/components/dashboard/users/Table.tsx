@@ -345,7 +345,6 @@ export function DataTableDemo({ className }: { className?: string }) {
 				</div>
 			</div>
 			<CommonModal ref={formRef}>
-				{/* <FormModal closeModal={() => formRef.current?.click()} /> */}
 				<CommonForm
 					updateObj={detailUser}
 					formType={formType}
