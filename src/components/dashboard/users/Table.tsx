@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { format } from 'fecha'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { CheckCircle2, XCircle, X } from 'lucide-react'
 import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
 	ColumnDef,
@@ -16,8 +16,9 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
+import toast from 'react-hot-toast'
 
-import { TableUser } from '@/lib/interfaces'
+import { TableUser, User } from '@/lib/interfaces/users'
 import { useGetUsers } from '@/lib/mutations/users'
 import { FormModal } from '@/components/dashboard/users/FormModal'
 import { cn } from '@/lib/utils'
@@ -42,135 +43,154 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/common/ui/table'
-import { getUsers } from '@/lib/apis/users'
-
-export const columns: ColumnDef<TableUser>[] = [
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<Checkbox
-				checked={table.getIsAllPageRowsSelected()}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-				aria-label='Select all'
-			/>
-		),
-		cell: ({ row }) => (
-			<Checkbox
-				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
-				aria-label='Select row'
-			/>
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'username',
-		header: 'Username',
-		cell: ({ row }) => <div>{row.getValue('username')}</div>,
-	},
-	{
-		accessorKey: 'email',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant='ghost'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-					Email
-					<CaretSortIcon className='ml-2 h-4 w-4' />
-				</Button>
-			)
-		},
-		cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>,
-	},
-	{
-		accessorKey: 'isVerified',
-		header: () => <div className='text-center'>Is Verified</div>,
-		cell: ({ row }) => (
-			<div className='flex justify-center font-medium'>
-				{row.getValue('isVerified') ? (
-					<CheckCircle2 className='h-4 w-4 text-green-500' />
-				) : (
-					<XCircle className='h-4 w-4 text-red-500' />
-				)}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'isCreator',
-		header: () => <div className='text-center'>Is Creator</div>,
-		cell: ({ row }) => (
-			<div className='flex justify-center font-medium'>
-				{row.getValue('isCreator') ? (
-					<CheckCircle2 className='h-4 w-4 text-green-500' />
-				) : (
-					<XCircle className='h-4 w-4 text-red-500' />
-				)}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'isBanned',
-		header: () => <div className='text-center'>Is Banned</div>,
-		cell: ({ row }) => (
-			<div className='flex justify-center font-medium'>
-				{row.getValue('isBanned') ? (
-					<CheckCircle2 className='h-4 w-4 text-green-500' />
-				) : (
-					<XCircle className='h-4 w-4 text-red-500' />
-				)}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'role',
-		header: 'Role',
-		cell: ({ row }) => <div className='font-medium'>{row.getValue('role')}</div>,
-	},
-	{
-		accessorKey: 'created_at',
-		header: () => <div className='text-right'>Created At</div>,
-		cell: ({ row }) => (
-			<div className='text-right font-medium'>{row.getValue('created_at')}</div>
-		),
-	},
-	{
-		id: 'actions',
-		enableHiding: false,
-		cell: ({ row }) => {
-			const user = row.original
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='ghost' className='h-8 w-8 p-0'>
-							<span className='sr-only'>Open menu</span>
-							<DotsHorizontalIcon className='h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
-							Copy User Email
-						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			)
-		},
-	},
-]
 
 export function DataTableDemo({ className }: { className?: string }) {
 	const users = useGetUsers()
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
+	const [detailUser, setDetailUser] = React.useState<User | null>(null)
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = React.useState({})
 	const formRef = React.useRef<React.ElementRef<'button'>>(null)
+	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
+
+	const viewCustomerDetails = (index: number) => {
+		{
+			if (users.data && users.data[index]) {
+				setDetailUser(users.data[index] as User)
+			}
+		}
+	}
+
+	React.useEffect(() => {
+		if (detailUser) {
+			detailsRef.current?.click()
+		}
+	}, [detailUser])
+
+	const columns: ColumnDef<TableUser>[] = [
+		{
+			id: 'select',
+			header: ({ table }) => (
+				<Checkbox
+					checked={table.getIsAllPageRowsSelected()}
+					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+					aria-label='Select all'
+				/>
+			),
+			cell: ({ row }) => (
+				<Checkbox
+					checked={row.getIsSelected()}
+					onCheckedChange={(value) => row.toggleSelected(!!value)}
+					aria-label='Select row'
+				/>
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+		{
+			accessorKey: 'username',
+			header: 'Username',
+			cell: ({ row }) => <div>{row.getValue('username')}</div>,
+		},
+		{
+			accessorKey: 'email',
+			header: ({ column }) => {
+				return (
+					<Button
+						variant='ghost'
+						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+						Email
+						<CaretSortIcon className='ml-2 h-4 w-4' />
+					</Button>
+				)
+			},
+			cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>,
+		},
+		{
+			accessorKey: 'isVerified',
+			header: () => <div className='text-center'>Is Verified</div>,
+			cell: ({ row }) => (
+				<div className='flex justify-center font-medium'>
+					{row.getValue('isVerified') ? (
+						<CheckCircle2 className='h-4 w-4 text-green-500' />
+					) : (
+						<XCircle className='h-4 w-4 text-red-500' />
+					)}
+				</div>
+			),
+		},
+		{
+			accessorKey: 'isCreator',
+			header: () => <div className='text-center'>Is Creator</div>,
+			cell: ({ row }) => (
+				<div className='flex justify-center font-medium'>
+					{row.getValue('isCreator') ? (
+						<CheckCircle2 className='h-4 w-4 text-green-500' />
+					) : (
+						<XCircle className='h-4 w-4 text-red-500' />
+					)}
+				</div>
+			),
+		},
+		{
+			accessorKey: 'isBanned',
+			header: () => <div className='text-center'>Is Banned</div>,
+			cell: ({ row }) => (
+				<div className='flex justify-center font-medium'>
+					{row.getValue('isBanned') ? (
+						<CheckCircle2 className='h-4 w-4 text-green-500' />
+					) : (
+						<XCircle className='h-4 w-4 text-red-500' />
+					)}
+				</div>
+			),
+		},
+		{
+			accessorKey: 'role',
+			header: 'Role',
+			cell: ({ row }) => <div className='font-medium'>{row.getValue('role')}</div>,
+		},
+		{
+			accessorKey: 'created_at',
+			header: () => <div className='text-right'>Created At</div>,
+			cell: ({ row }) => (
+				<div className='text-right font-medium'>{row.getValue('created_at')}</div>
+			),
+		},
+		{
+			id: 'actions',
+			enableHiding: false,
+			cell: ({ row }) => {
+				const user = row.original
+				const index = row.index
+
+				return (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='ghost' className='h-8 w-8 p-0'>
+								<span className='sr-only'>Open menu</span>
+								<DotsHorizontalIcon className='h-4 w-4' />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<DropdownMenuLabel>Actions</DropdownMenuLabel>
+							<DropdownMenuItem
+								onClick={() => navigator.clipboard.writeText(user.email)}>
+								Copy User Email
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onClick={() => viewCustomerDetails(index)}>
+								View customer
+							</DropdownMenuItem>
+							<DropdownMenuItem>View payment details</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				)
+			},
+		},
+	]
 
 	const table = useReactTable({
 		data: users.data || [],
@@ -304,6 +324,53 @@ export function DataTableDemo({ className }: { className?: string }) {
 			</div>
 			<CommonModal ref={formRef}>
 				<FormModal closeModal={() => formRef.current?.click()} />
+			</CommonModal>
+			<CommonModal ref={detailsRef}>
+				<div className='relative rounded-sm p-8'>
+					{/* close */}
+					<div className='absolute right-2 top-2'>
+						<X
+							className='h-4 w-4 cursor-pointer'
+							onClick={() => detailsRef.current?.click()}
+						/>
+					</div>
+					<div className='grid grid-cols-2 gap-x-2 gap-y-4'>
+						{detailUser &&
+							Object.entries(detailUser).map(([key, value]) => (
+								<div className='flex flex-col'>
+									<label className='capitalize'>
+										{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}
+									</label>
+									{typeof value === 'boolean' ? (
+										<p className='flex-1 rounded bg-gray-200 p-2'>
+											{value ? (
+												<CheckCircle2 className='h-4 w-4 text-green-500' />
+											) : (
+												<XCircle className='h-4 w-4 text-red-500' />
+											)}
+										</p>
+									) : typeof value === 'object' && value[0] ? (
+										<p className='flex-1 space-y-1 rounded bg-gray-200 p-2'>
+											{(value as Array<any>).map((item, i) => (
+												<p>
+													{i}. {item}
+												</p>
+											))}{' '}
+										</p>
+									) : (
+										<p
+											className='flex-1 rounded bg-gray-200 p-2'
+											onClick={() => {
+												navigator.clipboard.writeText(value)
+												toast.success('Copied')
+											}}>
+											{value}
+										</p>
+									)}
+								</div>
+							))}
+					</div>
+				</div>
 			</CommonModal>
 		</div>
 	)
