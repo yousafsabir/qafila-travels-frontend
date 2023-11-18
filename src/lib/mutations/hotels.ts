@@ -3,8 +3,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { queryClient } from '@/lib/config'
 import { httpClient } from '@/lib/config'
-import { getHotels } from '@/lib/apis/hotels'
-import { type Hotel } from '@/lib/interfaces/hotels'
+import { getHotels, createHotel } from '@/lib/apis/hotels'
+import { type Hotel, type CreateHotel } from '@/lib/interfaces/hotels'
 
 // export function useLogin() {
 // 	let loadingToast: any
@@ -30,26 +30,30 @@ import { type Hotel } from '@/lib/interfaces/hotels'
 // 	})
 // }
 
-// export function useCreateUser() {
-// 	let loadingToast: any
-// 	return useMutation({
-// 		mutationKey: ['create_user'],
-// 		mutationFn: async (params: CreateUser) => {
-// 			loadingToast = toast.loading('Adding User')
-// 			const res = await createUser(params)
-// 			return res
-// 		},
-// 		onSuccess: (response) => {
-// 			toast.dismiss(loadingToast)
-// 			if (response.status === 200) {
-// 				toast.success('User Added')
-// 				queryClient.invalidateQueries({ queryKey: ['get_users'] })
-// 			} else {
-// 				toast.error(`Error: ${response.message}`)
-// 			}
-// 		},
-// 	})
-// }
+export function useCreateHotel() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['create_hotel'],
+		mutationFn: async (params: CreateHotel) => {
+			loadingToast = toast.loading('Adding Hotel')
+			const res = await createHotel(params)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('Hotel Added')
+				queryClient.invalidateQueries({ queryKey: ['get_hotels'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
+	})
+}
 
 // export function useGetMe() {
 // 	return useQuery({

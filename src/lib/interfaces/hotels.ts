@@ -1,4 +1,4 @@
-import { HttpCommonResponse } from "."
+import { HttpCommonResponse } from '.'
 
 export interface Hotel {
 	_id: string
@@ -25,6 +25,32 @@ export interface Hotel {
 	vendor_invoice: string
 	vendor_name: string
 	view: string
+}
+
+export interface CreateHotel {
+	SNo: string
+	DateOfEntry: string
+	InvoiceNumber: string
+	GuestName: string
+	CheckInDate: string
+	CheckoutDate: string
+	NumberOfNights: string
+	RoomType: string
+	View: string
+	MealPlan: string
+	HotelName: string
+	CostPerNight: string
+	SalesPerNight: string
+	TotalCost: string
+	VATPercent: string
+	MunicipalityFeePercent: string
+	TotalSales: string
+	Profit: string
+	VendorName: string
+	VendorInvoiceNumber: string
+	ClientName: string
+	HCNNumber: string
+	ReservationStatus: string
 }
 
 export interface TableHotel {
