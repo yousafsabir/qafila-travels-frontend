@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 type ITextField = {
-	type: 'text' | 'email' | 'password'
+	type: 'text' | 'email' | 'password' | 'date'
 	label: string
 	key: string
 	defaultValue: string
