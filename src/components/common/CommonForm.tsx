@@ -75,7 +75,7 @@ export const CommonForm = ({
 				<div className='grid grid-cols-2 gap-x-2 gap-y-3'>
 					{formFields.map((aField, i) => (
 						<Fragment key={i}>
-							{['email', 'text', 'password', 'number'].includes(aField.type) ? (
+							{['email', 'text', 'password', 'number', 'date'].includes(aField.type) ? (
 								<FormField
 									control={form.control}
 									name={aField.key}

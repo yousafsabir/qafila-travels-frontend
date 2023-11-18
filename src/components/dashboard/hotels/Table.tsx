@@ -16,11 +16,12 @@ import {
 } from '@tanstack/react-table'
 
 import { TableHotel, Hotel } from '@/lib/interfaces/hotels'
-import { useGetHotels } from '@/lib/mutations/hotels'
+import { useGetHotels, useCreateHotel } from '@/lib/mutations/hotels'
+import { createHotelForm, updateHotelForm } from '@/components/dashboard/hotels/forms'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
-import { CommonModal, ShowDetails } from '@/components/common'
+import { CommonForm, CommonModal, ShowDetails } from '@/components/common'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -43,7 +44,14 @@ import { getUsers } from '@/lib/apis/users'
 
 export function HotelsTable({ className }: { className?: string }) {
 	const hotels = useGetHotels()
+	const createHotel = useCreateHotel()
+
+	const onSubmit = async (values: any) => {
+		await createHotel.mutateAsync(values)
+	}
+
 	const [detailHotel, setDetailHotel] = React.useState<Hotel | null>(null)
+	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -264,11 +272,13 @@ export function HotelsTable({ className }: { className?: string }) {
 				</div>
 			</div>
 			<CommonModal ref={formRef}>
-				<div className='flex h-[100px] w-[100px] items-center justify-center'>
-					<Button variant={'default'} onClick={() => formRef.current?.click()}>
-						Close
-					</Button>
-				</div>
+				<CommonForm
+					updateObj={detailHotel}
+					formType={formType}
+					closeModal={() => formRef.current?.click()}
+					formFields={formType === 'create' ? createHotelForm : updateHotelForm}
+					submitFunc={(values) => onSubmit(values)}
+				/>
 			</CommonModal>
 			<CommonModal ref={detailsRef}>
 				<ShowDetails
