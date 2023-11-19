@@ -16,7 +16,7 @@ import {
 } from '@tanstack/react-table'
 
 import { TableHotel, Hotel } from '@/lib/interfaces/hotels'
-import { useGetHotels, useCreateHotel } from '@/lib/mutations/hotels'
+import { useGetHotels, useCreateHotel, useUpdateHotel } from '@/lib/mutations/hotels'
 import { createHotelForm, updateHotelForm } from '@/components/dashboard/hotels/forms'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
@@ -45,20 +45,30 @@ import { getUsers } from '@/lib/apis/users'
 export function HotelsTable({ className }: { className?: string }) {
 	const hotels = useGetHotels()
 	const createHotel = useCreateHotel()
+	const updateHotel = useUpdateHotel()
+	const [detailHotel, setDetailHotel] = React.useState<Hotel | null>(null)
+	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
 
 	const onSubmit = async (values: any) => {
 		await createHotel.mutateAsync(values)
 	}
 
-	const [detailHotel, setDetailHotel] = React.useState<Hotel | null>(null)
-	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
+	const onUpdate = async (values: any) => {
+		let filteredObj: Record<string, any> = {}
+		Object.entries(values).forEach(([key, value]) => {
+			if (value) filteredObj[key] = value
+		})
 
-	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = React.useState({})
-	const formRef = React.useRef<React.ElementRef<'button'>>(null)
-	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
+		await updateHotel.mutateAsync(filteredObj)
+	}
+
+	const onEditUser = (index: number) => {
+		if (hotels.data?.hotels && hotels.data?.hotels[index]) {
+			setFormType('edit')
+			setDetailHotel(hotels.data?.hotels[index] as Hotel)
+			formRef.current?.click()
+		}
+	}
 
 	const viewHotelDetails = (index: number) => {
 		{
@@ -68,6 +78,13 @@ export function HotelsTable({ className }: { className?: string }) {
 			}
 		}
 	}
+
+	const [sorting, setSorting] = React.useState<SortingState>([])
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+	const [rowSelection, setRowSelection] = React.useState({})
+	const formRef = React.useRef<React.ElementRef<'button'>>(null)
+	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const columns: ColumnDef<TableHotel>[] = [
 		{
@@ -133,6 +150,9 @@ export function HotelsTable({ className }: { className?: string }) {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem onClick={() => viewHotelDetails(index)}>
 								View Details
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => onEditUser(index)}>
+								Edit Hotel
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -277,7 +297,9 @@ export function HotelsTable({ className }: { className?: string }) {
 					formType={formType}
 					closeModal={() => formRef.current?.click()}
 					formFields={formType === 'create' ? createHotelForm : updateHotelForm}
-					submitFunc={(values) => onSubmit(values)}
+					submitFunc={(values) =>
+						formType === 'create' ? onSubmit(values) : onUpdate(values)
+					}
 				/>
 			</CommonModal>
 			<CommonModal ref={detailsRef}>

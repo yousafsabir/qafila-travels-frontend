@@ -63,3 +63,7 @@ export interface TableHotel {
 export interface GetHotelsResponse extends HttpCommonResponse {
 	hotels: Hotel[]
 }
+
+export interface GetHotelResponse extends HttpCommonResponse {
+	hotels: Hotel
+}

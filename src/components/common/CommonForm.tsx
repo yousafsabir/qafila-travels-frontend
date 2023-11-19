@@ -44,8 +44,8 @@ export const CommonForm = ({
 		formFields = formFields.map((field) => {
 			Object.entries(updateObj).forEach(([key, value]) => {
 				if (key === field.key) {
-					field.defaultValue = value as any
-					defaultValues[key] = value as any
+					field.defaultValue = String(value) as any
+					defaultValues[key] = String(value) as any
 				}
 			})
 			return field
