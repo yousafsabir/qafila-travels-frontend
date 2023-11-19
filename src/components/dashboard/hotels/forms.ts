@@ -4,7 +4,7 @@ import * as z from 'zod'
 export const createHotelForm: IFormField[] = [
 	{
 		label: 'Sr No.',
-		key: 'SNo',
+		key: 'hotel_sr_no',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -15,7 +15,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Date of Entry',
-		key: 'DateOfEntry',
+		key: 'date_of_entry',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
@@ -23,7 +23,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Invoice Number',
-		key: 'InvoiceNumber',
+		key: 'invoice_number',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -34,7 +34,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Guest Name',
-		key: 'GuestName',
+		key: 'guest_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -42,7 +42,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Check In Date',
-		key: 'CheckInDate',
+		key: 'check_in_date',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
@@ -50,7 +50,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Checkout Date',
-		key: 'CheckoutDate',
+		key: 'check_out_date',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
@@ -58,7 +58,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Number Of Nights',
-		key: 'NumberOfNights',
+		key: 'number_of_nights',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -69,7 +69,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Room Type',
-		key: 'RoomType',
+		key: 'room_type',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -77,7 +77,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'View',
-		key: 'View',
+		key: 'view',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -85,7 +85,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Meal Plan',
-		key: 'MealPlan',
+		key: 'meal_plan',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -93,7 +93,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Hotel Name',
-		key: 'HotelName',
+		key: 'hotel_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -101,7 +101,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Cost Per Night',
-		key: 'CostPerNight',
+		key: 'cost_per_night',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -112,7 +112,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Sales Per Night',
-		key: 'SalesPerNight',
+		key: 'sales_per_night',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -123,7 +123,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Total Cost',
-		key: 'TotalCost',
+		key: 'total_cost',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -134,7 +134,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'VAT (%)',
-		key: 'VATPercent',
+		key: 'vat',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -145,7 +145,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Municipality Fee (%)',
-		key: 'MunicipalityFeePercent',
+		key: 'municipality_fee',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -156,7 +156,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Total Sales',
-		key: 'TotalSales',
+		key: 'total_sales',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -167,7 +167,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Profit',
-		key: 'Profit',
+		key: 'profit',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -178,7 +178,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Vendor Name',
-		key: 'VendorName',
+		key: 'vendor_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -186,7 +186,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Vendor Invoice Number',
-		key: 'VendorInvoiceNumber',
+		key: 'vendor_invoice',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -197,7 +197,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Client Name',
-		key: 'ClientName',
+		key: 'client_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -205,7 +205,7 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'HCN Number',
-		key: 'HCNNumber',
+		key: 'hcn_number',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -216,25 +216,30 @@ export const createHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Reservation Status',
-		key: 'ReservationStatus',
+		key: 'reservation_status',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, `Reservation Status is required`),
 	},
 ]
+
 export const updateHotelForm: IFormField[] = [
 	{
 		label: 'Sr No.',
-		key: 'SNo',
+		key: 'hotel_sr_no',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
-		validation: z.string().min(1, 'Sr No. is required').email('Invalid email').optional(),
+		validation: z
+			.string()
+			.min(1, 'Sr No. is required')
+			.transform((a) => Number(a))
+			.optional(),
 	},
 	{
 		label: 'Date of Entry',
-		key: 'DateOfEntry',
+		key: 'date_of_entry',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
@@ -242,7 +247,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Invoice Number',
-		key: 'InvoiceNumber',
+		key: 'invoice_number',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -254,7 +259,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Guest Name',
-		key: 'GuestName',
+		key: 'guest_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -262,7 +267,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Check In Date',
-		key: 'CheckInDate',
+		key: 'check_in_date',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
@@ -270,7 +275,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Checkout Date',
-		key: 'CheckoutDate',
+		key: 'check_out_date',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
@@ -278,7 +283,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Number Of Nights',
-		key: 'NumberOfNights',
+		key: 'number_of_nights',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -290,7 +295,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Room Type',
-		key: 'RoomType',
+		key: 'room_type',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -298,7 +303,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'View',
-		key: 'View',
+		key: 'view',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -306,7 +311,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Meal Plan',
-		key: 'MealPlan',
+		key: 'meal_plan',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -314,7 +319,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Hotel Name',
-		key: 'HotelName',
+		key: 'hotel_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -322,7 +327,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Cost Per Night',
-		key: 'CostPerNight',
+		key: 'cost_per_night',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -334,7 +339,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Sales Per Night',
-		key: 'SalesPerNight',
+		key: 'sales_per_night',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -346,7 +351,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Total Cost',
-		key: 'TotalCost',
+		key: 'total_cost',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -358,7 +363,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'VAT (%)',
-		key: 'VATPercent',
+		key: 'vat',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -370,7 +375,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Municipality Fee (%)',
-		key: 'MunicipalityFeePercent',
+		key: 'municipality_fee',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -382,7 +387,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Total Sales',
-		key: 'TotalSales',
+		key: 'total_sales',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -394,7 +399,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Profit',
-		key: 'Profit',
+		key: 'profit',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -406,7 +411,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Vendor Name',
-		key: 'VendorName',
+		key: 'vendor_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -414,7 +419,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Vendor Invoice Number',
-		key: 'VendorInvoiceNumber',
+		key: 'vendor_invoice',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -426,7 +431,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Client Name',
-		key: 'ClientName',
+		key: 'client_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -434,7 +439,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'HCN Number',
-		key: 'HCNNumber',
+		key: 'hcn_number',
 		type: 'number',
 		defaultValue: '',
 		placeholder: '',
@@ -446,7 +451,7 @@ export const updateHotelForm: IFormField[] = [
 	},
 	{
 		label: 'Reservation Status',
-		key: 'ReservationStatus',
+		key: 'reservation_status',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
