@@ -10,6 +10,9 @@
 		"prepare": "husky install",
 		"prettier:fix": "prettier --write ."
 	},
+	"engines": {
+		"node": ">=18.0.0"
+	  },
 	"dependencies": {
 		"@hookform/resolvers": "^3.3.2",
 		"@radix-ui/react-checkbox": "^1.0.4",
