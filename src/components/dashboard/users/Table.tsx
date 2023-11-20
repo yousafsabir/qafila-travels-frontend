@@ -46,19 +46,18 @@ import {
 export function DataTableDemo({ className }: { className?: string }) {
 	const users = useGetUsers()
 	const createUser = useCreateUser()
-
 	const updateUser = useUpdateUser()
+	const [detailUser, setDetailUser] = React.useState<User | null>(null)
 
 	const onSubmit = async (values: CreateUser) => {
 		await createUser.mutateAsync(values)
 	}
 
 	const onUpdate = async (values: any) => {
-		await updateUser.mutateAsync(values as User)
+		await updateUser.mutateAsync({ ...values, _id: detailUser?._id || '' })
 	}
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [detailUser, setDetailUser] = React.useState<User | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
