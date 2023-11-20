@@ -54,12 +54,7 @@ export function HotelsTable({ className }: { className?: string }) {
 	}
 
 	const onUpdate = async (values: any) => {
-		let filteredObj: Record<string, any> = {}
-		Object.entries(values).forEach(([key, value]) => {
-			if (value) filteredObj[key] = value
-		})
-
-		await updateHotel.mutateAsync(filteredObj)
+		await updateHotel.mutateAsync({ ...values, _id: detailHotel?._id || '' })
 	}
 
 	const onEditUser = (index: number) => {
