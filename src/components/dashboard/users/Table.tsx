@@ -54,12 +54,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 	}
 
 	const onUpdate = async (values: any) => {
-		let filteredObj: Record<string, any> = {}
-		Object.entries(values).forEach(([key, value]) => {
-			if (value) filteredObj[key] = value
-		})
-
-		await updateUser.mutateAsync(filteredObj as User)
+		await updateUser.mutateAsync(values as User)
 	}
 
 	const [sorting, setSorting] = React.useState<SortingState>([])
@@ -217,7 +212,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
+		getPaginationRowModel: getPaginationRowModel({initialSync: true}),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,

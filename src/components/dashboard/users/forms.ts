@@ -84,6 +84,60 @@ export const createUserForm: IFormField[] = [
 		]),
 	},
 	{
+		label: 'Is Banned',
+		key: 'isBanned',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Ban Status',
+		validation: z.enum(['true', 'false']).transform((a) => (a === 'true' ? true : false)),
+	},
+	{
+		label: 'Is Creator',
+		key: 'isCreator',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Creator Status',
+		validation: z.enum(['true', 'false']).transform((a) => (a === 'true' ? true : false)),
+	},
+	{
+		label: 'Is Verified',
+		key: 'isVerified',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Verified Status',
+		validation: z.enum(['true', 'false']).transform((a) => (a === 'true' ? true : false)),
+	},
+	{
 		label: 'Password',
 		key: 'password',
 		type: 'text',
@@ -176,6 +230,69 @@ export const updateUserForm: IFormField[] = [
 		placeholder: 'Select Access Level',
 		validation: z
 			.enum(['read', 'create,read', 'create,read,update', 'create,read,update,delete'])
+			.optional(),
+	},
+	{
+		label: 'Is Banned',
+		key: 'isBanned',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Ban Status',
+		validation: z
+			.enum(['true', 'false'])
+			.transform((a) => (a === 'true' ? true : false))
+			.optional(),
+	},
+	{
+		label: 'Is Creator',
+		key: 'isCreator',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Creator Status',
+		validation: z
+			.enum(['true', 'false'])
+			.transform((a) => (a === 'true' ? true : false))
+			.optional(),
+	},
+	{
+		label: 'Is Verified',
+		key: 'isVerified',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Verified Status',
+		validation: z
+			.enum(['true', 'false'])
+			.transform((a) => (a === 'true' ? true : false))
 			.optional(),
 	},
 	{
