@@ -14,6 +14,7 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
+import Loading from 'react-loading'
 
 import { TableHotel, Hotel } from '@/lib/interfaces/hotels'
 import { useGetHotels, useCreateHotel, useUpdateHotel } from '@/lib/mutations/hotels'
@@ -239,7 +240,19 @@ export function HotelsTable({ className }: { className?: string }) {
 						))}
 					</TableHeader>
 					<TableBody>
-						{table.getRowModel().rows?.length ? (
+						{hotels.isLoading ? (
+							<TableRow>
+								<TableCell colSpan={columns.length} className='h-24 text-center'>
+									<Loading
+										type='spin'
+										className='mx-auto'
+										width={20}
+										height={20}
+										color='#777'
+									/>
+								</TableCell>
+							</TableRow>
+						) : table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
 								<TableRow
 									key={row.id}

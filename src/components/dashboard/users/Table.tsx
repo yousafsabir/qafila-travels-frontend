@@ -15,6 +15,7 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
+import Loading from 'react-loading'
 
 import { type TableUser, type User, type CreateUser } from '@/lib/interfaces/users'
 import { useCreateUser, useGetUsers, useUpdateUser } from '@/lib/mutations/users'
@@ -211,7 +212,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel({initialSync: true}),
+		getPaginationRowModel: getPaginationRowModel({ initialSync: true }),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
@@ -291,7 +292,19 @@ export function DataTableDemo({ className }: { className?: string }) {
 						))}
 					</TableHeader>
 					<TableBody>
-						{table.getRowModel().rows?.length ? (
+						{users.isLoading ? (
+							<TableRow>
+								<TableCell colSpan={columns.length} className='h-24 text-center'>
+									<Loading
+										type='spin'
+										className='mx-auto'
+										width={20}
+										height={20}
+										color='#777'
+									/>
+								</TableCell>
+							</TableRow>
+						) : table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
 								<TableRow
 									key={row.id}
