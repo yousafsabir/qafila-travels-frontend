@@ -7,7 +7,7 @@ export interface UserLogin {
 
 export interface User {
 	_id: string
-	username: string
+	user_name: string
 	email: string
 	current_balance: number
 	isBanned: boolean

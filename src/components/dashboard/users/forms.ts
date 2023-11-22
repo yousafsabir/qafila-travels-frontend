@@ -12,7 +12,7 @@ export const createUserForm: IFormField[] = [
 	},
 	{
 		label: 'Username',
-		key: 'username',
+		key: 'user_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
@@ -161,7 +161,7 @@ export const updateUserForm: IFormField[] = [
 	},
 	{
 		label: 'Username',
-		key: 'username',
+		key: 'user_name',
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
