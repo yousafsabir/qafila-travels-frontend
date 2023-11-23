@@ -22,7 +22,7 @@ export default function Home() {
 				router.push('/login')
 			} else {
 				store.setAdmin(getMe.data.user)
-				router.push('/dashboard')
+				router.push(store.url ?? '/dashboard')
 			}
 		}
 	}, [getMe.data])

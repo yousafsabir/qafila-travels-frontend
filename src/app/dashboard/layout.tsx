@@ -13,7 +13,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 	const store = useStore()
 	useEffect(() => {
-		if (!store.admin) return router.push('/')
+		if (!store.admin) {
+			const url = window.location.href
+			store.setUrl(url.substring(url.indexOf("/dashboard"), url.length))
+			return router.push('/')
+		}
 	}, [])
 
 	const path = usePathname()
