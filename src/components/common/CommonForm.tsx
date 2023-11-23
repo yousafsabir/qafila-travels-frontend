@@ -26,23 +26,34 @@ import {
 	SelectValue,
 } from '@/components/common/ui/select'
 
-export const CommonForm = ({
-	formType,
-	formFields,
-	updateObj,
-	submitFunc,
-	closeModal,
-}: {
-	formType: 'create' | 'edit'
+type CommonForm = {
+	type: 'form'
+	operationType: 'create' | 'edit'
 	formFields: IFormField[]
-	updateObj?: any
+	defaultObj?: any
+	submitText: string
+	cancelText: string
+	submitFunc: (values: any) => void
+}
+
+type CommonModalForm = {
+	type: 'modal'
+	operationType: 'create' | 'edit'
+	formFields: IFormField[]
+	defaultObj?: any
+	submitText: string
+	cancelText: string
 	submitFunc: (values: any) => void
 	closeModal: () => void
-}) => {
+}
+
+type CommonFormProps = CommonForm | CommonModalForm
+
+export const CommonForm = (props: CommonFormProps) => {
 	let defaultValues: Record<string, any> = {}
-	if (formType === 'edit') {
-		formFields = formFields.map((field) => {
-			Object.entries(updateObj).forEach(([key, value]) => {
+	if (props.operationType === 'edit') {
+		props.formFields = props.formFields.map((field) => {
+			Object.entries(props.defaultObj).forEach(([key, value]) => {
 				if (key === field.key) {
 					field.defaultValue = String(value) as any
 					defaultValues[key] = String(value) as any
@@ -52,7 +63,7 @@ export const CommonForm = ({
 		})
 	}
 
-	const zodSchema = extractSchemaFromField(formFields)
+	const zodSchema = extractSchemaFromField(props.formFields)
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
 		defaultValues: defaultValues,
@@ -60,11 +71,11 @@ export const CommonForm = ({
 
 	const onCancel = () => {
 		form.reset()
-		closeModal()
+		if (props.type === 'modal') props.closeModal()
 	}
 	useEffect(() => {
 		form.reset()
-	}, [formType])
+	}, [props.operationType])
 
 	return (
 		<Form {...form}>
@@ -74,11 +85,11 @@ export const CommonForm = ({
 					Object.entries(values).forEach(([key, value]) => {
 						if (value || typeof value === 'boolean') filteredObj[key] = value
 					})
-					submitFunc(filteredObj)
+					props.submitFunc(filteredObj)
 				})}
 				className='space-y-3 rounded-lg bg-gray-50 px-8 py-8'>
 				<div className='grid grid-cols-2 gap-x-2 gap-y-3'>
-					{formFields.map((aField, i) => (
+					{props.formFields.map((aField, i) => (
 						<Fragment key={i}>
 							{['email', 'text', 'password', 'number', 'date'].includes(
 								aField.type,
@@ -95,7 +106,7 @@ export const CommonForm = ({
 													type={aField.type}
 													{...field}
 													defaultValue={
-														formType === 'edit'
+														props.operationType === 'edit'
 															? (function () {
 																	return aField.defaultValue
 															  })()
@@ -118,7 +129,7 @@ export const CommonForm = ({
 												<Select
 													onValueChange={field.onChange}
 													defaultValue={
-														formType === 'edit'
+														props.operationType === 'edit'
 															? aField.defaultValue
 															: ''
 													}
@@ -151,10 +162,10 @@ export const CommonForm = ({
 				</div>
 				<div className='mt-6 flex justify-center gap-2'>
 					<Button variant={'outline'} className='px-8' type='button' onClick={onCancel}>
-						Cancel
+						{props.cancelText}
 					</Button>
 					<Button className='px-8' type='submit'>
-						{formType === 'create' ? 'Create' : 'Update'}
+						{props.submitText}
 					</Button>
 				</div>
 			</form>

@@ -278,10 +278,13 @@ export function UmrahsTable({ className }: { className?: string }) {
 			</div>
 			<CommonModal ref={formRef}>
 				<CommonForm
-					updateObj={detailUmrah}
-					formType={formType}
+					type='modal'
+					defaultObj={detailUmrah}
+					operationType={formType}
 					closeModal={() => formRef.current?.click()}
 					formFields={formType === 'create' ? createUmrahForm : updateUmrahForm}
+					submitText={formType === 'create' ? 'Create' : 'Update'}
+					cancelText='Cancel'
 					submitFunc={(values) =>
 						formType === 'create' ? onSubmit(values) : onUpdate(values)
 					}

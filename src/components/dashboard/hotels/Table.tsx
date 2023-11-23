@@ -16,7 +16,7 @@ import {
 } from '@tanstack/react-table'
 import Loading from 'react-loading'
 
-import { TableHotel, Hotel } from '@/lib/interfaces/hotels'
+import { TableHotel, Hotel, CreateHotel } from '@/lib/interfaces/hotels'
 import { useGetHotels, useCreateHotel, useUpdateHotel } from '@/lib/mutations/hotels'
 import { createHotelForm, updateHotelForm } from '@/components/dashboard/hotels/forms'
 import { cn } from '@/lib/utils'
@@ -301,12 +301,17 @@ export function HotelsTable({ className }: { className?: string }) {
 			</div>
 			<CommonModal ref={formRef}>
 				<CommonForm
-					updateObj={detailHotel}
-					formType={formType}
+				type='modal'
+					defaultObj={detailHotel}
+					operationType={formType}
 					closeModal={() => formRef.current?.click()}
 					formFields={formType === 'create' ? createHotelForm : updateHotelForm}
+					submitText={formType === 'create' ? 'Create' : 'Update'}
+					cancelText='Cancel'
 					submitFunc={(values) =>
-						formType === 'create' ? onSubmit(values) : onUpdate(values)
+						formType === 'create'
+							? onSubmit(values as CreateHotel)
+							: onUpdate(values as any)
 					}
 				/>
 			</CommonModal>
