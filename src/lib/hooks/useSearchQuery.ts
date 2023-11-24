@@ -110,9 +110,9 @@ function parseSearchQueryStr(queryString?: string | null): {
 	queryObj: ISearchQuery | null
 	queryStr: string
 } {
-	console.log('Provided Query String', queryString)
+	'use client'
 	if (!queryString) {
-		if (window && window.location.href.indexOf('?') !== -1) {
+		if (typeof window !== 'undefined' && window.location.href.indexOf('?') !== -1) {
 			queryString = window.location.href
 		} else {
 			return {

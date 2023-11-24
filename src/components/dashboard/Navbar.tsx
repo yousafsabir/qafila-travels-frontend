@@ -41,7 +41,7 @@ export function Navbar({ className }: { className?: string }) {
 						<DropdownMenuTrigger asChild>
 							<div className='flex cursor-pointer items-center'>
 								<UserCircle2 className='mr-2 h-10 w-10' />
-								<span>{admin?.username ? admin?.username : 'no_username'}</span>
+								<span>{admin?.user_name ? admin?.user_name : 'no_username'}</span>
 							</div>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent className='w-56'>

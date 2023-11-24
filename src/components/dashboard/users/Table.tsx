@@ -210,28 +210,24 @@ export function DataTableDemo({ className }: { className?: string }) {
 		},
 	]
 
-	const table = React.useMemo(
-		() =>
-			useReactTable({
-				data: users.data?.users || [],
-				columns,
-				onSortingChange: setSorting,
-				onColumnFiltersChange: setColumnFilters,
-				getCoreRowModel: getCoreRowModel(),
-				getPaginationRowModel: getPaginationRowModel({ initialSync: true }),
-				getSortedRowModel: getSortedRowModel(),
-				getFilteredRowModel: getFilteredRowModel(),
-				onColumnVisibilityChange: setColumnVisibility,
-				onRowSelectionChange: setRowSelection,
-				state: {
-					sorting,
-					columnFilters,
-					columnVisibility,
-					rowSelection,
-				},
-			}),
-		[],
-	)
+	const table = useReactTable({
+		data: users.data?.users || [],
+		columns,
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel({ initialSync: true }),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
+		onRowSelectionChange: setRowSelection,
+		state: {
+			sorting,
+			columnFilters,
+			columnVisibility,
+			rowSelection,
+		},
+	})
 
 	return (
 		<div className={cn('w-full', className)}>
