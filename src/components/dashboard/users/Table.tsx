@@ -17,6 +17,7 @@ import {
 } from '@tanstack/react-table'
 import Loading from 'react-loading'
 
+import { useSearchQuery } from '@/lib/hooks'
 import { type TableUser, type User, type CreateUser } from '@/lib/interfaces/users'
 import { useCreateUser, useGetUsers, useUpdateUser } from '@/lib/mutations/users'
 import { cn } from '@/lib/utils'
@@ -34,7 +35,7 @@ import {
 } from '@/components/common/ui/dropdown-menu'
 import { Input } from '@/components/common/ui/input'
 import { CommonForm } from '@/components/common'
-import { createUserForm, updateUserForm } from '@/components/dashboard/users/forms'
+import { createUserForm, updateUserForm, searchUserForm } from '@/components/dashboard/users/forms'
 import {
 	Table,
 	TableBody,
@@ -45,7 +46,10 @@ import {
 } from '@/components/common/ui/table'
 
 export function DataTableDemo({ className }: { className?: string }) {
-	const users = useGetUsers()
+	const searchQuery = useSearchQuery()
+
+	// const users = React.useMemo(() => useGetUsers(searchQuery.queryStr), [])
+	const users = useGetUsers(searchQuery.queryStr)
 	const createUser = useCreateUser()
 	const updateUser = useUpdateUser()
 	const [detailUser, setDetailUser] = React.useState<User | null>(null)
@@ -67,16 +71,16 @@ export function DataTableDemo({ className }: { className?: string }) {
 	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const viewCustomerDetails = (index: number) => {
-		if (users.data && users.data[index]) {
-			setDetailUser(users.data[index] as User)
+		if (users.data && users.data.users[index]) {
+			setDetailUser(users.data.users[index] as User)
 			detailsRef.current?.click()
 		}
 	}
 
 	const onEditUser = (index: number) => {
-		if (users.data && users.data[index]) {
+		if (users.data && users.data.users[index]) {
 			setFormType('edit')
-			setDetailUser(users.data[index] as User)
+			setDetailUser(users.data.users[index] as User)
 			formRef.current?.click()
 		}
 	}
@@ -102,9 +106,9 @@ export function DataTableDemo({ className }: { className?: string }) {
 			enableHiding: false,
 		},
 		{
-			accessorKey: 'username',
+			accessorKey: 'user_name',
 			header: 'Username',
-			cell: ({ row }) => <div>{row.getValue('username')}</div>,
+			cell: ({ row }) => <div>{row.getValue('user_name')}</div>,
 		},
 		{
 			accessorKey: 'email',
@@ -206,27 +210,41 @@ export function DataTableDemo({ className }: { className?: string }) {
 		},
 	]
 
-	const table = useReactTable({
-		data: users.data || [],
-		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel({ initialSync: true }),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
-			rowSelection,
-		},
-	})
+	const table = React.useMemo(
+		() =>
+			useReactTable({
+				data: users.data?.users || [],
+				columns,
+				onSortingChange: setSorting,
+				onColumnFiltersChange: setColumnFilters,
+				getCoreRowModel: getCoreRowModel(),
+				getPaginationRowModel: getPaginationRowModel({ initialSync: true }),
+				getSortedRowModel: getSortedRowModel(),
+				getFilteredRowModel: getFilteredRowModel(),
+				onColumnVisibilityChange: setColumnVisibility,
+				onRowSelectionChange: setRowSelection,
+				state: {
+					sorting,
+					columnFilters,
+					columnVisibility,
+					rowSelection,
+				},
+			}),
+		[],
+	)
 
 	return (
 		<div className={cn('w-full', className)}>
+			<CommonForm
+				type='form'
+				defaultObj={searchQuery.filterObj}
+				operationType='edit'
+				formFields={searchUserForm}
+				submitText='Search'
+				cancelText='Cancel'
+				submitFunc={searchQuery.setQuery}
+			/>
+			<hr className='bg-gray-300' />
 			<div className='flex items-center py-4'>
 				<Input
 					placeholder='Filter emails...'
@@ -353,10 +371,13 @@ export function DataTableDemo({ className }: { className?: string }) {
 			</div>
 			<CommonModal ref={formRef}>
 				<CommonForm
-					updateObj={detailUser}
-					formType={formType}
+					type='modal'
+					defaultObj={detailUser}
+					operationType={formType}
 					closeModal={() => formRef.current?.click()}
 					formFields={formType === 'create' ? createUserForm : updateUserForm}
+					submitText={formType === 'create' ? 'Create' : 'Update'}
+					cancelText='Cancel'
 					submitFunc={(values) =>
 						formType === 'create'
 							? onSubmit(values as CreateUser)
