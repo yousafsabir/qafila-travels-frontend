@@ -46,11 +46,25 @@ export function useSearchQuery() {
 		router.push(generateSearchQueryStr({ ...state, filter: object }))
 	}
 
+	function setPage(page: number): void {
+		setState((prev) => ({ ...prev, page }))
+	}
+
+	function setLimit(limit: number): void {
+		setState((prev) => ({ ...prev, limit }))
+	}
+
 	return {
 		queryStr,
 		filterObj: state.filter,
 		selectArr: state.select,
+		pagination: {
+			page: state.page,
+			limit: state.limit,
+		},
 		setQuery,
+		setPage,
+		setLimit,
 	}
 }
 
