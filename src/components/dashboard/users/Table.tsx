@@ -11,7 +11,6 @@ import {
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
-	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
@@ -33,6 +32,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
+import { CommonTable } from '@/components/common'
 import { Input } from '@/components/common/ui/input'
 import { CommonForm } from '@/components/common'
 import { createUserForm, updateUserForm, searchUserForm } from '@/components/dashboard/users/forms'
@@ -61,12 +61,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 	const onUpdate = async (values: any) => {
 		await updateUser.mutateAsync({ ...values, _id: detailUser?._id || '' })
 	}
-
-	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = React.useState({})
 	const formRef = React.useRef<React.ElementRef<'button'>>(null)
 	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
@@ -210,6 +205,11 @@ export function DataTableDemo({ className }: { className?: string }) {
 		},
 	]
 
+	const [sorting, setSorting] = React.useState<SortingState>([])
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+	const [rowSelection, setRowSelection] = React.useState({})
+
 	const table = useReactTable({
 		data: users.data?.users || [],
 		columns,
@@ -226,6 +226,10 @@ export function DataTableDemo({ className }: { className?: string }) {
 			columnFilters,
 			columnVisibility,
 			rowSelection,
+			pagination: {
+				pageIndex: searchQuery.pagination.page,
+				pageSize: searchQuery.pagination.limit,
+			},
 		},
 	})
 
@@ -241,130 +245,20 @@ export function DataTableDemo({ className }: { className?: string }) {
 				submitFunc={searchQuery.setQuery}
 			/>
 			<hr className='bg-gray-300' />
-			<div className='flex items-center py-4'>
-				<Input
-					placeholder='Filter emails...'
-					value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-					onChange={(event) =>
-						table.getColumn('email')?.setFilterValue(event.target.value)
-					}
-					className='max-w-sm'
-				/>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className='capitalize'
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								)
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>
-				<Button
-					variant={'outline'}
-					onClick={() => {
-						setFormType('create')
-						formRef?.current?.click()
-					}}
-					className='ml-4'>
-					Create
-				</Button>
-			</div>
-			<div className='rounded-md border'>
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-												  )}
-										</TableHead>
-									)
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{users.isLoading ? (
-							<TableRow>
-								<TableCell colSpan={columns.length} className='h-24 text-center'>
-									<Loading
-										type='spin'
-										className='mx-auto'
-										width={20}
-										height={20}
-										color='#777'
-									/>
-								</TableCell>
-							</TableRow>
-						) : table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && 'selected'}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className='h-24 text-center'>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
-			<div className='mt-auto flex items-center justify-end space-x-2 py-4'>
-				<div className='text-muted-foreground flex-1 text-sm'>
-					{table.getFilteredSelectedRowModel().rows.length} of{' '}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
-				</div>
-				<div className='space-x-2'>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}>
-						Previous
-					</Button>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}>
-						Next
-					</Button>
-				</div>
-			</div>
+			<CommonTable
+				columns={columns}
+				data={users.data?.users || []}
+				loading={users.isLoading}
+				onCreate={() => {
+					setFormType('create')
+					formRef?.current?.click()
+				}}
+				page={searchQuery.pagination.page}
+				limit={searchQuery.pagination.limit}
+				lastPage={users.data?.pagination.last_page || 0}
+				setPage={searchQuery.setPage}
+				setLimit={searchQuery.setLimit}
+			/>
 			<CommonModal ref={formRef}>
 				<CommonForm
 					type='modal'
