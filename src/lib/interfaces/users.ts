@@ -38,3 +38,7 @@ export interface LoginResponse extends HttpCommonResponse {
 export interface GetUserResponse extends HttpCommonResponse {
 	user: User
 }
+
+export interface GetUsersResponse extends HttpCommonResponse {
+	users: User[]
+}

@@ -71,10 +71,11 @@ export function useGetMe() {
 	})
 }
 
-export function useGetUsers() {
+export function useGetUsers(searchParams?: string) {
 	return useQuery({
-		queryKey: ['get_users'],
-		queryFn: () => getUsers(),
+		queryKey: ['get_users', searchParams],
+		queryFn: () => getUsers(searchParams),
+		
 	})
 }
 

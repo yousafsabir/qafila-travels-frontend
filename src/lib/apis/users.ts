@@ -4,6 +4,7 @@ import {
 	UserLogin,
 	LoginResponse,
 	GetUserResponse,
+	GetUsersResponse,
 	TableUser,
 	CreateUser,
 	User,
@@ -21,8 +22,8 @@ export function getMe() {
 	return http.get<GetUserResponse>(apiUrls.users.me)
 }
 
-export function getUsers() {
-	return http.get<TableUser[]>(apiUrls.users.getAll)
+export function getUsers(searchParams?: string) {
+	return http.get<GetUsersResponse>(`${apiUrls.users.getAll}${searchParams ? searchParams : ''}`)
 }
 
 export function updateUser(data: User) {
