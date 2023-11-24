@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, Fragment, type FormEventHandler } from 'react'
+import { useEffect, Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -51,19 +51,29 @@ type CommonFormProps = CommonForm | CommonModalForm
 
 export const CommonForm = (props: CommonFormProps) => {
 	let defaultValues: Record<string, any> = {}
-	if (props.operationType === 'edit') {
-		props.formFields = props.formFields.map((field) => {
-			Object.entries(props.defaultObj).forEach(([key, value]) => {
-				if (key === field.key) {
-					field.defaultValue = String(value) as any
-					defaultValues[key] = String(value) as any
-				}
-			})
-			return field
-		})
-	}
+	let [formFields, setFormFields] = useState<IFormField[]>([])
 
-	const zodSchema = extractSchemaFromField(props.formFields)
+	console.log(`Here in ${props.submitText} form`)
+
+	useEffect(() => {
+		if (props.operationType === 'edit') {
+			setFormFields(
+				props.formFields.map((field) => {
+					Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
+						if (key === field.key) {
+							field.defaultValue = String(value) as any
+							defaultValues[key] = String(value) as any
+						}
+					})
+					return field
+				}),
+			)
+		} else {
+			setFormFields(props.formFields)
+		}
+	}, [])
+
+	const zodSchema = extractSchemaFromField(formFields)
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
 		defaultValues: defaultValues,
@@ -73,6 +83,7 @@ export const CommonForm = (props: CommonFormProps) => {
 		form.reset()
 		if (props.type === 'modal') props.closeModal()
 	}
+
 	useEffect(() => {
 		form.reset()
 	}, [props.operationType])
@@ -89,7 +100,7 @@ export const CommonForm = (props: CommonFormProps) => {
 				})}
 				className='space-y-3 rounded-lg bg-gray-50 px-8 py-8'>
 				<div className='grid grid-cols-2 gap-x-2 gap-y-3'>
-					{props.formFields.map((aField, i) => (
+					{formFields.map((aField, i) => (
 						<Fragment key={i}>
 							{['email', 'text', 'password', 'number', 'date'].includes(
 								aField.type,
