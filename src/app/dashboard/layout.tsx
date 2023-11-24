@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 

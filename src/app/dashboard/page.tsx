@@ -1,6 +1,11 @@
-'use client'
+import { Metadata } from 'next'
 
 import { DataTableDemo } from '@/components/dashboard/users/Table'
+
+export const metadata: Metadata = {
+	title: 'Dashboard',
+	description: 'Qafila Travels Dashboard',
+}
 
 export default function Dashboard() {
 	return (
