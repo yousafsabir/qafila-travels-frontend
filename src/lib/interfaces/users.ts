@@ -1,4 +1,4 @@
-import { HttpCommonResponse } from './http'
+import { HttpCommonResponse, CommonGetAllResponse } from './http'
 
 export interface UserLogin {
 	email: string
@@ -39,6 +39,6 @@ export interface GetUserResponse extends HttpCommonResponse {
 	user: User
 }
 
-export interface GetUsersResponse extends HttpCommonResponse {
+export interface GetUsersResponse extends CommonGetAllResponse {
 	users: User[]
 }
