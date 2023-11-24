@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -12,6 +12,7 @@ import {
 	useReactTable,
 } from '@tanstack/react-table'
 import Loading from 'react-loading'
+import { ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from 'lucide-react'
 
 import { PAGINATION_LIMIT } from '@/lib/config'
 import {
@@ -19,8 +20,6 @@ import {
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
 import {
@@ -39,7 +38,8 @@ export function CommonTable(props: {
 	onCreate: () => void
 	page: number
 	limit: number
-    lastPage: number
+	lastPage: number
+	totalDocuments: number
 	setPage: (page: number) => void
 	setLimit: (limit: number) => void
 	loading: boolean
@@ -77,7 +77,7 @@ export function CommonTable(props: {
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline' className=''>
-							Table Size: {props.limit}
+							Entries: {props.limit}
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
@@ -183,23 +183,51 @@ export function CommonTable(props: {
 			</div>
 			<div className='mt-auto flex items-center justify-end space-x-2 py-4'>
 				<div className='text-muted-foreground flex-1 text-sm'>
-					{table.getFilteredSelectedRowModel().rows.length} of{' '}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
+					{table.getFilteredSelectedRowModel().rows.length ? (
+						<>
+							{table.getFilteredSelectedRowModel().rows.length} of{' '}
+							{table.getFilteredRowModel().rows.length} row(s) selected.
+						</>
+					) : (
+						<>
+							Showing {(props.page - 1) * props.limit + 1}-
+							{(props.page - 1) * props.limit + props.data.length} of{' '}
+							{props.totalDocuments} Documents
+						</>
+					)}
 				</div>
 				<div className='space-x-2'>
 					<Button
 						variant='outline'
 						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}>
-						Previous
+						onClick={() => props.setPage(1)}
+						disabled={props.page === 1}
+						title='First Page'>
+						<ChevronsLeft />
 					</Button>
 					<Button
 						variant='outline'
 						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}>
-						Next
+						onClick={() => props.setPage(props.page - 1)}
+						disabled={props.page === 1}
+						title='Previous Page'>
+						<ChevronLeft />
+					</Button>
+					<Button
+						variant='outline'
+						size='sm'
+						onClick={() => props.setPage(props.page + 1)}
+						disabled={props.page === props.lastPage}
+						title='Next Page'>
+						<ChevronRight />
+					</Button>
+					<Button
+						variant='outline'
+						size='sm'
+						onClick={() => props.setPage(props.lastPage)}
+						disabled={props.page === props.lastPage}
+						title='Last Page'>
+						<ChevronsRight />
 					</Button>
 				</div>
 			</div>

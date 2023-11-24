@@ -2,19 +2,8 @@
 
 import * as React from 'react'
 import { CheckCircle2, XCircle } from 'lucide-react'
-import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
-import {
-	ColumnDef,
-	ColumnFiltersState,
-	SortingState,
-	VisibilityState,
-	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getSortedRowModel,
-	useReactTable,
-} from '@tanstack/react-table'
-import Loading from 'react-loading'
+import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { ColumnDef } from '@tanstack/react-table'
 
 import { useSearchQuery } from '@/lib/hooks'
 import { type TableUser, type User, type CreateUser } from '@/lib/interfaces/users'
@@ -25,7 +14,6 @@ import { Checkbox } from '@/components/common/ui/checkbox'
 import { CommonModal, ShowDetails } from '@/components/common'
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
@@ -33,26 +21,19 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
 import { CommonTable } from '@/components/common'
-import { Input } from '@/components/common/ui/input'
 import { CommonForm } from '@/components/common'
 import { createUserForm, updateUserForm, searchUserForm } from '@/components/dashboard/users/forms'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/common/ui/table'
 
 export function DataTableDemo({ className }: { className?: string }) {
 	const searchQuery = useSearchQuery()
 
-	// const users = React.useMemo(() => useGetUsers(searchQuery.queryStr), [])
 	const users = useGetUsers(searchQuery.queryStr)
 	const createUser = useCreateUser()
 	const updateUser = useUpdateUser()
 	const [detailUser, setDetailUser] = React.useState<User | null>(null)
+	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
+	const formRef = React.useRef<React.ElementRef<'button'>>(null)
+	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const onSubmit = async (values: CreateUser) => {
 		await createUser.mutateAsync(values)
@@ -61,9 +42,6 @@ export function DataTableDemo({ className }: { className?: string }) {
 	const onUpdate = async (values: any) => {
 		await updateUser.mutateAsync({ ...values, _id: detailUser?._id || '' })
 	}
-	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
-	const formRef = React.useRef<React.ElementRef<'button'>>(null)
-	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const viewCustomerDetails = (index: number) => {
 		if (users.data && users.data.users[index]) {
@@ -205,34 +183,6 @@ export function DataTableDemo({ className }: { className?: string }) {
 		},
 	]
 
-	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = React.useState({})
-
-	const table = useReactTable({
-		data: users.data?.users || [],
-		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		manualPagination: true,
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
-			rowSelection,
-			pagination: {
-				pageIndex: searchQuery.pagination.page,
-				pageSize: searchQuery.pagination.limit,
-			},
-		},
-	})
-
 	return (
 		<div className={cn('w-full', className)}>
 			<CommonForm
@@ -256,6 +206,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={users.data?.pagination.last_page || 0}
+				totalDocuments={users.data?.pagination.total_count || 0}
 				setPage={searchQuery.setPage}
 				setLimit={searchQuery.setLimit}
 			/>
