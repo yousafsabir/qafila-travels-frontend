@@ -14,4 +14,11 @@ export const apiUrls = {
 		deleteOne: 'hotels/delete_hotel_by_id',
 		updateOne: 'hotels/update_hotel_by_id',
 	},
+	umrahs: {
+		create: 'hotels',
+		getAll: 'hotels',
+		getOne: 'hotels',
+		deleteOne: 'hotels',
+		updateOne: 'hotels',
+	},
 }
