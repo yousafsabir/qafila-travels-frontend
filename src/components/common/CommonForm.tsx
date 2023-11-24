@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, Fragment, useState } from 'react'
+import { useEffect, Fragment, useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
+import { NO_VALUE } from '@/lib/config'
+import { type IFormField } from '@/lib/interfaces'
 import {
 	Form,
 	FormControl,
@@ -13,7 +15,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/common/ui/form'
-import { type IFormField } from '@/lib/interfaces'
 import { Input } from '@/components/common/ui/input'
 import { Button } from '@/components/common/ui/button'
 import {
@@ -60,7 +61,7 @@ export const CommonForm = (props: CommonFormProps) => {
 					Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
 						if (key === field.key) {
 							field.defaultValue = String(value) as any
-							defaultValues[key] = String(value) as any
+							defaultValues[key] = String(value) as any 
 						}
 					})
 					return field
@@ -74,12 +75,25 @@ export const CommonForm = (props: CommonFormProps) => {
 	const zodSchema = extractSchemaFromField(formFields)
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
-		defaultValues: defaultValues,
+		defaultValues: {
+			email: '',
+		},
 	})
 
 	const onCancel = () => {
+		defaultValues = {}
+
+		// Resetting Form values manually because form.reset() won't work
+		formFields.forEach((field) => {
+			if (field.type === 'select') {
+				form.setValue(field.key, NO_VALUE)
+			} else {
+				form.setValue(field.key, '')
+			}
+		})
 		form.reset()
 		if (props.type === 'modal') props.closeModal()
+		if (props.type === 'form') props.submitFunc({})
 	}
 
 	useEffect(() => {
@@ -92,7 +106,8 @@ export const CommonForm = (props: CommonFormProps) => {
 				onSubmit={form.handleSubmit((values) => {
 					let filteredObj: Record<string, any> = {}
 					Object.entries(values).forEach(([key, value]) => {
-						if (value || typeof value === 'boolean') filteredObj[key] = value
+						if ((value !== NO_VALUE && value) || typeof value === 'boolean')
+							filteredObj[key] = value
 					})
 					props.submitFunc(filteredObj)
 				})}
@@ -169,7 +184,7 @@ export const CommonForm = (props: CommonFormProps) => {
 						</Fragment>
 					))}
 				</div>
-				<div className='mt-6 flex justify-center gap-2'>
+				<div className='flex justify-center gap-2 pt-6'>
 					<Button variant={'outline'} className='px-8' type='button' onClick={onCancel}>
 						{props.cancelText}
 					</Button>
