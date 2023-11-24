@@ -53,8 +53,6 @@ export const CommonForm = (props: CommonFormProps) => {
 	let defaultValues: Record<string, any> = {}
 	let [formFields, setFormFields] = useState<IFormField[]>([])
 
-	console.log(`Here in ${props.submitText} form`)
-
 	useEffect(() => {
 		if (props.operationType === 'edit') {
 			setFormFields(

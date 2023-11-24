@@ -24,7 +24,6 @@ export function useSearchQuery() {
 	const store = useStore()
 
 	const { queryObj: existingQuery, queryStr: existingQueryStr } = parseSearchQueryStr(store.url)
-	console.log('existingQuery: ', existingQuery)
 	const [state, setState] = useState<ISearchQuery>({
 		filter: existingQuery ? existingQuery.filter : {},
 		select: existingQuery ? existingQuery.select : [],
@@ -40,7 +39,6 @@ export function useSearchQuery() {
 
 	useEffect(() => {
 		router.push(queryStr)
-		console.log('Pushing query to the router')
 	}, [queryStr])
 
 	function setQuery(object: Record<string, string | number | boolean>) {
@@ -132,7 +130,6 @@ function parseSearchQueryStr(queryString?: string | null): {
 	queryString = queryString.substring(queryString.indexOf('?') + 1)
 
 	const queryArr = queryString.split('&').filter((v) => Boolean(v))
-	console.log('Query Array: ', queryArr)
 	let returnObj: any = {}
 	queryArr.forEach((query) => {
 		const [key, value] = query.split('=')
