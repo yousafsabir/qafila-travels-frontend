@@ -1,5 +1,7 @@
-import { IFormField } from '@/lib/interfaces'
 import * as z from 'zod'
+
+import { IFormField } from '@/lib/interfaces'
+import { NO_VALUE } from '@/lib/config'
 
 export const createUserForm: IFormField[] = [
 	{
@@ -173,6 +175,10 @@ export const searchUserForm: IFormField[] = [
 		type: 'select',
 		values: [
 			{
+				label: '--Select--',
+				value: NO_VALUE,
+			},
+			{
 				label: 'User',
 				value: 'user',
 			},
@@ -190,6 +196,10 @@ export const searchUserForm: IFormField[] = [
 		key: 'access_level',
 		type: 'select',
 		values: [
+			{
+				label: '--Select--',
+				value: NO_VALUE,
+			},
 			{
 				label: 'Read Access',
 				value: 'read',
@@ -219,6 +229,10 @@ export const searchUserForm: IFormField[] = [
 		type: 'select',
 		values: [
 			{
+				label: '--Select--',
+				value: NO_VALUE,
+			},
+			{
 				label: 'Yes',
 				value: 'true',
 			},
@@ -240,6 +254,10 @@ export const searchUserForm: IFormField[] = [
 		type: 'select',
 		values: [
 			{
+				label: '--Select--',
+				value: NO_VALUE,
+			},
+			{
 				label: 'Yes',
 				value: 'true',
 			},
@@ -260,6 +278,10 @@ export const searchUserForm: IFormField[] = [
 		key: 'isVerified',
 		type: 'select',
 		values: [
+			{
+				label: '--Select--',
+				value: NO_VALUE,
+			},
 			{
 				label: 'Yes',
 				value: 'true',
