@@ -150,6 +150,134 @@ export const createUserForm: IFormField[] = [
 	},
 ]
 
+export const searchUserForm: IFormField[] = [
+	{
+		label: 'Email',
+		key: 'email',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.string().min(1, 'Email is required').email('Invalid email').optional(),
+	},
+	{
+		label: 'Username',
+		key: 'user_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.string().min(1, 'Username is required').optional(),
+	},
+	{
+		label: 'Role',
+		key: 'role',
+		type: 'select',
+		values: [
+			{
+				label: 'User',
+				value: 'user',
+			},
+			{
+				label: 'Admin',
+				value: 'admin',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Select Role',
+		validation: z.enum(['user', 'admin']).optional(),
+	},
+	{
+		label: 'Access Level',
+		key: 'access_level',
+		type: 'select',
+		values: [
+			{
+				label: 'Read Access',
+				value: 'read',
+			},
+			{
+				label: 'Create & Read Access',
+				value: 'create,read',
+			},
+			{
+				label: 'Create, Read & Update Access',
+				value: 'create,read,update',
+			},
+			{
+				label: 'Create, Read, Update & Delete Access',
+				value: 'create,read,update,delete',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Select Access Level',
+		validation: z
+			.enum(['read', 'create,read', 'create,read,update', 'create,read,update,delete'])
+			.optional(),
+	},
+	{
+		label: 'Is Banned',
+		key: 'isBanned',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Ban Status',
+		validation: z
+			.enum(['true', 'false'])
+			.transform((a) => (a === 'true' ? true : false))
+			.optional(),
+	},
+	{
+		label: 'Is Creator',
+		key: 'isCreator',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Creator Status',
+		validation: z
+			.enum(['true', 'false'])
+			.transform((a) => (a === 'true' ? true : false))
+			.optional(),
+	},
+	{
+		label: 'Is Verified',
+		key: 'isVerified',
+		type: 'select',
+		values: [
+			{
+				label: 'Yes',
+				value: 'true',
+			},
+			{
+				label: 'No',
+				value: 'false',
+			},
+		],
+		defaultValue: '',
+		placeholder: 'Change Verified Status',
+		validation: z
+			.enum(['true', 'false'])
+			.transform((a) => (a === 'true' ? true : false))
+			.optional(),
+	},
+]
+
 export const updateUserForm: IFormField[] = [
 	{
 		label: 'Email',
