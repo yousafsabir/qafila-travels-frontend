@@ -11,9 +11,9 @@ export function createHotel(data: CreateHotel) {
 	return http.post<any>(apiUrls.hotels.create, data)
 }
 
-// export function getMe() {
-// 	return http.get<GetUserResponse>(apiUrls.users.me)
-// }
+export function deleteHotel() {
+	return http.delete<any>(apiUrls.users.me)
+}
 
 export function getHotel(hotelId: string) {
 	return http.post<GetHotelResponse>(apiUrls.hotels.getAll, { id: hotelId })
