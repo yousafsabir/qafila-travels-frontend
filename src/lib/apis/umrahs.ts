@@ -14,8 +14,8 @@ export function getUmrah(umrahId: string) {
 	return http.post<GetUmrahResponse>(`${apiUrls.umrahs.getAll}/${umrahId}`, { id: umrahId })
 }
 
-export function getUmrahs() {
-	return http.get<GetUmrahsResponse>(apiUrls.umrahs.getAll)
+export function getUmrahs(searchParams?: string) {
+	return http.get<GetUmrahsResponse>(`${apiUrls.umrahs.getAll}${searchParams ? searchParams : ''}`)
 }
 
 export function updateUmrah(data: Partial<Umrah>, umrahId: string) {

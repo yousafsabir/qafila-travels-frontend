@@ -154,6 +154,65 @@ export const createUmrahForm: IFormField[] = [
 	},
 ]
 
+export const searchUmrahForm: IFormField[] = [
+	{
+		label: 'Sr No.',
+		key: 'umrah_sr_no',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Invoice Number',
+		key: 'invoice_number',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Guest Name',
+		key: 'guest_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'No. Of Visas',
+		key: 'no_of_visas',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Total Cost',
+		key: 'total_cost',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Vendor Name',
+		key: 'vendor_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Client Name',
+		key: 'client_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+]
+
 export const updateUmrahForm: IFormField[] = [
 	{
 		label: 'Sr No.',

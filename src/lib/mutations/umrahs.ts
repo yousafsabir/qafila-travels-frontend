@@ -55,9 +55,9 @@ export function useUpdateUmrah() {
 	})
 }
 
-export function useGetUmrahs() {
+export function useGetUmrahs(searchParams?: string) {
 	return useQuery({
-		queryKey: ['get_umrahs'],
-		queryFn: () => getUmrahs(),
+		queryKey: ['get_umrahs', searchParams],
+		queryFn: () => getUmrahs(searchParams),
 	})
 }

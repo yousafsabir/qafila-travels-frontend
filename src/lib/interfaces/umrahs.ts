@@ -1,4 +1,4 @@
-import { HttpCommonResponse } from '.'
+import { HttpCommonResponse, CommonGetAllResponse } from '.'
 
 export interface Umrah {
 	_id: string
@@ -30,7 +30,7 @@ export interface TableUmrah {
 	cost_per_visa: string
 }
 
-export interface GetUmrahsResponse extends HttpCommonResponse {
+export interface GetUmrahsResponse extends CommonGetAllResponse {
 	umrahs: Umrah[]
 }
 

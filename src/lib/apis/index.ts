@@ -15,10 +15,10 @@ export const apiUrls = {
 		updateOne: 'hotels/update_hotel_by_id',
 	},
 	umrahs: {
-		create: 'hotels',
-		getAll: 'hotels',
-		getOne: 'hotels',
-		deleteOne: 'hotels',
-		updateOne: 'hotels',
+		create: 'umrahs',
+		getAll: 'umrahs',
+		getOne: 'umrahs',
+		deleteOne: 'umrahs',
+		updateOne: 'umrahs',
 	},
 }

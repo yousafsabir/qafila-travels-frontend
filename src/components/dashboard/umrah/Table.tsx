@@ -1,52 +1,40 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
-import {
-	ColumnDef,
-	ColumnFiltersState,
-	SortingState,
-	VisibilityState,
-	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
-	useReactTable,
-} from '@tanstack/react-table'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { ColumnDef } from '@tanstack/react-table'
 
+import { useSearchQuery } from '@/lib/hooks'
 import { TableUmrah, Umrah } from '@/lib/interfaces/umrahs'
 import { useGetUmrahs, useCreateUmrah, useUpdateUmrah } from '@/lib/mutations/umrahs'
-import { createUmrahForm, updateUmrahForm } from '@/components/dashboard/umrah/forms'
+import {
+	createUmrahForm,
+	searchUmrahForm,
+	updateUmrahForm,
+} from '@/components/dashboard/umrah/forms'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
-import { CommonForm, CommonModal, ShowDetails } from '@/components/common'
+import { CommonForm, CommonModal, ShowDetails, CommonTable } from '@/components/common'
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
-import { Input } from '@/components/common/ui/input'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/common/ui/table'
 
 export function UmrahsTable({ className }: { className?: string }) {
+	const searchQuery = useSearchQuery()
+
 	const umrahs = useGetUmrahs()
 	const createUmrah = useCreateUmrah()
 	const updateUmrah = useUpdateUmrah()
 	const [detailUmrah, setDetailUmrah] = React.useState<Umrah | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
+	const formRef = React.useRef<React.ElementRef<'button'>>(null)
+	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const onSubmit = async (values: any) => {
 		await createUmrah.mutateAsync(values)
@@ -54,14 +42,6 @@ export function UmrahsTable({ className }: { className?: string }) {
 
 	const onUpdate = async (values: any) => {
 		await updateUmrah.mutateAsync({ ...values, _id: detailUmrah?._id || '' })
-	}
-
-	const onEditUser = (index: number) => {
-		if (umrahs.data?.umrahs && umrahs.data?.umrahs[index]) {
-			setFormType('edit')
-			setDetailUmrah(umrahs.data?.umrahs[index] as Umrah)
-			formRef.current?.click()
-		}
 	}
 
 	const viewUmrahDetails = (index: number) => {
@@ -73,12 +53,13 @@ export function UmrahsTable({ className }: { className?: string }) {
 		}
 	}
 
-	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = React.useState({})
-	const formRef = React.useRef<React.ElementRef<'button'>>(null)
-	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
+	const onEditUmrah = (index: number) => {
+		if (umrahs.data?.umrahs && umrahs.data?.umrahs[index]) {
+			setFormType('edit')
+			setDetailUmrah(umrahs.data?.umrahs[index] as Umrah)
+			formRef.current?.click()
+		}
+	}
 
 	const columns: ColumnDef<TableUmrah>[] = [
 		{
@@ -136,7 +117,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 							<DropdownMenuItem onClick={() => viewUmrahDetails(index)}>
 								View Details
 							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onEditUser(index)}>
+							<DropdownMenuItem onClick={() => onEditUmrah(index)}>
 								Edit Umrah
 							</DropdownMenuItem>
 						</DropdownMenuContent>
@@ -146,136 +127,33 @@ export function UmrahsTable({ className }: { className?: string }) {
 		},
 	]
 
-	const table = useReactTable({
-		data: (umrahs.data?.umrahs as unknown as TableUmrah[]) || [],
-		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
-			rowSelection,
-		},
-	})
-
 	return (
 		<div className={cn('w-full', className)}>
-			<div className='flex items-center py-4'>
-				<Input
-					placeholder='Filter emails...'
-					value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-					onChange={(event) =>
-						table.getColumn('email')?.setFilterValue(event.target.value)
-					}
-					className='max-w-sm'
-				/>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className='capitalize'
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								)
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>
-				<Button
-					variant={'outline'}
-					onClick={() => formRef?.current?.click()}
-					className='ml-4'>
-					Create
-				</Button>
-			</div>
-			<div className='rounded-md border'>
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-												  )}
-										</TableHead>
-									)
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && 'selected'}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className='h-24 text-center'>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
-			<div className='mt-auto flex items-center justify-end space-x-2 py-4'>
-				<div className='text-muted-foreground flex-1 text-sm'>
-					{table.getFilteredSelectedRowModel().rows.length} of{' '}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
-				</div>
-				<div className='space-x-2'>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}>
-						Previous
-					</Button>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}>
-						Next
-					</Button>
-				</div>
-			</div>
+			<CommonForm
+				type='form'
+				defaultObj={searchQuery.filterObj}
+				operationType='edit'
+				formFields={searchUmrahForm}
+				submitText='Search'
+				cancelText='Cancel'
+				submitFunc={searchQuery.setQuery}
+			/>
+			<hr className='bg-gray-300' />
+			<CommonTable
+				columns={columns}
+				data={umrahs.data?.umrahs || []}
+				loading={umrahs.isLoading}
+				onCreate={() => {
+					setFormType('create')
+					formRef?.current?.click()
+				}}
+				page={searchQuery.pagination.page}
+				limit={searchQuery.pagination.limit}
+				lastPage={umrahs.data?.pagination.last_page || 0}
+				totalDocuments={umrahs.data?.pagination.total_count || 0}
+				setPage={searchQuery.setPage}
+				setLimit={searchQuery.setLimit}
+			/>
 			<CommonModal ref={formRef}>
 				<CommonForm
 					type='modal'
