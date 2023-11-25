@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -34,13 +35,16 @@ export const SignInForm = () => {
 
 	const onSubmit = async (values: UserLogin) => {
 		await login.mutateAsync(values)
+	}
+
+	useEffect(() => {
 		if (login.data?.status === 200) {
 			router.push('/dashboard')
 		}
 		if (login.isError) {
 			toast.error(String(login.data))
 		}
-	}
+	}, [login.data])
 
 	return (
 		<Form {...form}>
