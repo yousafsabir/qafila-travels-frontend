@@ -159,7 +159,7 @@ export const searchUserForm: IFormField[] = [
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
-		validation: z.string().min(1, 'Email is required').email('Invalid email').optional(),
+		validation: z.any(),
 	},
 	{
 		label: 'Username',
@@ -167,7 +167,7 @@ export const searchUserForm: IFormField[] = [
 		type: 'text',
 		defaultValue: '',
 		placeholder: '',
-		validation: z.string().min(1, 'Username is required').optional(),
+		validation: z.any(),
 	},
 	{
 		label: 'Role',
@@ -189,7 +189,7 @@ export const searchUserForm: IFormField[] = [
 		],
 		defaultValue: '',
 		placeholder: 'Select Role',
-		validation: z.enum(['user', 'admin']).optional(),
+		validation: z.any(),
 	},
 	{
 		label: 'Access Level',
@@ -219,9 +219,7 @@ export const searchUserForm: IFormField[] = [
 		],
 		defaultValue: '',
 		placeholder: 'Select Access Level',
-		validation: z
-			.enum(['read', 'create,read', 'create,read,update', 'create,read,update,delete'])
-			.optional(),
+		validation: z.any(),
 	},
 	{
 		label: 'Is Banned',
@@ -243,10 +241,7 @@ export const searchUserForm: IFormField[] = [
 		],
 		defaultValue: '',
 		placeholder: 'Change Ban Status',
-		validation: z
-			.enum(['true', 'false'])
-			.transform((a) => (a === 'true' ? true : false))
-			.optional(),
+		validation: z.any(),
 	},
 	{
 		label: 'Is Creator',
@@ -268,10 +263,7 @@ export const searchUserForm: IFormField[] = [
 		],
 		defaultValue: '',
 		placeholder: 'Change Creator Status',
-		validation: z
-			.enum(['true', 'false'])
-			.transform((a) => (a === 'true' ? true : false))
-			.optional(),
+		validation: z.any(),
 	},
 	{
 		label: 'Is Verified',
@@ -293,10 +285,7 @@ export const searchUserForm: IFormField[] = [
 		],
 		defaultValue: '',
 		placeholder: 'Change Verified Status',
-		validation: z
-			.enum(['true', 'false'])
-			.transform((a) => (a === 'true' ? true : false))
-			.optional(),
+		validation: z.any(),
 	},
 ]
 
