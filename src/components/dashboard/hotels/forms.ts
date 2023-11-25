@@ -224,6 +224,89 @@ export const createHotelForm: IFormField[] = [
 	},
 ]
 
+export const searchHotelForm: IFormField[] = [
+	{
+		label: 'Sr No.',
+		key: 'hotel_sr_no',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Invoice Number',
+		key: 'invoice_number',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Guest Name',
+		key: 'guest_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Check In Date',
+		key: 'check_in_date',
+		type: 'date',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Checkout Date',
+		key: 'check_out_date',
+		type: 'date',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Hotel Name',
+		key: 'hotel_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Total Cost',
+		key: 'total_cost',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Vendor Name',
+		key: 'vendor_name',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Vendor Invoice Number',
+		key: 'vendor_invoice',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Reservation Status',
+		key: 'reservation_status',
+		type: 'text',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+]
+
 export const updateHotelForm: IFormField[] = [
 	{
 		label: 'Sr No.',

@@ -1,54 +1,36 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
-import {
-	ColumnDef,
-	ColumnFiltersState,
-	SortingState,
-	VisibilityState,
-	flexRender,
-	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
-	useReactTable,
-} from '@tanstack/react-table'
-import Loading from 'react-loading'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { ColumnDef } from '@tanstack/react-table'
 
+import { useSearchQuery } from '@/lib/hooks'
 import { TableHotel, Hotel, CreateHotel } from '@/lib/interfaces/hotels'
 import { useGetHotels, useCreateHotel, useUpdateHotel } from '@/lib/mutations/hotels'
-import { createHotelForm, updateHotelForm } from '@/components/dashboard/hotels/forms'
+import { createHotelForm, searchHotelForm, updateHotelForm } from '@/components/dashboard/hotels/forms'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
-import { CommonForm, CommonModal, ShowDetails } from '@/components/common'
+import { CommonForm, CommonModal, ShowDetails, CommonTable } from '@/components/common'
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
-import { Input } from '@/components/common/ui/input'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/common/ui/table'
-import { getUsers } from '@/lib/apis/users'
 
 export function HotelsTable({ className }: { className?: string }) {
-	const hotels = useGetHotels()
+	const searchQuery = useSearchQuery()
+
+	const hotels = useGetHotels(searchQuery.queryStr)
 	const createHotel = useCreateHotel()
 	const updateHotel = useUpdateHotel()
 	const [detailHotel, setDetailHotel] = React.useState<Hotel | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
+	const formRef = React.useRef<React.ElementRef<'button'>>(null)
+	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
 
 	const onSubmit = async (values: any) => {
 		await createHotel.mutateAsync(values)
@@ -56,14 +38,6 @@ export function HotelsTable({ className }: { className?: string }) {
 
 	const onUpdate = async (values: any) => {
 		await updateHotel.mutateAsync({ ...values, _id: detailHotel?._id || '' })
-	}
-
-	const onEditUser = (index: number) => {
-		if (hotels.data?.hotels && hotels.data?.hotels[index]) {
-			setFormType('edit')
-			setDetailHotel(hotels.data?.hotels[index] as Hotel)
-			formRef.current?.click()
-		}
 	}
 
 	const viewHotelDetails = (index: number) => {
@@ -74,13 +48,14 @@ export function HotelsTable({ className }: { className?: string }) {
 			}
 		}
 	}
-
-	const [sorting, setSorting] = React.useState<SortingState>([])
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-	const [rowSelection, setRowSelection] = React.useState({})
-	const formRef = React.useRef<React.ElementRef<'button'>>(null)
-	const detailsRef = React.useRef<React.ElementRef<'button'>>(null)
+	
+	const onEditHotel = (index: number) => {
+		if (hotels.data?.hotels && hotels.data?.hotels[index]) {
+			setFormType('edit')
+			setDetailHotel(hotels.data?.hotels[index] as Hotel)
+			formRef.current?.click()
+		}
+	}
 
 	const columns: ColumnDef<TableHotel>[] = [
 		{
@@ -147,7 +122,7 @@ export function HotelsTable({ className }: { className?: string }) {
 							<DropdownMenuItem onClick={() => viewHotelDetails(index)}>
 								View Details
 							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onEditUser(index)}>
+							<DropdownMenuItem onClick={() => onEditHotel(index)}>
 								Edit Hotel
 							</DropdownMenuItem>
 						</DropdownMenuContent>
@@ -157,151 +132,36 @@ export function HotelsTable({ className }: { className?: string }) {
 		},
 	]
 
-	const table = useReactTable({
-		data: hotels.data?.hotels || [],
-		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
-			rowSelection,
-		},
-	})
-
 	return (
 		<div className={cn('w-full', className)}>
-			<div className='flex items-center py-4'>
-				<Input
-					placeholder='Filter emails...'
-					value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-					onChange={(event) =>
-						table.getColumn('email')?.setFilterValue(event.target.value)
-					}
-					className='max-w-sm'
-				/>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className='capitalize'
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								)
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>
-				<Button
-					variant={'outline'}
-					onClick={() => formRef?.current?.click()}
-					className='ml-4'>
-					Create
-				</Button>
-			</div>
-			<div className='rounded-md border'>
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-												  )}
-										</TableHead>
-									)
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{hotels.isLoading ? (
-							<TableRow>
-								<TableCell colSpan={columns.length} className='h-24 text-center'>
-									<Loading
-										type='spin'
-										className='mx-auto'
-										width={20}
-										height={20}
-										color='#777'
-									/>
-								</TableCell>
-							</TableRow>
-						) : table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && 'selected'}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className='h-24 text-center'>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
-			<div className='mt-auto flex items-center justify-end space-x-2 py-4'>
-				<div className='text-muted-foreground flex-1 text-sm'>
-					{table.getFilteredSelectedRowModel().rows.length} of{' '}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
-				</div>
-				<div className='space-x-2'>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}>
-						Previous
-					</Button>
-					<Button
-						variant='outline'
-						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}>
-						Next
-					</Button>
-				</div>
-			</div>
+			<CommonForm
+				type='form'
+				defaultObj={searchQuery.filterObj}
+				operationType='edit'
+				formFields={searchHotelForm}
+				submitText='Search'
+				cancelText='Cancel'
+				submitFunc={searchQuery.setQuery}
+			/>
+			<hr className='bg-gray-300' />
+			<CommonTable
+				columns={columns}
+				data={hotels.data?.hotels || []}
+				loading={hotels.isLoading}
+				onCreate={() => {
+					setFormType('create')
+					formRef?.current?.click()
+				}}
+				page={searchQuery.pagination.page}
+				limit={searchQuery.pagination.limit}
+				lastPage={hotels.data?.pagination.last_page || 0}
+				totalDocuments={hotels.data?.pagination.total_count || 0}
+				setPage={searchQuery.setPage}
+				setLimit={searchQuery.setLimit}
+			/>
 			<CommonModal ref={formRef}>
 				<CommonForm
-				type='modal'
+					type='modal'
 					defaultObj={detailHotel}
 					operationType={formType}
 					closeModal={() => formRef.current?.click()}

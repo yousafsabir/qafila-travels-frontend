@@ -19,8 +19,8 @@ export function getHotel(hotelId: string) {
 	return http.post<GetHotelResponse>(apiUrls.hotels.getAll, { id: hotelId })
 }
 
-export function getHotels() {
-	return http.get<GetHotelsResponse>(apiUrls.hotels.getAll)
+export function getHotels(searchParams?: string) {
+	return http.get<GetHotelsResponse>(`${apiUrls.hotels.getAll}${searchParams ? searchParams : ''}`)
 }
 
 export function updateHotel(data: Partial<Hotel>) {

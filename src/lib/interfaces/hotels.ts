@@ -1,4 +1,4 @@
-import { HttpCommonResponse } from '.'
+import { HttpCommonResponse, CommonGetAllResponse } from '.'
 
 export interface Hotel {
 	_id: string
@@ -60,7 +60,7 @@ export interface TableHotel {
 	hcn_number: string
 }
 
-export interface GetHotelsResponse extends HttpCommonResponse {
+export interface GetHotelsResponse extends CommonGetAllResponse {
 	hotels: Hotel[]
 }
 

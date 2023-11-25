@@ -55,9 +55,9 @@ export function useUpdateHotel() {
 	})
 }
 
-export function useGetHotels() {
+export function useGetHotels(searchParams?: string) {
 	return useQuery({
-		queryKey: ['get_hotels'],
-		queryFn: () => getHotels(),
+		queryKey: ['get_hotels', searchParams],
+		queryFn: () => getHotels(searchParams),
 	})
 }
