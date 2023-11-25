@@ -51,7 +51,7 @@ type CommonModalForm = {
 type CommonFormProps = CommonForm | CommonModalForm
 
 export const CommonForm = (props: CommonFormProps) => {
-	let defaultValues: Record<string, any> = {}
+	let [defaultValues, setDefaultValues] = useState<Record<string, any>>({})
 	let [formFields, setFormFields] = useState<IFormField[]>([])
 
 	useEffect(() => {
@@ -61,7 +61,7 @@ export const CommonForm = (props: CommonFormProps) => {
 					Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
 						if (key === field.key) {
 							field.defaultValue = String(value) as any
-							defaultValues[key] = String(value) as any 
+							setDefaultValues((prev) => ({ ...prev, [key]: String(value) }))
 						}
 					})
 					return field
@@ -75,7 +75,7 @@ export const CommonForm = (props: CommonFormProps) => {
 	const zodSchema = extractSchemaFromField(formFields)
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
-		defaultValues: defaultValues
+		defaultValues: defaultValues,
 	})
 
 	const onCancel = () => {
@@ -104,8 +104,12 @@ export const CommonForm = (props: CommonFormProps) => {
 				onSubmit={form.handleSubmit((values) => {
 					let filteredObj: Record<string, any> = {}
 					Object.entries(values).forEach(([key, value]) => {
-						if ((value !== NO_VALUE && value) || typeof value === 'boolean')
-							filteredObj[key] = value
+						if (value !== NO_VALUE && (value || typeof value === 'boolean')) {
+							// TODO: below logic should be this: defaultValues[key] && defaultValues[key] !== value but reducing it due to current backend
+							if (defaultValues[key] !== value) {
+								filteredObj[key] = value
+							}
+						}
 					})
 					props.submitFunc(filteredObj)
 				})}
