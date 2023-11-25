@@ -75,9 +75,7 @@ export const CommonForm = (props: CommonFormProps) => {
 	const zodSchema = extractSchemaFromField(formFields)
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
-		defaultValues: {
-			email: '',
-		},
+		defaultValues: defaultValues
 	})
 
 	const onCancel = () => {
