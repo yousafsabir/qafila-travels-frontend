@@ -17,6 +17,7 @@ export interface Hotel {
 	number_of_nights: string
 	profit: string
 	reservation_status: string
+	no_of_rooms: string
 	room_type: string
 	sales_per_night: string
 	total_cost: string
@@ -27,31 +28,7 @@ export interface Hotel {
 	view: string
 }
 
-export interface CreateHotel {
-	SNo: string
-	DateOfEntry: string
-	InvoiceNumber: string
-	GuestName: string
-	CheckInDate: string
-	CheckoutDate: string
-	NumberOfNights: string
-	RoomType: string
-	View: string
-	MealPlan: string
-	HotelName: string
-	CostPerNight: string
-	SalesPerNight: string
-	TotalCost: string
-	VATPercent: string
-	MunicipalityFeePercent: string
-	TotalSales: string
-	Profit: string
-	VendorName: string
-	VendorInvoiceNumber: string
-	ClientName: string
-	HCNNumber: string
-	ReservationStatus: string
-}
+export interface CreateHotel extends Omit<Hotel, '_id'> {}
 
 export interface TableHotel {
 	client_name: string
