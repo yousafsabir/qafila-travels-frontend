@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { Filter } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { useSearchQuery } from '@/lib/hooks'
@@ -15,7 +16,13 @@ import {
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
-import { CommonForm, CommonModal, ShowDetails, CommonTable } from '@/components/common'
+import {
+	CommonForm,
+	CommonModal,
+	ShowDetails,
+	CommonTable,
+	CommonAccordion,
+} from '@/components/common'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -129,14 +136,28 @@ export function UmrahsTable({ className }: { className?: string }) {
 
 	return (
 		<div className={cn('w-full', className)}>
-			<CommonForm
-				type='form'
-				defaultObj={searchQuery.filterObj}
-				operationType='edit'
-				formFields={searchUmrahForm}
-				submitText='Search'
-				cancelText='Cancel'
-				submitFunc={searchQuery.setQuery}
+			<CommonAccordion
+				accordions={[
+					{
+						label: (
+							<div className='flex gap-2'>
+								<Filter className='h-6 w-6' />
+								Filters
+							</div>
+						),
+						content: (
+							<CommonForm
+								type='form'
+								defaultObj={searchQuery.filterObj}
+								operationType='edit'
+								formFields={searchUmrahForm}
+								submitText='Search'
+								cancelText='Cancel'
+								submitFunc={searchQuery.setQuery}
+							/>
+						),
+					},
+				]}
 			/>
 			<hr className='bg-gray-300' />
 			<CommonTable

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { CheckCircle2, XCircle, Filter } from 'lucide-react'
 import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
 
@@ -11,7 +11,6 @@ import { useCreateUser, useGetUsers, useUpdateUser } from '@/lib/mutations/users
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
 import { Checkbox } from '@/components/common/ui/checkbox'
-import { CommonModal, ShowDetails } from '@/components/common'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -20,8 +19,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
-import { CommonTable } from '@/components/common'
-import { CommonForm } from '@/components/common'
+import {
+	CommonTable,
+	CommonForm,
+	CommonAccordion,
+	CommonModal,
+	ShowDetails,
+} from '@/components/common'
 import { createUserForm, updateUserForm, searchUserForm } from '@/components/dashboard/users/forms'
 
 export function DataTableDemo({ className }: { className?: string }) {
@@ -185,14 +189,28 @@ export function DataTableDemo({ className }: { className?: string }) {
 
 	return (
 		<div className={cn('w-full', className)}>
-			<CommonForm
-				type='form'
-				defaultObj={searchQuery.filterObj}
-				operationType='edit'
-				formFields={searchUserForm}
-				submitText='Search'
-				cancelText='Cancel'
-				submitFunc={searchQuery.setQuery}
+			<CommonAccordion
+				accordions={[
+					{
+						label: (
+							<div className='flex gap-2'>
+								<Filter className='h-6 w-6' />
+								Filters
+							</div>
+						),
+						content: (
+							<CommonForm
+								type='form'
+								defaultObj={searchQuery.filterObj}
+								operationType='edit'
+								formFields={searchUserForm}
+								submitText='Search'
+								cancelText='Cancel'
+								submitFunc={searchQuery.setQuery}
+							/>
+						),
+					},
+				]}
 			/>
 			<hr className='bg-gray-300' />
 			<CommonTable
