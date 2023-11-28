@@ -68,6 +68,17 @@ export const createHotelForm: IFormField[] = [
 			.transform((a) => Number(a)),
 	},
 	{
+		label: 'Number of Rooms',
+		key: 'no_of_rooms',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z
+			.string()
+			.min(1, `Number Of Rooms is required`)
+			.transform((a) => Number(a)),
+	},
+	{
 		label: 'Room Type',
 		key: 'room_type',
 		type: 'text',
@@ -373,6 +384,18 @@ export const updateHotelForm: IFormField[] = [
 		validation: z
 			.string()
 			.min(1, `Number Of Nights is required`)
+			.transform((a) => Number(a))
+			.optional(),
+	},
+	{
+		label: 'Number of Rooms',
+		key: 'no_of_rooms',
+		type: 'number',
+		defaultValue: '',
+		placeholder: '',
+		validation: z
+			.string()
+			.min(1, `Number Of Rooms is required`)
 			.transform((a) => Number(a))
 			.optional(),
 	},
