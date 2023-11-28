@@ -1,7 +1,9 @@
-import { IFormField } from '@/lib/interfaces'
 import * as z from 'zod'
 
-export const createUmrahForm: IFormField[] = [
+import { IFormField } from '@/lib/interfaces'
+import { Umrah } from '@/lib/interfaces/umrahs'
+
+export const createUmrahForm: IFormField<Umrah>[] = [
 	{
 		label: 'Sr No.',
 		key: 'umrah_sr_no',
@@ -154,7 +156,7 @@ export const createUmrahForm: IFormField[] = [
 	},
 ]
 
-export const searchUmrahForm: IFormField[] = [
+export const searchUmrahForm: IFormField<Umrah>[] = [
 	{
 		label: 'Sr No.',
 		key: 'umrah_sr_no',
@@ -213,7 +215,7 @@ export const searchUmrahForm: IFormField[] = [
 	},
 ]
 
-export const updateUmrahForm: IFormField[] = [
+export const updateUmrahForm: IFormField<Umrah>[] = [
 	{
 		label: 'Sr No.',
 		key: 'umrah_sr_no',

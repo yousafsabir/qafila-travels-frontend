@@ -1,27 +1,27 @@
 import * as z from 'zod'
 
-type ITextField = {
+type ITextField<T> = {
 	type: 'text' | 'email' | 'password' | 'date'
 	label: string
-	key: string
+	key: keyof T
 	defaultValue: string
 	placeholder: string
 	validation: z.ZodTypeAny | null
 }
 
-type INumberField = {
+type INumberField<T> = {
 	type: 'number'
 	label: string
-	key: string
+	key: keyof T
 	defaultValue: string
 	placeholder: string
 	validation: z.ZodTypeAny | null
 }
 
-type ISelectField = {
+type ISelectField<T> = {
 	type: 'select'
 	label: string
-	key: string
+	key: keyof T
 	values: {
 		label: string
 		value: string
@@ -31,4 +31,4 @@ type ISelectField = {
 	validation: z.ZodTypeAny | null
 }
 
-export type IFormField = ITextField | INumberField | ISelectField
+export type IFormField<T> = ITextField<T> | INumberField<T> | ISelectField<T>

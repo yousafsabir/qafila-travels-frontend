@@ -1,9 +1,10 @@
 import * as z from 'zod'
 
 import { IFormField } from '@/lib/interfaces'
+import { CreateUser, User } from '@/lib/interfaces/users'
 import { NO_VALUE } from '@/lib/config'
 
-export const createUserForm: IFormField[] = [
+export const createUserForm: IFormField<CreateUser>[] = [
 	{
 		label: 'Email',
 		key: 'email',
@@ -152,7 +153,7 @@ export const createUserForm: IFormField[] = [
 	},
 ]
 
-export const searchUserForm: IFormField[] = [
+export const searchUserForm: IFormField<User>[] = [
 	{
 		label: 'Email',
 		key: 'email',
@@ -289,7 +290,7 @@ export const searchUserForm: IFormField[] = [
 	},
 ]
 
-export const updateUserForm: IFormField[] = [
+export const updateUserForm: IFormField<CreateUser>[] = [
 	{
 		label: 'Email',
 		key: 'email',

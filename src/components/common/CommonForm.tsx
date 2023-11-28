@@ -30,7 +30,7 @@ import {
 type CommonForm = {
 	type: 'form'
 	operationType: 'create' | 'edit'
-	formFields: IFormField[]
+	formFields: IFormField<any>[]
 	defaultObj?: any
 	submitText: string
 	cancelText: string
@@ -40,7 +40,7 @@ type CommonForm = {
 type CommonModalForm = {
 	type: 'modal'
 	operationType: 'create' | 'edit'
-	formFields: IFormField[]
+	formFields: IFormField<any>[]
 	defaultObj?: any
 	submitText: string
 	cancelText: string
@@ -52,7 +52,7 @@ type CommonFormProps = CommonForm | CommonModalForm
 
 export const CommonForm = (props: CommonFormProps) => {
 	let [defaultValues, setDefaultValues] = useState<Record<string, any>>({})
-	let [formFields, setFormFields] = useState<IFormField[]>([])
+	let [formFields, setFormFields] = useState<IFormField<any>[]>([])
 
 	useEffect(() => {
 		if (props.operationType === 'edit') {
@@ -84,9 +84,9 @@ export const CommonForm = (props: CommonFormProps) => {
 		// Resetting Form values manually because form.reset() won't work
 		formFields.forEach((field) => {
 			if (field.type === 'select') {
-				form.setValue(field.key, NO_VALUE)
+				form.setValue((field as any).key, NO_VALUE)
 			} else {
-				form.setValue(field.key, '')
+				form.setValue((field as any).key, '')
 			}
 		})
 		form.reset()
@@ -122,7 +122,7 @@ export const CommonForm = (props: CommonFormProps) => {
 							) ? (
 								<FormField
 									control={form.control}
-									name={aField.key}
+									name={(aField as any).key}
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{aField.label}</FormLabel>
@@ -147,7 +147,7 @@ export const CommonForm = (props: CommonFormProps) => {
 							) : aField.type === 'select' ? (
 								<FormField
 									control={form.control}
-									name={aField.key}
+									name={(aField as any).key}
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>{aField.label}</FormLabel>
@@ -199,11 +199,11 @@ export const CommonForm = (props: CommonFormProps) => {
 	)
 }
 
-function extractSchemaFromField(formFields: IFormField[]) {
+function extractSchemaFromField(formFields: IFormField<any>[]) {
 	let schemaObj: Record<string, z.ZodTypeAny> = {}
 	for (let field of formFields) {
 		if (field.validation) {
-			schemaObj[field.key] = field.validation
+			schemaObj[(field as any).key] = field.validation
 		}
 	}
 	return z.object({

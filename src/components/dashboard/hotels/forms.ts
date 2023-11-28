@@ -1,7 +1,9 @@
-import { IFormField } from '@/lib/interfaces'
 import * as z from 'zod'
 
-export const createHotelForm: IFormField[] = [
+import { IFormField } from '@/lib/interfaces'
+import { Hotel } from '@/lib/interfaces/hotels'
+
+export const createHotelForm: IFormField<Hotel>[] = [
 	{
 		label: 'Sr No.',
 		key: 'hotel_sr_no',
@@ -235,7 +237,7 @@ export const createHotelForm: IFormField[] = [
 	},
 ]
 
-export const searchHotelForm: IFormField[] = [
+export const searchHotelForm: IFormField<Hotel>[] = [
 	{
 		label: 'Sr No.',
 		key: 'hotel_sr_no',
@@ -318,7 +320,7 @@ export const searchHotelForm: IFormField[] = [
 	},
 ]
 
-export const updateHotelForm: IFormField[] = [
+export const updateHotelForm: IFormField<Hotel>[] = [
 	{
 		label: 'Sr No.',
 		key: 'hotel_sr_no',
