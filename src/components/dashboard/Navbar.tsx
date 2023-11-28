@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { LogOut, UserCircle2 } from 'lucide-react'
+import { LogOut, Settings, UserCircle2 } from 'lucide-react'
 import { useEffect } from 'react'
 
 import useStore from '@/lib/store'
@@ -14,6 +14,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
+import Link from 'next/link'
 
 export function Navbar({ className }: { className?: string }) {
 	const router = useRouter()
@@ -21,9 +22,9 @@ export function Navbar({ className }: { className?: string }) {
 
 	const logout = useLogout()
 
-    const onLogout = async () => {
-        await logout.mutateAsync()
-    }
+	const onLogout = async () => {
+		await logout.mutateAsync()
+	}
 
 	useEffect(() => {
 		if (logout.isSuccess) {
@@ -46,6 +47,13 @@ export function Navbar({ className }: { className?: string }) {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent className='w-56'>
 							<DropdownMenuGroup>
+								<DropdownMenuItem
+									className='cursor-pointer'>
+									<Link href={'/dashboard/profile'} className='flex'>
+										<Settings className='mr-2 h-4 w-4' />
+										<span>Profile</span>
+									</Link>
+								</DropdownMenuItem>
 								<DropdownMenuItem
 									className='cursor-pointer'
 									onClick={() => logout.mutate()}>

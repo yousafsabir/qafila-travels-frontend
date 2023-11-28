@@ -1,13 +1,25 @@
 import { CheckCircle2, X, XCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-export function ShowDetails({ obj, close }: { obj: Record<string, any>; close: () => void }) {
+import { cn } from '@/lib/utils'
+
+export function ShowDetails({
+	obj,
+	close,
+	className,
+}: {
+	obj: Record<string, any>
+	close?: () => void
+	className?: string
+}) {
 	return (
-		<div className='relative rounded-sm p-8'>
+		<div className={cn('relative rounded-sm p-8', className)}>
 			{/* close */}
-			<div className='absolute right-3 top-3'>
-				<X className='h-6 w-6 cursor-pointer' onClick={close} />
-			</div>
+			{close && (
+				<div className='absolute right-3 top-3'>
+					<X className='h-6 w-6 cursor-pointer' onClick={close} />
+				</div>
+			)}
 			<div className='grid grid-cols-2 gap-x-2 gap-y-4'>
 				{obj &&
 					Object.entries(obj).map(([key, value]) => (
@@ -33,7 +45,7 @@ export function ShowDetails({ obj, close }: { obj: Record<string, any>; close: (
 								</p>
 							) : (
 								<p
-									className='break-words flex-1 rounded bg-gray-200 p-2'
+									className='flex-1 break-words rounded bg-gray-200 p-2'
 									onClick={() => {
 										navigator.clipboard.writeText(value)
 										toast.success('Copied')
