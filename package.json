@@ -8,7 +8,8 @@
 		"start": "next start",
 		"lint": "next lint",
 		"prepare": "husky install",
-		"prettier:fix": "prettier --write ."
+		"prettier:fix": "prettier --write .",
+		"typecheck": "tsc --project ./tsconfig.json --noEmit"
 	},
 	"engines": {
 		"node": ">=18.0.0"
