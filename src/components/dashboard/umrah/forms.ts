@@ -5,34 +5,12 @@ import { Umrah } from '@/lib/interfaces/umrahs'
 
 export const createUmrahForm: IFormField<Umrah>[] = [
 	{
-		label: 'Sr No.',
-		key: 'umrah_sr_no',
-		type: 'text',
-		defaultValue: '',
-		placeholder: '',
-		validation: z
-			.string()
-			.min(1, 'Sr No. is required')
-			.transform((a) => Number(a)),
-	},
-	{
 		label: 'Date of Entry',
 		key: 'date_of_entry',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, 'Date of Entry is required'),
-	},
-	{
-		label: 'Invoice Number',
-		key: 'invoice_number',
-		type: 'number',
-		defaultValue: '',
-		placeholder: '',
-		validation: z
-			.string()
-			.min(1, `Invoice Number is required`)
-			.transform((a) => Number(a)),
 	},
 	{
 		label: 'Guest Name',
@@ -217,36 +195,12 @@ export const searchUmrahForm: IFormField<Umrah>[] = [
 
 export const updateUmrahForm: IFormField<Umrah>[] = [
 	{
-		label: 'Sr No.',
-		key: 'umrah_sr_no',
-		type: 'text',
-		defaultValue: '',
-		placeholder: '',
-		validation: z
-			.string()
-			.min(1, 'Sr No. is required')
-			.transform((a) => Number(a))
-			.optional(),
-	},
-	{
 		label: 'Date of Entry',
 		key: 'date_of_entry',
 		type: 'date',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, 'Date of Entry is required').optional(),
-	},
-	{
-		label: 'Invoice Number',
-		key: 'invoice_number',
-		type: 'number',
-		defaultValue: '',
-		placeholder: '',
-		validation: z
-			.string()
-			.min(1, `Invoice Number is required`)
-			.transform((a) => Number(a))
-			.optional(),
 	},
 	{
 		label: 'Guest Name',
