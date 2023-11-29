@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, Fragment, useState, useRef } from 'react'
+import { useEffect, Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
 import { NO_VALUE } from '@/lib/config'
+import { fieldCalculation } from '@/lib/utils'
 import { type IFormField } from '@/lib/interfaces'
 import {
 	Form,
@@ -22,7 +23,6 @@ import {
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/common/ui/select'
@@ -53,30 +53,76 @@ type CommonFormProps = CommonForm | CommonModalForm
 export const CommonForm = (props: CommonFormProps) => {
 	let [defaultValues, setDefaultValues] = useState<Record<string, any>>({})
 	let [formFields, setFormFields] = useState<IFormField<any>[]>([])
+	let calculatedValuesConfig: Record<string, { expression: string; dependencies: string[] }> = {}
 
 	useEffect(() => {
+		/**
+		 * @description `_formFields` contains fields with `defaultValue` key set to
+		 * the default value stringified in `edit` mode
+		 */
+		let _formFields = props.formFields.map((field) => {
+			Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
+				if (key === field.key) {
+					field.defaultValue = String(value) as any
+					setDefaultValues((prev) => ({ ...prev, [key]: String(value) }))
+				}
+			})
+			// Looking for calculated values and setting them to calculatedValuesConfig
+			if (field.valueType === 'calculated') {
+				let calculationDeps = fieldCalculation.getDependencyArray(
+					props.formFields,
+					field.expression,
+				)
+				calculatedValuesConfig[field.key as string] = {
+					expression: field.expression,
+					dependencies: calculationDeps,
+				}
+			}
+			return field
+		})
+
+		// Setting Stringified defaultValues for editing
 		if (props.operationType === 'edit') {
-			setFormFields(
-				props.formFields.map((field) => {
-					Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
-						if (key === field.key) {
-							field.defaultValue = String(value) as any
-							setDefaultValues((prev) => ({ ...prev, [key]: String(value) }))
-						}
-					})
-					return field
-				}),
-			)
+			setFormFields(_formFields)
 		} else {
 			setFormFields(props.formFields)
 		}
 	}, [])
 
 	const zodSchema = extractSchemaFromField(formFields)
+
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
 		defaultValues: defaultValues,
+		shouldUnregister: false,
 	})
+
+	useEffect(() => {
+		let subscription: any
+		const handler = setTimeout(() => {
+			subscription = form.watch((data) => {
+				Object.entries(calculatedValuesConfig).forEach(([key, value]) => {
+					if (fieldCalculation.checkFields(data, value.dependencies)) {
+						const expression = fieldCalculation.replaceKeyWithValue(
+							data,
+							value.expression,
+						)
+						const result = String(fieldCalculation.arithmeticEvaluate(expression))
+						const prevValue = data[key]
+						if (result !== prevValue) {
+							form.setValue(key, result)
+						}
+					}
+				})
+			})
+		}, 300)
+		return () => {
+			clearTimeout(handler)
+			if (subscription) {
+				subscription.unsubscribe()
+			}
+		}
+	}, [form.watch])
 
 	const onCancel = () => {
 		defaultValues = {}
