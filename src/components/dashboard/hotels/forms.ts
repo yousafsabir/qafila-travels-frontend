@@ -128,7 +128,9 @@ export const createHotelForm: IFormField<Hotel>[] = [
 		label: 'Total Cost',
 		key: 'total_cost',
 		type: 'number',
-		valueType: 'normal',
+		valueType: 'calculated',
+		calculationType: 'arithmetic',
+		expression: 'no_of_rooms * cost_per_night * number_of_nights',
 		defaultValue: '',
 		placeholder: '',
 		validation: z
