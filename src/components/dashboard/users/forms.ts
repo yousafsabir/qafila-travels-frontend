@@ -9,6 +9,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Email',
 		key: 'email',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -17,6 +18,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Username',
 		key: 'user_name',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, 'Username is required'),
@@ -25,6 +27,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Name',
 		key: 'name',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string(),
@@ -33,6 +36,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Phone',
 		key: 'phone',
 		type: 'number',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().transform((a) => Number(a)),
@@ -41,6 +45,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Role',
 		key: 'role',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'User',
@@ -59,6 +64,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Access Level',
 		key: 'access_level',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Read Access',
@@ -90,6 +96,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Is Banned',
 		key: 'isBanned',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Yes',
@@ -108,6 +115,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Is Creator',
 		key: 'isCreator',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Yes',
@@ -126,6 +134,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Is Verified',
 		key: 'isVerified',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Yes',
@@ -144,6 +153,7 @@ export const createUserForm: IFormField<CreateUser>[] = [
 		label: 'Password',
 		key: 'password',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z
@@ -158,6 +168,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Email',
 		key: 'email',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.any(),
@@ -166,6 +177,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Username',
 		key: 'user_name',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.any(),
@@ -174,6 +186,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Role',
 		key: 'role',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: '--Select--',
@@ -196,6 +209,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Access Level',
 		key: 'access_level',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: '--Select--',
@@ -226,6 +240,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Is Banned',
 		key: 'isBanned',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: '--Select--',
@@ -248,6 +263,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Is Creator',
 		key: 'isCreator',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: '--Select--',
@@ -270,6 +286,7 @@ export const searchUserForm: IFormField<User>[] = [
 		label: 'Is Verified',
 		key: 'isVerified',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: '--Select--',
@@ -295,6 +312,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Email',
 		key: 'email',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, 'Email is required').email('Invalid email').optional(),
@@ -303,6 +321,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Username',
 		key: 'user_name',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, 'Username is required').optional(),
@@ -311,6 +330,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Name',
 		key: 'name',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().optional(),
@@ -319,6 +339,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Phone',
 		key: 'phone',
 		type: 'number',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z
@@ -330,6 +351,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Role',
 		key: 'role',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'User',
@@ -348,6 +370,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Access Level',
 		key: 'access_level',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Read Access',
@@ -376,6 +399,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Is Banned',
 		key: 'isBanned',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Yes',
@@ -397,6 +421,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Is Creator',
 		key: 'isCreator',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Yes',
@@ -418,6 +443,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Is Verified',
 		key: 'isVerified',
 		type: 'select',
+		valueType: 'normal',
 		values: [
 			{
 				label: 'Yes',
@@ -439,6 +465,7 @@ export const updateUserForm: IFormField<CreateUser>[] = [
 		label: 'Password',
 		key: 'password',
 		type: 'text',
+		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
 		validation: z

@@ -1,34 +1,33 @@
 import * as z from 'zod'
 
-type ITextField<T> = {
-	type: 'text' | 'email' | 'password' | 'date'
+type NormalValue = {
+	valueType: 'normal'
+}
+
+type CalculatedValue = {
+	valueType: 'calculated'
+	calculationType: 'arithmetic' | 'string-interpolated'
+	calculation: string
+}
+
+type CommonInputData<T> = {
 	label: string
 	key: keyof T
 	defaultValue: string
 	placeholder: string
 	validation: z.ZodTypeAny | null
+} & (NormalValue | CalculatedValue)
+
+type ITextField<T> = CommonInputData<T> & {
+	type: 'text' | 'email' | 'password' | 'date' | 'number'
 }
 
-type INumberField<T> = {
-	type: 'number'
-	label: string
-	key: keyof T
-	defaultValue: string
-	placeholder: string
-	validation: z.ZodTypeAny | null
-}
-
-type ISelectField<T> = {
+type ISelectField<T> = CommonInputData<T> & {
 	type: 'select'
-	label: string
-	key: keyof T
 	values: {
 		label: string
 		value: string
 	}[]
-	defaultValue: string
-	placeholder: string
-	validation: z.ZodTypeAny | null
 }
 
-export type IFormField<T> = ITextField<T> | INumberField<T> | ISelectField<T>
+export type IFormField<T> = ITextField<T> | ISelectField<T>

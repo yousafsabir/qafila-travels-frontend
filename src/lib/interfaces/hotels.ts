@@ -28,7 +28,7 @@ export interface Hotel {
 	view: string
 }
 
-export interface CreateHotel extends Omit<Hotel, '_id'> {}
+export interface CreateHotel extends Omit<Hotel, '_id' | 'hotel_sr_no' | 'invoice_number'> {}
 
 export interface TableHotel {
 	client_name: string
