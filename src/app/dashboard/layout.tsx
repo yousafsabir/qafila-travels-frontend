@@ -35,6 +35,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			name: 'Umrahs',
 			path: '/dashboard/umrahs',
 		},
+		{
+			name: 'Transportations',
+			path: '/dashboard/transportations',
+		},
 	]
 	return (
 		<main className='min-h-screen'>

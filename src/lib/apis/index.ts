@@ -21,4 +21,11 @@ export const apiUrls = {
 		deleteOne: 'umrahs',
 		updateOne: 'umrahs',
 	},
+	transportations: {
+		create: 'transportations/add_transportations',
+		getAll: 'transportations/get_transportations',
+		getOne: 'transportations/get_transportation_by_id',
+		deleteOne: 'transportations/delete_transportation_by_id',
+		updateOne: 'transportations/update_transportation_by_id',
+	},
 }
