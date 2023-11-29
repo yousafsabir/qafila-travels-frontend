@@ -16,14 +16,16 @@ export default function Home() {
 	const getMe = useGetMe()
 
 	useEffect(() => {
-		if (getMe.data?.user) {
-			store.setAdmin(getMe.data.user)
-			router.push(store.url ?? '/dashboard')
-		} else {
-			toast.error('You need to Login')
-			router.push('/login')
+		if ((!getMe.isLoading && getMe.isError) || getMe.isSuccess) {
+			if (getMe.data && getMe.data.user) {
+				store.setAdmin(getMe.data.user)
+				router.push(store.url ?? '/dashboard')
+			} else {
+				toast.error('You need to Login')
+				router.push('/login')
+			}
 		}
-	}, [getMe.data])
+	}, [getMe.isSuccess, getMe.isLoading, getMe.isError])
 
 	if (getMe.isLoading)
 		return (
