@@ -1,4 +1,10 @@
+import { Metadata } from 'next'
+
 import { SignInForm } from '@/components/login'
+
+export const metadata: Metadata = {
+	title: 'Login',
+}
 
 export default function Login() {
 	return (
