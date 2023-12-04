@@ -17,6 +17,7 @@ export interface Hotel {
 	number_of_nights: string
 	profit: string
 	reservation_status: string
+	finance_status: string
 	no_of_rooms: string
 	room_type: string
 	sales_per_night: string

@@ -237,6 +237,31 @@ export const createHotelForm: IFormField<Hotel>[] = [
 		placeholder: '',
 		validation: z.string().min(1, `Reservation Status is required`),
 	},
+	{
+		label: 'Finance Status',
+		key: 'finance_status',
+		type: 'select',
+		values: [
+			{
+				label: 'Checked',
+				value: 'checked',
+			},
+			{
+				label: 'Issue',
+				value: 'issue',
+			},
+			{
+				label: 'Un-checked',
+				value: 'unchecked',
+			},
+		],
+		valueType: 'normal',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.enum(['checked', 'issue', 'unchecked'], {
+			required_error: 'Finance Status is required',
+		}),
+	},
 ]
 
 export const searchHotelForm: IFormField<Hotel>[] = [
@@ -282,6 +307,29 @@ export const searchHotelForm: IFormField<Hotel>[] = [
 		label: 'Meal Plan',
 		key: 'meal_plan',
 		type: 'text',
+		valueType: 'normal',
+		defaultValue: '',
+		placeholder: '',
+		validation: z.any(),
+	},
+	{
+		label: 'Finance Status',
+		key: 'finance_status',
+		type: 'select',
+		values: [
+			{
+				label: 'Checked',
+				value: 'checked',
+			},
+			{
+				label: 'Issue',
+				value: 'issue',
+			},
+			{
+				label: 'Un-checked',
+				value: 'unchecked',
+			},
+		],
 		valueType: 'normal',
 		defaultValue: '',
 		placeholder: '',
@@ -531,5 +579,32 @@ export const updateHotelForm: IFormField<Hotel>[] = [
 		defaultValue: '',
 		placeholder: '',
 		validation: z.string().min(1, `Reservation Status is required`).optional(),
+	},
+	{
+		label: 'Finance Status',
+		key: 'finance_status',
+		type: 'select',
+		values: [
+			{
+				label: 'Checked',
+				value: 'checked',
+			},
+			{
+				label: 'Issue',
+				value: 'issue',
+			},
+			{
+				label: 'Un-checked',
+				value: 'unchecked',
+			},
+		],
+		valueType: 'normal',
+		defaultValue: '',
+		placeholder: '',
+		validation: z
+			.enum(['checked', 'issue', 'unchecked'], {
+				required_error: 'Finance Status is required',
+			})
+			.optional(),
 	},
 ]
