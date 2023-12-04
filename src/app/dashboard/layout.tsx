@@ -24,8 +24,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	const path = usePathname()
 	const routes = [
 		{
-			name: 'Users',
+			name: 'Dashboard',
 			path: '/dashboard',
+		},
+		{
+			name: 'Users',
+			path: '/dashboard/users',
 		},
 		{
 			name: 'Hotels',
