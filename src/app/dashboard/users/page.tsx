@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { DataTableDemo } from '@/components/dashboard/users/Table'
 
 export const metadata: Metadata = {
-	title: 'Dashboard',
+	title: 'Manage Users | Qafila Dashboard',
 	description: 'Qafila Travels Dashboard',
 }
 

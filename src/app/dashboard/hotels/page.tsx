@@ -1,4 +1,11 @@
+import { Metadata } from 'next'
+
 import { HotelsTable } from '@/components/dashboard/hotels'
+
+export const metadata: Metadata = {
+	title: 'Manage Hotels | Qafila Dashboard',
+	description: 'Qafila Travels Dashboard',
+}
 
 export default function Hotels() {
 	return (
