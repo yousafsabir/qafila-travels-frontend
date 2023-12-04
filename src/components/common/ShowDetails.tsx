@@ -35,7 +35,7 @@ export function ShowDetails({
 										<XCircle className='h-4 w-4 text-red-500' />
 									)}
 								</p>
-							) : typeof value === 'object' && value[0] ? (
+							) : typeof value === 'object' && value && value[0] ? (
 								<p className='flex-1 space-y-1 rounded bg-gray-200 p-2'>
 									{(value as Array<any>).map((item, i) => (
 										<p className='break-words ' key={i}>
