@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect } from 'react'
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { LuLayoutDashboard } from 'react-icons/lu'
+import { LayoutDashboard, Users, Hotel, Plane, Bus } from 'lucide-react'
 
 import useStore from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -16,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		if (!store.admin) {
 			const url = window.location.href
-			store.setUrl(url.substring(url.indexOf("/dashboard"), url.length))
+			store.setUrl(url.substring(url.indexOf('/dashboard'), url.length))
 			return router.push('/')
 		}
 	}, [])
@@ -26,22 +27,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		{
 			name: 'Dashboard',
 			path: '/dashboard',
+			icon: <LayoutDashboard />,
 		},
 		{
 			name: 'Users',
 			path: '/dashboard/users',
+			icon: <Users />,
 		},
 		{
 			name: 'Hotels',
 			path: '/dashboard/hotels',
+			icon: <Hotel />,
 		},
 		{
 			name: 'Umrahs',
 			path: '/dashboard/umrahs',
+			icon: <Plane />,
 		},
 		{
 			name: 'Transportations',
 			path: '/dashboard/transportations',
+			icon: <Bus />,
 		},
 	]
 	return (
@@ -57,10 +63,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 								<Link
 									className={cn(
 										{ 'bg-gray-100': path === route.path },
-										'cursor-pointer block rounded-md p-3 transition-colors  hover:bg-gray-100',
+										'flex gap-2 cursor-pointer items-center rounded-md p-3 transition-colors  hover:bg-gray-100',
 									)}
 									href={route.path}>
-									{route.name}
+									{route.icon}
+									<span>{route.name}</span>
 								</Link>
 							</li>
 						))}
