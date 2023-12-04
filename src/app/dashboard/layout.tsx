@@ -69,12 +69,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 						<li
 							className='flex justify-end rounded-md bg-blue-500 p-3 text-white'
 							key={0}>
-							<ChevronRight
-								className={cn('cursor-pointer transition-transform', {
-									'rotate-180': sidebarToggle,
-								})}
-								onClick={() => setSidebarToggle((prev) => !prev)}
-							/>
+							<CommonTooltip
+								trigger={
+									<ChevronRight
+										className={cn('cursor-pointer transition-transform', {
+											'rotate-180': sidebarToggle,
+										})}
+										onClick={() => setSidebarToggle((prev) => !prev)}
+									/>
+								}>
+								{sidebarToggle ? 'Contract Sidebar' : 'Expand Sidebar'}
+							</CommonTooltip>
 						</li>
 						{routes.map((route, i) => (
 							<li key={i + 1}>
