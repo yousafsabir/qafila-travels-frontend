@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { FileEdit, Trash, CheckCircle2, XCircle } from 'lucide-react'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -13,15 +15,19 @@ import {
 } from '@tanstack/react-table'
 import Loading from 'react-loading'
 import { ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 import { PAGINATION_LIMIT } from '@/lib/config'
 import {
 	DropdownMenu,
-	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuCheckboxItem,
 	DropdownMenuTrigger,
 } from '@/components/common/ui/dropdown-menu'
+import { Checkbox } from '@/components/common/ui/checkbox'
 import {
 	Table,
 	TableBody,
@@ -34,8 +40,10 @@ import { Button } from '@/components/common/ui/button'
 
 export function CommonTable(props: {
 	data: any
-	columns: ColumnDef<any>[]
+	columns: string[]
 	onCreate: () => void
+	onEdit: (index: number) => void
+	onViewDetails: (index: number) => void
 	page: number
 	limit: number
 	lastPage: number
@@ -46,12 +54,120 @@ export function CommonTable(props: {
 }) {
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+	const initialVisibleColumns = React.useMemo(() => {
+		let hiddenColumns: Record<string, boolean> = {}
+		for (let i = 5; i < props.columns.length; i++) {
+			hiddenColumns[props.columns[i]] = false
+		}
+		return hiddenColumns
+	}, [])
+	const [columnVisibility, setColumnVisibility] =
+		React.useState<VisibilityState>(initialVisibleColumns)
 	const [rowSelection, setRowSelection] = React.useState({})
+
+	const tableColums = React.useMemo(() => {
+		return [
+			{
+				id: 'select',
+				header: ({ table }) => (
+					<Checkbox
+						checked={table.getIsAllPageRowsSelected()}
+						onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+						aria-label='Select all'
+					/>
+				),
+				cell: ({ row }) => (
+					<Checkbox
+						checked={row.getIsSelected()}
+						onCheckedChange={(value) => row.toggleSelected(!!value)}
+						aria-label='Select row'
+					/>
+				),
+				enableSorting: false,
+				enableHiding: false,
+			},
+			...props.columns.map((column) => ({
+				accessorKey: column,
+				header: (
+					<p className='capitalize'>
+						{column.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}
+					</p>
+				),
+
+				// @ts-ignore
+				cell: ({ row }) => {
+					const value = row.getValue(column)
+					return (
+						<div className='flex flex-col' key={column}>
+							{typeof value === 'boolean' ? (
+								<p className='flex-1 rounded bg-gray-200 p-2'>
+									{value ? (
+										<CheckCircle2 className='h-4 w-4 text-green-500' />
+									) : (
+										<XCircle className='h-4 w-4 text-red-500' />
+									)}
+								</p>
+							) : typeof value === 'object' && value && value[0] ? (
+								<p className='flex-1 break-words'>
+									{(value as Array<any>).join(', ')}
+								</p>
+							) : (
+								<p
+									className='flex-1 break-words'
+									onClick={() => {
+										navigator.clipboard.writeText(value)
+										toast.success('Copied')
+									}}>
+									{value}
+								</p>
+							)}
+						</div>
+					)
+				},
+			})),
+			{
+				id: 'actions',
+				enableHiding: false,
+				cell: ({ row }) => {
+					const index = row.index
+					return (
+						<>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant='ghost' className='h-8 w-8 p-0'>
+										<span className='sr-only'>Open menu</span>
+										<DotsHorizontalIcon className='h-4 w-4' />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align='end'>
+									<DropdownMenuLabel>Actions</DropdownMenuLabel>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem onClick={() => props.onViewDetails(index)}>
+										View Details
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+							<Button
+								variant='ghost'
+								className='h-8 w-8 p-0'
+								onClick={() => props.onEdit(index)}>
+								<span className='sr-only'>Edit</span>
+								<FileEdit className='h-4 w-4 text-green-500' />
+							</Button>
+							<Button variant='ghost' className='h-8 w-8 p-0'>
+								<span className='sr-only'>Delete</span>
+								<Trash className='h-4 w-4 text-red-500' />
+							</Button>
+						</>
+					)
+				},
+			},
+		] as ColumnDef<any>[]
+	}, [])
 
 	const table = useReactTable({
 		data: props.data,
-		columns: props.columns,
+		columns: tableColums,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
@@ -96,7 +212,7 @@ export function CommonTable(props: {
 							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
+					<DropdownMenuContent className='grid grid-cols-2'>
 						{table
 							.getAllColumns()
 							.filter((column) => column.getCanHide())
@@ -109,7 +225,9 @@ export function CommonTable(props: {
 										onCheckedChange={(value) =>
 											column.toggleVisibility(!!value)
 										}>
-										{column.id}
+										{column.id
+											.replace(/([a-z])([A-Z])/g, '$1 $2')
+											.replace(/_/g, ' ')}
 									</DropdownMenuCheckboxItem>
 								)
 							})}
