@@ -5,22 +5,30 @@ export interface UserLogin {
 	password: string
 }
 
-export interface User {
-	_id: string
-	user_name: string
-	name: string
-	email: string
-	phone: string
-	current_balance: number
-	isBanned: boolean
-	isCreator: boolean
-	isVerified: boolean
-	access_level: 'create' | 'create,read' | 'create,read,update' | 'create,read,update,delete'
-	role: 'user' | 'admin'
-	transactionIds: string[]
-	created_at: string
-	updated_at: string
+export class UserClass {
+	constructor(
+		public _id: string = '',
+		public user_name: string = '',
+		public name: string = '',
+		public email: string = '',
+		public phone: string = '',
+		public current_balance: number = 123,
+		public isBanned: boolean = true,
+		public isCreator: boolean = true,
+		public isVerified: boolean = true,
+		public access_level:
+			| 'read'
+			| 'create,read'
+			| 'create,read,update'
+			| 'create,read,update,delete' = 'read',
+		public role: 'user' | 'admin' = 'user',
+		public transactionIds: string[] = [],
+		public created_at: string = '',
+		public updated_at: string = '',
+	) {}
 }
+
+export interface User extends UserClass {}
 
 export interface CreateUser extends Omit<User, '_id'> {
 	password: string

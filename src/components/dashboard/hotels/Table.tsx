@@ -2,11 +2,11 @@
 
 import * as React from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { Filter } from 'lucide-react'
+import { FileEdit, Filter, Trash } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { useSearchQuery } from '@/lib/hooks'
-import { TableHotel, Hotel, CreateHotel } from '@/lib/interfaces/hotels'
+import { TableHotel, Hotel, CreateHotel, HotelClass } from '@/lib/interfaces/hotels'
 import { useGetHotels, useCreateHotel, useUpdateHotel } from '@/lib/mutations/hotels'
 import {
 	createHotelForm,
@@ -68,80 +68,92 @@ export function HotelsTable({ className }: { className?: string }) {
 		}
 	}
 
-	const columns: ColumnDef<TableHotel>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected()}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label='Select all'
-				/>
-			),
-			cell: ({ row }) => (
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label='Select row'
-				/>
-			),
-			enableSorting: false,
-			enableHiding: false,
-		},
-		{
-			accessorKey: 'client_name',
-			header: 'Client Name',
-			cell: ({ row }) => <div>{row.getValue('client_name')}</div>,
-		},
-		{
-			accessorKey: 'hotel_name',
-			header: 'Hotel Name',
-			cell: ({ row }) => <div className='lowercase'>{row.getValue('hotel_name')}</div>,
-		},
-		{
-			accessorKey: 'hotel_sr_no',
-			header: () => <div className='text-center'>Hotel Sr No.</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>{row.getValue('hotel_sr_no')}</div>
-			),
-		},
-		{
-			accessorKey: 'hcn_number',
-			header: () => <div className='text-center'>HCN No.</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>{row.getValue('hcn_number')}</div>
-			),
-		},
-		{
-			id: 'actions',
-			enableHiding: false,
-			cell: ({ row }) => {
-				const user = row.original
-				const index = row.index
+	const columns = Object.keys(new HotelClass())
 
-				return (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<DotsHorizontalIcon className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={() => viewHotelDetails(index)}>
-								View Details
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onEditHotel(index)}>
-								Edit Hotel
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				)
-			},
-		},
-	]
+	// const columns: ColumnDef<TableHotel>[] = [
+	// 	{
+	// 		id: 'select',
+	// 		header: ({ table }) => (
+	// 			<Checkbox
+	// 				checked={table.getIsAllPageRowsSelected()}
+	// 				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+	// 				aria-label='Select all'
+	// 			/>
+	// 		),
+	// 		cell: ({ row }) => (
+	// 			<Checkbox
+	// 				checked={row.getIsSelected()}
+	// 				onCheckedChange={(value) => row.toggleSelected(!!value)}
+	// 				aria-label='Select row'
+	// 			/>
+	// 		),
+	// 		enableSorting: false,
+	// 		enableHiding: false,
+	// 	},
+	// 	{
+	// 		accessorKey: 'client_name',
+	// 		header: 'Client Name',
+	// 		cell: ({ row }) => <div>{row.getValue('client_name')}</div>,
+	// 	},
+	// 	{
+	// 		accessorKey: 'hotel_name',
+	// 		header: 'Hotel Name',
+	// 		cell: ({ row }) => <div className='lowercase'>{row.getValue('hotel_name')}</div>,
+	// 	},
+	// 	{
+	// 		accessorKey: 'hotel_sr_no',
+	// 		header: () => <div className='text-center'>Hotel Sr No.</div>,
+	// 		cell: ({ row }) => (
+	// 			<div className='flex justify-center font-medium'>{row.getValue('hotel_sr_no')}</div>
+	// 		),
+	// 	},
+	// 	{
+	// 		accessorKey: 'hcn_number',
+	// 		header: () => <div className='text-center'>HCN No.</div>,
+	// 		cell: ({ row }) => (
+	// 			<div className='flex justify-center font-medium'>{row.getValue('hcn_number')}</div>
+	// 		),
+	// 	},
+	// 	{
+	// 		id: 'actions',
+	// 		enableHiding: false,
+	// 		cell: ({ row }) => {
+	// 			const user = row.original
+	// 			const index = row.index
+
+	// 			return (
+	// 				<>
+	// 					<DropdownMenu>
+	// 						<DropdownMenuTrigger asChild>
+	// 							<Button variant='ghost' className='h-8 w-8 p-0'>
+	// 								<span className='sr-only'>Open menu</span>
+	// 								<DotsHorizontalIcon className='h-4 w-4' />
+	// 							</Button>
+	// 						</DropdownMenuTrigger>
+	// 						<DropdownMenuContent align='end'>
+	// 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
+	// 							<DropdownMenuSeparator />
+	// 							<DropdownMenuItem onClick={() => viewHotelDetails(index)}>
+	// 								View Details
+	// 							</DropdownMenuItem>
+	// 						</DropdownMenuContent>
+	// 					</DropdownMenu>
+	// 					<Button
+	// 						variant='ghost'
+	// 						className='h-8 w-8 p-0'
+	// 						onClick={() => onEditHotel(index)}>
+	// 						<span className='sr-only'>Edit</span>
+	// 						<FileEdit className='h-4 w-4 text-green-500' />
+	// 					</Button>
+	// 					<Button variant='ghost' className='h-8 w-8 p-0'>
+	// 						<span className='sr-only'>Delete</span>
+	// 						<Trash className='h-4 w-4 text-red-500' />
+	// 					</Button>
+	// 				</>
+	// 			)
+	// 		},
+	// 	},
+	// ]
 
 	return (
 		<div className={cn('w-full', className)}>
@@ -177,6 +189,8 @@ export function HotelsTable({ className }: { className?: string }) {
 					setFormType('create')
 					formRef?.current?.click()
 				}}
+				onEdit={onEditHotel}
+				onViewDetails={viewHotelDetails}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={hotels.data?.pagination.last_page || 0}

@@ -1,27 +1,31 @@
 import { HttpCommonResponse, CommonGetAllResponse } from '.'
 
-export type Transportation = {
-	_id: string
-	sr_no: string
-	date_of_entry: string
-	invoice_number: string
-	vehicle_type: string
-	arrival_time: string
-	trip_segments: string
-	way: string
-	no_of_pax: string
-	cost_per_segment: string
-	vat: string
-	municipality_fee: string
-	sale_per_segment: string
-	total_cost: string
-	total_sale: string
-	profit: string
-	vendor_name: string
-	vendor_invoice: string
-	client_name: string
-	reservation_status: string
+export class TransportationClass {
+	constructor(
+		public _id: string = '',
+		public sr_no: string = '',
+		public date_of_entry: string = '',
+		public invoice_number: string = '',
+		public vehicle_type: string = '',
+		public arrival_time: string = '',
+		public trip_segments: string = '',
+		public way: string = '',
+		public no_of_pax: string = '',
+		public cost_per_segment: string = '',
+		public vat: string = '',
+		public municipality_fee: string = '',
+		public sale_per_segment: string = '',
+		public total_cost: string = '',
+		public total_sale: string = '',
+		public profit: string = '',
+		public vendor_name: string = '',
+		public vendor_invoice: string = '',
+		public client_name: string = '',
+		public reservation_status: string = '',
+	) {}
 }
+
+export type Transportation = TransportationClass
 
 export type CreateTransportation = Omit<Transportation, '_id' | 'sr_no' | 'invoice_number'>
 

@@ -6,7 +6,7 @@ import { Filter } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { useSearchQuery } from '@/lib/hooks'
-import { TableUmrah, Umrah } from '@/lib/interfaces/umrahs'
+import { TableUmrah, Umrah, UmrahClass } from '@/lib/interfaces/umrahs'
 import { useGetUmrahs, useCreateUmrah, useUpdateUmrah } from '@/lib/mutations/umrahs'
 import {
 	createUmrahForm,
@@ -68,71 +68,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 		}
 	}
 
-	const columns: ColumnDef<TableUmrah>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected()}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label='Select all'
-				/>
-			),
-			cell: ({ row }) => (
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label='Select row'
-				/>
-			),
-			enableSorting: false,
-			enableHiding: false,
-		},
-		{
-			accessorKey: 'invoice_number',
-			header: 'Invoice Number',
-			cell: ({ row }) => <div>{row.getValue('invoice_number')}</div>,
-		},
-		{
-			accessorKey: 'no_of_visas',
-			header: 'No Of Visas',
-			cell: ({ row }) => <div className='lowercase'>{row.getValue('no_of_visas')}</div>,
-		},
-		{
-			accessorKey: 'cost_per_visa',
-			header: 'Cost Per Visa',
-			cell: ({ row }) => <div className='lowercase'>{row.getValue('cost_per_visa')}</div>,
-		},
-		{
-			id: 'actions',
-			enableHiding: false,
-			cell: ({ row }) => {
-				const user = row.original
-				const index = row.index
-
-				return (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<DotsHorizontalIcon className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={() => viewUmrahDetails(index)}>
-								View Details
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onEditUmrah(index)}>
-								Edit Umrah
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				)
-			},
-		},
-	]
+	const columns = Object.keys(new UmrahClass())
 
 	return (
 		<div className={cn('w-full', className)}>
@@ -168,6 +104,8 @@ export function UmrahsTable({ className }: { className?: string }) {
 					setFormType('create')
 					formRef?.current?.click()
 				}}
+				onEdit={onEditUmrah}
+				onViewDetails={viewUmrahDetails}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={umrahs.data?.pagination.last_page || 0}

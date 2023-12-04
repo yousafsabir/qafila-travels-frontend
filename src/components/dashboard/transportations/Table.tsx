@@ -10,6 +10,7 @@ import {
 	TransportationTable,
 	Transportation,
 	CreateTransportation,
+	TransportationClass,
 } from '@/lib/interfaces/transportations'
 import {
 	useGetTransportations,
@@ -83,80 +84,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 		}
 	}
 
-	const columns: ColumnDef<TransportationTable>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected()}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label='Select all'
-				/>
-			),
-			cell: ({ row }) => (
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label='Select row'
-				/>
-			),
-			enableSorting: false,
-			enableHiding: false,
-		},
-		{
-			accessorKey: 'client_name',
-			header: 'Client Name',
-			cell: ({ row }) => <div>{row.getValue('client_name')}</div>,
-		},
-		{
-			accessorKey: 'date_of_entry',
-			header: 'Date Of Entry',
-			cell: ({ row }) => <div className='lowercase'>{row.getValue('date_of_entry')}</div>,
-		},
-		{
-			accessorKey: 'no_of_pax',
-			header: () => <div className='text-center'>No Of Pax</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>{row.getValue('no_of_pax')}</div>
-			),
-		},
-		{
-			accessorKey: 'total_cost',
-			header: () => <div className='text-center'>Total Cost</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>{row.getValue('total_cost')}</div>
-			),
-		},
-		{
-			id: 'actions',
-			enableHiding: false,
-			cell: ({ row }) => {
-				const user = row.original
-				const index = row.index
-
-				return (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<DotsHorizontalIcon className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={() => viewTransportationDetails(index)}>
-								View Details
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onEditTransportation(index)}>
-								Edit Transportation
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				)
-			},
-		},
-	]
+	const columns = Object.keys(new TransportationClass())
 
 	return (
 		<div className={cn('w-full', className)}>
@@ -192,6 +120,8 @@ export function TransportationsTable({ className }: { className?: string }) {
 					setFormType('create')
 					formRef?.current?.click()
 				}}
+				onEdit={onEditTransportation}
+				onViewDetails={viewTransportationDetails}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={transportations.data?.pagination.last_page || 0}

@@ -6,7 +6,7 @@ import { CaretSortIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { useSearchQuery } from '@/lib/hooks'
-import { type TableUser, type User, type CreateUser } from '@/lib/interfaces/users'
+import { type TableUser, type User, type CreateUser, UserClass } from '@/lib/interfaces/users'
 import { useCreateUser, useGetUsers, useUpdateUser } from '@/lib/mutations/users'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/common/ui/button'
@@ -62,130 +62,7 @@ export function DataTableDemo({ className }: { className?: string }) {
 		}
 	}
 
-	const columns: ColumnDef<TableUser>[] = [
-		{
-			id: 'select',
-			header: ({ table }) => (
-				<Checkbox
-					checked={table.getIsAllPageRowsSelected()}
-					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-					aria-label='Select all'
-				/>
-			),
-			cell: ({ row }) => (
-				<Checkbox
-					checked={row.getIsSelected()}
-					onCheckedChange={(value) => row.toggleSelected(!!value)}
-					aria-label='Select row'
-				/>
-			),
-			enableSorting: false,
-			enableHiding: false,
-		},
-		{
-			accessorKey: 'user_name',
-			header: 'Username',
-			cell: ({ row }) => <div>{row.getValue('user_name')}</div>,
-		},
-		{
-			accessorKey: 'email',
-			header: ({ column }) => {
-				return (
-					<Button
-						variant='ghost'
-						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-						Email
-						<CaretSortIcon className='ml-2 h-4 w-4' />
-					</Button>
-				)
-			},
-			cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>,
-		},
-		{
-			accessorKey: 'isVerified',
-			header: () => <div className='text-center'>Is Verified</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>
-					{row.getValue('isVerified') ? (
-						<CheckCircle2 className='h-4 w-4 text-green-500' />
-					) : (
-						<XCircle className='h-4 w-4 text-red-500' />
-					)}
-				</div>
-			),
-		},
-		{
-			accessorKey: 'isCreator',
-			header: () => <div className='text-center'>Is Creator</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>
-					{row.getValue('isCreator') ? (
-						<CheckCircle2 className='h-4 w-4 text-green-500' />
-					) : (
-						<XCircle className='h-4 w-4 text-red-500' />
-					)}
-				</div>
-			),
-		},
-		{
-			accessorKey: 'isBanned',
-			header: () => <div className='text-center'>Is Banned</div>,
-			cell: ({ row }) => (
-				<div className='flex justify-center font-medium'>
-					{row.getValue('isBanned') ? (
-						<CheckCircle2 className='h-4 w-4 text-green-500' />
-					) : (
-						<XCircle className='h-4 w-4 text-red-500' />
-					)}
-				</div>
-			),
-		},
-		{
-			accessorKey: 'role',
-			header: 'Role',
-			cell: ({ row }) => <div className='font-medium'>{row.getValue('role')}</div>,
-		},
-		{
-			accessorKey: 'created_at',
-			header: () => <div className='text-right'>Created At</div>,
-			cell: ({ row }) => (
-				<div className='text-right font-medium'>{row.getValue('created_at')}</div>
-			),
-		},
-		{
-			id: 'actions',
-			enableHiding: false,
-			cell: ({ row }) => {
-				const user = row.original
-				const index = row.index
-
-				return (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<DotsHorizontalIcon className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuItem
-								onClick={() => navigator.clipboard.writeText(user.email)}>
-								Copy User Email
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={() => viewCustomerDetails(index)}>
-								View User
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onEditUser(index)}>
-								Edit User
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				)
-			},
-		},
-	]
+	const columns = Object.keys(new UserClass())
 
 	return (
 		<div className={cn('w-full', className)}>
@@ -221,6 +98,8 @@ export function DataTableDemo({ className }: { className?: string }) {
 					setFormType('create')
 					formRef?.current?.click()
 				}}
+				onEdit={onEditUser}
+				onViewDetails={viewCustomerDetails}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={users.data?.pagination.last_page || 0}
