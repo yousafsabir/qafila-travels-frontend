@@ -7,6 +7,7 @@ import { ChevronRight, LayoutDashboard, Users, Hotel, Plane, Bus } from 'lucide-
 
 import useStore from '@/lib/store'
 import { cn } from '@/lib/utils'
+import { CommonTooltip } from '@/components/common'
 import { Navbar } from '@/components/dashboard'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -69,7 +70,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 							className='flex justify-end rounded-md bg-blue-500 p-3 text-white'
 							key={0}>
 							<ChevronRight
-								className={cn('cursor-pointer transition-transform', { 'rotate-180': sidebarToggle })}
+								className={cn('cursor-pointer transition-transform', {
+									'rotate-180': sidebarToggle,
+								})}
 								onClick={() => setSidebarToggle((prev) => !prev)}
 							/>
 						</li>
@@ -81,9 +84,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 										'flex cursor-pointer items-center justify-start gap-2 rounded-md p-3 transition-colors  hover:bg-gray-100',
 									)}
 									href={route.path}>
-									{cloneElement(route.icon, {
-										className: cn('max-w-[24px] min-w-[24px] flex-1'),
-									})}
+									<CommonTooltip
+										trigger={cloneElement(route.icon, {
+											className: cn('max-w-[24px] min-w-[24px] flex-1'),
+										})}>
+										{route.name}
+									</CommonTooltip>
 									<span
 										className={cn('transition-all', {
 											invisible: !sidebarToggle,
