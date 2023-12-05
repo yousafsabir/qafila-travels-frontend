@@ -142,6 +142,7 @@ export function CommonTable(props: {
 									<DropdownMenuItem onClick={() => props.onViewDetails(index)}>
 										View Details
 									</DropdownMenuItem>
+									<DropdownMenuItem>Duplicate</DropdownMenuItem>
 									<DropdownMenuItem
 										onClick={() => {
 											copyObjectToClipBoard(row.original)
@@ -149,6 +150,7 @@ export function CommonTable(props: {
 										}}>
 										Copy Details as Text
 									</DropdownMenuItem>
+									<DropdownMenuItem>Create Invoice & Voucher</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
 							<Button
