@@ -18,6 +18,7 @@ import { ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from 'lucide-r
 import toast from 'react-hot-toast'
 
 import { PAGINATION_LIMIT } from '@/lib/config'
+import { snakeCaseToNormal } from '@/lib/utils'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -88,11 +89,7 @@ export function CommonTable(props: {
 			},
 			...props.columns.map((column) => ({
 				accessorKey: column,
-				header: (
-					<p className='capitalize'>
-						{column.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}
-					</p>
-				),
+				header: <p className='capitalize'>{snakeCaseToNormal(column)}</p>,
 
 				// @ts-ignore
 				cell: ({ row }) => {
@@ -225,9 +222,7 @@ export function CommonTable(props: {
 										onCheckedChange={(value) =>
 											column.toggleVisibility(!!value)
 										}>
-										{column.id
-											.replace(/([a-z])([A-Z])/g, '$1 $2')
-											.replace(/_/g, ' ')}
+										{snakeCaseToNormal(column.id)}
 									</DropdownMenuCheckboxItem>
 								)
 							})}

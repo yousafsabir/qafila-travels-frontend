@@ -1,7 +1,7 @@
 import { CheckCircle2, X, XCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-import { cn } from '@/lib/utils'
+import { cn, snakeCaseToNormal } from '@/lib/utils'
 
 export function ShowDetails({
 	obj,
@@ -25,7 +25,7 @@ export function ShowDetails({
 					Object.entries(obj).map(([key, value]) => (
 						<div className='flex flex-col' key={key}>
 							<label className='capitalize'>
-								{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}
+								{snakeCaseToNormal(key)}
 							</label>
 							{typeof value === 'boolean' ? (
 								<p className='flex-1 rounded bg-gray-200 p-2'>
