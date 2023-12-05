@@ -18,7 +18,7 @@ import { ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from 'lucide-r
 import toast from 'react-hot-toast'
 
 import { PAGINATION_LIMIT } from '@/lib/config'
-import { snakeCaseToNormal } from '@/lib/utils'
+import { snakeCaseToNormal, copyObjectToClipBoard } from '@/lib/utils'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -141,6 +141,13 @@ export function CommonTable(props: {
 									<DropdownMenuSeparator />
 									<DropdownMenuItem onClick={() => props.onViewDetails(index)}>
 										View Details
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										onClick={() => {
+											copyObjectToClipBoard(row.original)
+											toast.success('Copied Details')
+										}}>
+										Copy Details as Text
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
