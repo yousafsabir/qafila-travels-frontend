@@ -105,12 +105,12 @@ export function CommonTable(props: {
 									)}
 								</p>
 							) : typeof value === 'object' && value && value[0] ? (
-								<p className='flex-1 break-words'>
+								<p className='flex-1 break-words overflow-ellipsis'>
 									{(value as Array<any>).join(', ')}
 								</p>
 							) : (
 								<p
-									className='flex-1 break-words'
+									className='flex-1 break-words overflow-ellipsis'
 									onClick={() => {
 										navigator.clipboard.writeText(value)
 										toast.success('Copied')
