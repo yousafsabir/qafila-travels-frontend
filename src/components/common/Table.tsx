@@ -97,7 +97,7 @@ export function CommonTable(props: {
 					return (
 						<div className='flex flex-col' key={column}>
 							{typeof value === 'boolean' ? (
-								<p className='flex-1 rounded bg-gray-200 p-2'>
+								<p className='flex-1'>
 									{value ? (
 										<CheckCircle2 className='h-4 w-4 text-green-500' />
 									) : (
