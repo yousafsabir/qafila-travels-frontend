@@ -11,7 +11,7 @@ import {
 	ShowDetails,
 	CommonTable,
 	CommonAccordion,
-} from '@/components/common'
+} from '@/components'
 import { type Hotel, type CreateHotel, HotelClass } from './interfaces'
 import { useGetHotels, useCreateHotel, useUpdateHotel } from './mutations'
 import {

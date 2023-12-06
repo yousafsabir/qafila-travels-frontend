@@ -1,7 +1,7 @@
 'use client'
 
 import useStore from '@/lib/store'
-import { ShowDetails } from '@/components/common'
+import { ShowDetails } from '@/components'
 
 export default function Profile() {
 	const { admin } = useStore()

@@ -11,7 +11,7 @@ import {
 	CommonAccordion,
 	CommonModal,
 	ShowDetails,
-} from '@/components/common'
+} from '@/components'
 import { type User, type CreateUser, UserClass } from './interfaces'
 import { useCreateUser, useGetUsers, useUpdateUser } from './mutations'
 import { createUserForm, updateUserForm, searchUserForm } from './forms'

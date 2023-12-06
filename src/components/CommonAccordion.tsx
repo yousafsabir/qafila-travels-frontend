@@ -4,7 +4,7 @@ import {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@/components/common/ui/accordion'
+} from '@/components/ui/accordion'
 
 interface IAccordion {
 	className?: string

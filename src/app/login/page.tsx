@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-import { SignInForm } from '@/components/login'
+import { SignInForm } from './SignInForm'
 
 export const metadata: Metadata = {
 	title: 'Login',

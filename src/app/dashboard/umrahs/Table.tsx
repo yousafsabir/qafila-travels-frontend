@@ -11,7 +11,7 @@ import {
 	ShowDetails,
 	CommonTable,
 	CommonAccordion,
-} from '@/components/common'
+} from '@/components'
 import { type Umrah, UmrahClass } from './interfaces'
 import { useGetUmrahs, useCreateUmrah, useUpdateUmrah } from './mutations'
 import { createUmrahForm, searchUmrahForm, updateUmrahForm } from './forms'

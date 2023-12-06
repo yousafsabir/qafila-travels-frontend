@@ -15,9 +15,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/common/ui/form'
-import { Input } from '@/components/common/ui/input'
-import { Button } from '@/components/common/ui/button'
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import {
 	Select,
 	SelectContent,
@@ -25,7 +25,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/common/ui/select'
+} from '@/components/ui/select'
 
 type CommonForm = {
 	type: 'form'

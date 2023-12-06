@@ -14,11 +14,11 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/common/ui/form'
+} from '@/components/ui/form'
 import { UserLogin } from './interfaces'
 import { SignInSchema } from './validations'
-import { Input } from '@/components/common/ui/input'
-import { Button } from '@/components/common/ui/button'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 export const SignInForm = () => {
 	const router = useRouter()

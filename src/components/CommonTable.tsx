@@ -27,8 +27,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuCheckboxItem,
 	DropdownMenuTrigger,
-} from '@/components/common/ui/dropdown-menu'
-import { Checkbox } from '@/components/common/ui/checkbox'
+} from '@/components/ui/dropdown-menu'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
 	Table,
 	TableBody,
@@ -36,8 +36,8 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@/components/common/ui/table'
-import { Button } from '@/components/common/ui/button'
+} from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
 
 export function CommonTable(props: {
 	data: any

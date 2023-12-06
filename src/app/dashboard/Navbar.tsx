@@ -13,7 +13,7 @@ import {
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@/components/common/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
 
 export function Navbar({ className }: { className?: string }) {

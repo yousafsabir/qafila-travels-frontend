@@ -11,7 +11,7 @@ import {
 	ShowDetails,
 	CommonTable,
 	CommonAccordion,
-} from '@/components/common'
+} from '@/components'
 import { type Transportation, type CreateTransportation, TransportationClass } from './interfaces'
 import {
 	useGetTransportations,
