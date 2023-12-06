@@ -220,11 +220,12 @@ export function CommonTable(props: {
 							return (
 								<Button
 									variant={'destructive'}
-									onClick={() =>
+									onClick={() => {
 										props.onDeleteMany(
 											selectedRows.map((row) => row.original._id),
 										)
-									}>
+										setRowSelection({})
+									}}>
 									Delete ({selectedRows.length})
 								</Button>
 							)
