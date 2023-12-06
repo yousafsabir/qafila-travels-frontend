@@ -8,7 +8,7 @@ import { ChevronRight, LayoutDashboard, Users, Hotel, Plane, Bus } from 'lucide-
 import useStore from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { CommonTooltip } from '@/components/common'
-import { Navbar } from '@/components/dashboard'
+import { Navbar } from './Navbar'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	const router = useRouter()

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { User } from '@/lib/interfaces/users'
+import { User } from '@/app/dashboard/users/interfaces'
 
 interface StoreState {
 	admin: User | null

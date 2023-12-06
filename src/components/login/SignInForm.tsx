@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
 
-import { useLogin } from '@/lib/mutations/users'
+import { useLogin } from './mutations'
 import {
 	Form,
 	FormControl,
@@ -15,8 +15,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/common/ui/form'
-import { UserLogin } from '@/lib/interfaces'
-import { FormSchema } from '@/lib/validations'
+import { UserLogin } from './interfaces'
+import { SignInSchema } from './validations'
 import { Input } from '@/components/common/ui/input'
 import { Button } from '@/components/common/ui/button'
 
@@ -24,7 +24,7 @@ export const SignInForm = () => {
 	const router = useRouter()
 
 	const form = useForm<UserLogin>({
-		resolver: zodResolver(FormSchema),
+		resolver: zodResolver(SignInSchema),
 		defaultValues: {
 			email: '',
 			password: '',

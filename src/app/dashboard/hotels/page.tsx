@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-import { HotelsTable } from '@/components/dashboard/hotels'
+import { HotelsTable } from './Table'
 
 export const metadata: Metadata = {
 	title: 'Manage Hotels | Qafila Dashboard',

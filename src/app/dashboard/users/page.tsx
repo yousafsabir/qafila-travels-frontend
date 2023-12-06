@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-import { DataTableDemo } from '@/components/dashboard/users/Table'
+import { UsersTable } from './Table'
 
 export const metadata: Metadata = {
 	title: 'Manage Users | Qafila Dashboard',
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Dashboard() {
 	return (
 		<div className='flex flex-1 flex-col'>
-			<DataTableDemo className='flex-1' />
+			<UsersTable className='flex-1' />
 		</div>
 	)
 }

@@ -1,5 +1,14 @@
 import { snakeCaseToNormal } from './snakeCaseToNormal'
 
+/**
+ * `copyObjectToClipBoard()` function writes contents of an object to the clipboard.
+ * @example
+ * {a: "value1", var_2: "value2", var3: "value3"} would be written as
+ * A = value1
+ * Var 2 = value2
+ * Var 3 = value3
+ * @param {Record<string, any>} obj 
+ */
 export function copyObjectToClipBoard(obj: Record<string, any>): void {
 	let text = ''
 	Object.entries(obj).forEach(([key, value]) => {

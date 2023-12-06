@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-import { TransportationsTable } from '@/components/dashboard/transportations'
+import { TransportationsTable } from './Table'
 
 export const metadata: Metadata = {
 	title: 'Manage Transportations | Qafila Dashboard',

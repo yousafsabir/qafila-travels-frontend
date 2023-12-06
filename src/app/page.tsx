@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import ReactLoading from 'react-loading'
 
-import { useGetMe } from '@/lib/mutations/users'
+import { useGetMe } from './mutations'
 import useStore from '@/lib/store'
 
 export default function Home() {

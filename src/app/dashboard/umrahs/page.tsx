@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-import { UmrahsTable } from '@/components/dashboard/umrah'
+import { UmrahsTable } from './Table'
 
 export const metadata: Metadata = {
 	title: 'Manage Umrahs | Qafila Dashboard',
