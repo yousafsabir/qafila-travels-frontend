@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { queryClient } from '@/lib/config'
-import { createUmrah, updateUmrah, getUmrahs } from './apis'
+import { createUmrah, updateUmrah, getUmrahs, deleteUmrahs } from './apis'
 import { type Umrah, type CreateUmrah } from './interfaces'
 
 export function useCreateUmrah() {
@@ -43,6 +43,31 @@ export function useUpdateUmrah() {
 			toast.dismiss(loadingToast)
 			if (response.status === 200) {
 				toast.success('Umrah Updated')
+				queryClient.invalidateQueries({ queryKey: ['get_umrahs'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
+	})
+}
+
+export function useDeleteUmrahs() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['delete_umrahs'],
+		mutationFn: async (ids: string[]) => {
+			loadingToast = toast.loading('Deleting Umrahs')
+			const res = await deleteUmrahs(ids)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('Umrahs Deleted')
 				queryClient.invalidateQueries({ queryKey: ['get_umrahs'] })
 			} else {
 				toast.error(`Error: ${response.message}`)

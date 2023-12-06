@@ -5,15 +5,9 @@ import { Filter } from 'lucide-react'
 
 import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
-import {
-	CommonForm,
-	CommonModal,
-	ShowDetails,
-	CommonTable,
-	CommonAccordion,
-} from '@/components'
+import { CommonForm, CommonModal, ShowDetails, CommonTable, CommonAccordion } from '@/components'
 import { type Umrah, UmrahClass } from './interfaces'
-import { useGetUmrahs, useCreateUmrah, useUpdateUmrah } from './mutations'
+import { useGetUmrahs, useCreateUmrah, useUpdateUmrah, useDeleteUmrahs } from './mutations'
 import { createUmrahForm, searchUmrahForm, updateUmrahForm } from './forms'
 
 export function UmrahsTable({ className }: { className?: string }) {
@@ -22,6 +16,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 	const umrahs = useGetUmrahs()
 	const createUmrah = useCreateUmrah()
 	const updateUmrah = useUpdateUmrah()
+	const deleteUmrahs = useDeleteUmrahs()
 	const [detailUmrah, setDetailUmrah] = React.useState<Umrah | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
 	const formRef = React.useRef<React.ElementRef<'button'>>(null)
@@ -50,6 +45,10 @@ export function UmrahsTable({ className }: { className?: string }) {
 			setDetailUmrah(umrahs.data?.umrahs[index] as Umrah)
 			formRef.current?.click()
 		}
+	}
+
+	const onDeleteUmrahs = async (ids: string[]) => {
+		await deleteUmrahs.mutateAsync(ids)
 	}
 
 	const columns = Object.keys(new UmrahClass())
@@ -90,6 +89,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 				}}
 				onEdit={onEditUmrah}
 				onViewDetails={viewUmrahDetails}
+				onDeleteMany={onDeleteUmrahs}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={umrahs.data?.pagination.last_page || 0}

@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { queryClient } from '@/lib/config'
-import { getUsers, createUser, updateUser, deleteUser } from './apis'
+import { getUsers, createUser, updateUser, deleteUsers } from './apis'
 import { type CreateUser, type User } from './interfaces'
 
 export function useCreateUser() {
@@ -62,19 +62,19 @@ export function useUpdateUser() {
 	})
 }
 
-export function useDeleteUser() {
+export function useDeleteUsers() {
 	let loadingToast: any
 	return useMutation({
-		mutationKey: ['delete_user'],
-		mutationFn: async (params: { user_name: string }) => {
-			loadingToast = toast.loading('Deleting User')
-			const res = await deleteUser(params)
+		mutationKey: ['delete_users'],
+		mutationFn: async (ids: string[]) => {
+			loadingToast = toast.loading('Deleting Users')
+			const res = await deleteUsers(ids)
 			return res
 		},
 		onSuccess: (response) => {
 			toast.dismiss(loadingToast)
 			if (response.status === 200) {
-				toast.success('User Deleted')
+				toast.success('Users Deleted')
 				queryClient.invalidateQueries({ queryKey: ['get_users'] })
 			} else {
 				toast.error(`Error: ${response.message}`)

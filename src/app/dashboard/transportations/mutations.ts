@@ -2,7 +2,12 @@ import toast from 'react-hot-toast'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { queryClient } from '@/lib/config'
-import { getTransportations, createTransportation, updateTransportation } from './apis'
+import {
+	getTransportations,
+	createTransportation,
+	updateTransportation,
+	deleteTransportations,
+} from './apis'
 import { type Transportation, type CreateTransportation } from './interfaces'
 
 export function useCreateTransportation() {
@@ -43,6 +48,31 @@ export function useUpdateTransportation() {
 			toast.dismiss(loadingToast)
 			if (response.status === 200) {
 				toast.success('Transportation Updated')
+				queryClient.invalidateQueries({ queryKey: ['get_transportations'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
+	})
+}
+
+export function useDeleteTransportations() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['delete_transportations'],
+		mutationFn: async (ids: string[]) => {
+			loadingToast = toast.loading('Deleting Transportations')
+			const res = await deleteTransportations(ids)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('Transportations Deleted')
 				queryClient.invalidateQueries({ queryKey: ['get_transportations'] })
 			} else {
 				toast.error(`Error: ${response.message}`)

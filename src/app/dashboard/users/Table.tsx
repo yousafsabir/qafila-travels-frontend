@@ -5,15 +5,9 @@ import { Filter } from 'lucide-react'
 
 import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
-import {
-	CommonTable,
-	CommonForm,
-	CommonAccordion,
-	CommonModal,
-	ShowDetails,
-} from '@/components'
+import { CommonTable, CommonForm, CommonAccordion, CommonModal, ShowDetails } from '@/components'
 import { type User, type CreateUser, UserClass } from './interfaces'
-import { useCreateUser, useGetUsers, useUpdateUser } from './mutations'
+import { useCreateUser, useGetUsers, useUpdateUser, useDeleteUsers } from './mutations'
 import { createUserForm, updateUserForm, searchUserForm } from './forms'
 
 export function UsersTable({ className }: { className?: string }) {
@@ -22,6 +16,7 @@ export function UsersTable({ className }: { className?: string }) {
 	const users = useGetUsers(searchQuery.queryStr)
 	const createUser = useCreateUser()
 	const updateUser = useUpdateUser()
+	const deleteUsers = useDeleteUsers()
 	const [detailUser, setDetailUser] = React.useState<User | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
 	const formRef = React.useRef<React.ElementRef<'button'>>(null)
@@ -48,6 +43,10 @@ export function UsersTable({ className }: { className?: string }) {
 			setDetailUser(users.data.users[index] as User)
 			formRef.current?.click()
 		}
+	}
+
+	const onDeleteUsers = async (ids: string[]) => {
+		await deleteUsers.mutateAsync(ids)
 	}
 
 	const columns = Object.keys(new UserClass())
@@ -88,6 +87,7 @@ export function UsersTable({ className }: { className?: string }) {
 				}}
 				onEdit={onEditUser}
 				onViewDetails={viewCustomerDetails}
+				onDeleteMany={onDeleteUsers}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={users.data?.pagination.last_page || 0}

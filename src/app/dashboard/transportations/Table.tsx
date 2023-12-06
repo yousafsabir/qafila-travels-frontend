@@ -5,18 +5,13 @@ import { Filter } from 'lucide-react'
 
 import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
-import {
-	CommonForm,
-	CommonModal,
-	ShowDetails,
-	CommonTable,
-	CommonAccordion,
-} from '@/components'
+import { CommonForm, CommonModal, ShowDetails, CommonTable, CommonAccordion } from '@/components'
 import { type Transportation, type CreateTransportation, TransportationClass } from './interfaces'
 import {
 	useGetTransportations,
 	useCreateTransportation,
 	useUpdateTransportation,
+	useDeleteTransportations,
 } from './mutations'
 import {
 	createTransportationForm,
@@ -30,6 +25,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 	const transportations = useGetTransportations(searchQuery.queryStr)
 	const createTransportation = useCreateTransportation()
 	const updateTransportation = useUpdateTransportation()
+	const deleteTransportations = useDeleteTransportations()
 	const [detailTransportation, setDetailTransportation] = React.useState<Transportation | null>(
 		null,
 	)
@@ -65,6 +61,10 @@ export function TransportationsTable({ className }: { className?: string }) {
 			setDetailTransportation(transportations.data?.transportations[index] as Transportation)
 			formRef.current?.click()
 		}
+	}
+
+	const onDeleteTransportations = async (ids: string[]) => {
+		await deleteTransportations.mutateAsync(ids)
 	}
 
 	const columns = Object.keys(new TransportationClass())
@@ -105,6 +105,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 				}}
 				onEdit={onEditTransportation}
 				onViewDetails={viewTransportationDetails}
+				onDeleteMany={onDeleteTransportations}
 				page={searchQuery.pagination.page}
 				limit={searchQuery.pagination.limit}
 				lastPage={transportations.data?.pagination.last_page || 0}
