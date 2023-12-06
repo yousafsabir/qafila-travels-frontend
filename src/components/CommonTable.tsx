@@ -45,6 +45,7 @@ export function CommonTable(props: {
 	onCreate: () => void
 	onEdit: (index: number) => void
 	onViewDetails: (index: number) => void
+	onDeleteMany: (ids: string[]) => void
 	page: number
 	limit: number
 	lastPage: number
@@ -65,7 +66,6 @@ export function CommonTable(props: {
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>(initialVisibleColumns)
 	const [rowSelection, setRowSelection] = React.useState({})
-
 	const tableColums = React.useMemo(() => {
 		return [
 			{
@@ -105,12 +105,12 @@ export function CommonTable(props: {
 									)}
 								</p>
 							) : typeof value === 'object' && value && value[0] ? (
-								<p className='flex-1 break-words overflow-ellipsis'>
+								<p className='flex-1 overflow-ellipsis break-words'>
 									{(value as Array<any>).join(', ')}
 								</p>
 							) : (
 								<p
-									className='flex-1 break-words overflow-ellipsis'
+									className='flex-1 overflow-ellipsis break-words'
 									onClick={() => {
 										navigator.clipboard.writeText(value)
 										toast.success('Copied')
@@ -195,7 +195,7 @@ export function CommonTable(props: {
 	})
 	return (
 		<>
-			<div className='flex items-center py-4'>
+			<div className='flex items-center justify-between py-4'>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant='outline' className=''>
@@ -212,34 +212,55 @@ export function CommonTable(props: {
 						})}
 					</DropdownMenuContent>
 				</DropdownMenu>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='outline' className='ml-auto'>
-							Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent className='grid grid-cols-2'>
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className='capitalize'
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}>
-										{snakeCaseToNormal(column.id)}
-									</DropdownMenuCheckboxItem>
-								)
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>
-				<Button variant={'outline'} onClick={props.onCreate} className='ml-4'>
-					Create
-				</Button>
+				<div className='flex flex-wrap gap-4'>
+					{(() => {
+						const selectedRows = table.getFilteredSelectedRowModel().rows
+
+						if (selectedRows.length) {
+							return (
+								<Button
+									variant={'destructive'}
+									onClick={() =>
+										props.onDeleteMany(
+											selectedRows.map((row) => row.original._id),
+										)
+									}>
+									Delete ({selectedRows.length})
+								</Button>
+							)
+						} else {
+							return null
+						}
+					})()}
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='outline'>
+								Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className='grid grid-cols-2'>
+							{table
+								.getAllColumns()
+								.filter((column) => column.getCanHide())
+								.map((column) => {
+									return (
+										<DropdownMenuCheckboxItem
+											key={column.id}
+											className='capitalize'
+											checked={column.getIsVisible()}
+											onCheckedChange={(value) =>
+												column.toggleVisibility(!!value)
+											}>
+											{snakeCaseToNormal(column.id)}
+										</DropdownMenuCheckboxItem>
+									)
+								})}
+						</DropdownMenuContent>
+					</DropdownMenu>
+					<Button variant={'outline'} onClick={props.onCreate}>
+						Create
+					</Button>
+				</div>
 			</div>
 			<div className='rounded-md border'>
 				<Table>
