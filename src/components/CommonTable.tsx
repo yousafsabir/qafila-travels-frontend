@@ -160,10 +160,6 @@ export function CommonTable(props: {
 								<span className='sr-only'>Edit</span>
 								<FileEdit className='h-4 w-4 text-green-500' />
 							</Button>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Delete</span>
-								<Trash className='h-4 w-4 text-red-500' />
-							</Button>
 						</>
 					)
 				},
