@@ -6,8 +6,8 @@ export function createUmrah(data: CreateUmrah) {
 	return http.post<any>(apiUrls.umrahs.create, data)
 }
 
-export function deleteUmrah(umrahId: string) {
-	return http.delete<any>(`${apiUrls.umrahs.deleteOne}/${umrahId}`)
+export function deleteUmrahs(ids: string[]) {
+	return http.delete<any>(apiUrls.umrahs.deleteMultiple, { ids })
 }
 
 export function getUmrah(umrahId: string) {
@@ -15,7 +15,9 @@ export function getUmrah(umrahId: string) {
 }
 
 export function getUmrahs(searchParams?: string) {
-	return http.get<GetUmrahsResponse>(`${apiUrls.umrahs.getAll}${searchParams ? searchParams : ''}`)
+	return http.get<GetUmrahsResponse>(
+		`${apiUrls.umrahs.getAll}${searchParams ? searchParams : ''}`,
+	)
 }
 
 export function updateUmrah(data: Partial<Umrah>, umrahId: string) {

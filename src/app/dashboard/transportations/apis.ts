@@ -11,8 +11,8 @@ export function createTransportation(data: CreateTransportation) {
 	return http.post<any>(apiUrls.transportations.create, data)
 }
 
-export function deleteTransportation() {
-	return http.delete<any>(apiUrls.users.me)
+export function deleteTransportations(ids: string[]) {
+	return http.delete<any>(apiUrls.transportations.deleteMultiple, { ids })
 }
 
 export function getTransportation(transportationId: string) {

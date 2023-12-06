@@ -1,11 +1,6 @@
 import { http } from '@/lib/config'
 import { apiUrls } from '@/lib/apis'
-import {
-	GetUsersResponse,
-	TableUser,
-	CreateUser,
-	User,
-} from './interfaces'
+import { GetUsersResponse, TableUser, CreateUser, User } from './interfaces'
 import { LoginResponse } from '@/app/login/interfaces'
 
 export function createUser(data: CreateUser) {
@@ -20,6 +15,6 @@ export function updateUser(data: User) {
 	return http.put<TableUser[]>(apiUrls.users.update, data)
 }
 
-export function deleteUser(data: { user_name: string }) {
-	return http.delete<TableUser[]>(apiUrls.users.delete, data)
+export function deleteUsers(ids: string[]) {
+	return http.delete<TableUser[]>(apiUrls.users.deleteMultiple, { ids })
 }
