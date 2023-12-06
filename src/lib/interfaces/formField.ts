@@ -50,19 +50,32 @@ type CommonInputData<T> = {
 	validation: z.ZodTypeAny | null
 } & (NormalValue | CalculatedValue)
 
-type ITextField<T> = CommonInputData<T> & {
+export type ITextInputField<T> = CommonInputData<T> & {
 	type: 'text' | 'email' | 'password' | 'date' | 'number'
+	classNames?: {
+		wrapper?: string
+		label?: string
+		input?: string
+	}
 }
 
 type ISelectField<T> = CommonInputData<T> & {
 	type: 'select'
+	valueType: 'normal' // Selects can't have calculated values for now
 	values: {
 		label: string
 		value: string
 	}[]
+	classNames?: {
+		wrapper?: string
+		label?: string
+		selectTrigger?: string
+		selectTriggerValue?: string
+		selectItem?: string
+	}
 }
 
 /**
- * @description hello world
+ * @description Common Form Field Type
  */
-export type IFormField<T> = ITextField<T> | ISelectField<T>
+export type IFormField<T> = ITextInputField<T> | ISelectField<T>

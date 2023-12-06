@@ -8,6 +8,7 @@ import * as z from 'zod'
 import { NO_VALUE } from '@/lib/config'
 import { fieldCalculation } from '@/lib/utils'
 import { type IFormField } from '@/lib/interfaces'
+import { type ITextInputField } from '@/lib/interfaces/formField'
 import {
 	Form,
 	FormControl,
@@ -29,26 +30,21 @@ import {
 
 type CommonForm = {
 	type: 'form'
-	operationType: 'create' | 'edit'
-	formFields: IFormField<any>[]
-	defaultObj?: any
-	submitText: string
-	cancelText: string
-	submitFunc: (values: any) => void
 }
 
 type CommonModalForm = {
 	type: 'modal'
+	closeModal: () => void
+}
+
+type CommonFormProps = {
 	operationType: 'create' | 'edit'
 	formFields: IFormField<any>[]
 	defaultObj?: any
 	submitText: string
 	cancelText: string
 	submitFunc: (values: any) => void
-	closeModal: () => void
-}
-
-type CommonFormProps = CommonForm | CommonModalForm
+} & (CommonForm | CommonModalForm)
 
 export const CommonForm = (props: CommonFormProps) => {
 	let [defaultValues, setDefaultValues] = useState<Record<string, any>>({})
@@ -170,8 +166,16 @@ export const CommonForm = (props: CommonFormProps) => {
 									control={form.control}
 									name={(aField as any).key}
 									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{aField.label}</FormLabel>
+										<FormItem
+											className={
+												aField.classNames && aField.classNames.wrapper
+											}>
+											<FormLabel
+												className={
+													aField.classNames && aField.classNames.label
+												}>
+												{aField.label}
+											</FormLabel>
 											<FormControl>
 												<Input
 													placeholder={aField.placeholder}
@@ -184,6 +188,10 @@ export const CommonForm = (props: CommonFormProps) => {
 															  })()
 															: ''
 													}
+													className={
+														(aField as ITextInputField<any>)?.classNames
+															?.input
+													}
 												/>
 											</FormControl>
 											<FormMessage />
@@ -195,8 +203,10 @@ export const CommonForm = (props: CommonFormProps) => {
 									control={form.control}
 									name={(aField as any).key}
 									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{aField.label}</FormLabel>
+										<FormItem className={aField.classNames?.wrapper}>
+											<FormLabel className={aField.classNames?.label}>
+												{aField.label}
+											</FormLabel>
 											<FormControl>
 												<Select
 													onValueChange={field.onChange}
@@ -206,8 +216,15 @@ export const CommonForm = (props: CommonFormProps) => {
 															: ''
 													}
 													{...field}>
-													<SelectTrigger className=''>
+													<SelectTrigger
+														className={
+															aField.classNames?.selectTrigger
+														}>
 														<SelectValue
+															className={
+																aField.classNames
+																	?.selectTriggerValue
+															}
 															placeholder={aField.placeholder}
 														/>
 													</SelectTrigger>
@@ -216,7 +233,11 @@ export const CommonForm = (props: CommonFormProps) => {
 															{aField.values.map((value, i) => (
 																<SelectItem
 																	value={value.value}
-																	key={i}>
+																	key={i}
+																	className={
+																		aField.classNames
+																			?.selectItem
+																	}>
 																	{value.label}
 																</SelectItem>
 															))}
