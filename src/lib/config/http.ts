@@ -17,6 +17,8 @@ class Http {
 	): Promise<T & HttpError> {
 		if (['get'].includes(type)) {
 			return (await httpClient.get(url)).data as Promise<T & HttpError>
+		} else if (type === 'delete') {
+			return (await httpClient.delete(url, { data })).data as Promise<T & HttpError>
 		}
 		return (await httpClient[type](url, data)).data as Promise<T & HttpError>
 	}
