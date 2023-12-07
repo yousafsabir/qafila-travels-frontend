@@ -60,12 +60,13 @@ export const CommonForm = (props: CommonFormProps) => {
 			if (field.type === 'heading') {
 				return field
 			}
-			Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
-				if (key === field.key) {
-					field.defaultValue = String(value) as any
-					setDefaultValues((prev) => ({ ...prev, [key]: String(value) }))
-				}
-			})
+			if (props.defaultObj && props.defaultObj[field.key]) {
+				field.defaultValue = String(props.defaultObj[field.key]) as any
+				setDefaultValues((prev) => ({
+					...prev,
+					[field.key]: String(props.defaultObj[field.key]),
+				}))
+			}
 			// Looking for calculated values and setting them to calculatedValuesConfig
 			if (field.valueType === 'calculated') {
 				let calculationDeps = fieldCalculation.getDependencyArray(
@@ -163,7 +164,11 @@ export const CommonForm = (props: CommonFormProps) => {
 					{formFields.map((aField, i) => (
 						<Fragment key={i}>
 							{aField.type === 'heading' ? (
-								<h3 className={cn('col-span-full font-bold border-b border-gray-300 text-blue-500 text-xl mt-5', aField.className)}>
+								<h3
+									className={cn(
+										'col-span-full mt-5 border-b border-gray-300 text-xl font-bold text-blue-500',
+										aField.className,
+									)}>
 									{aField.heading}
 								</h3>
 							) : ['email', 'text', 'password', 'number', 'date'].includes(
