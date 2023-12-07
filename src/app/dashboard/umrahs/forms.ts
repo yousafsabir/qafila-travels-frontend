@@ -17,6 +17,15 @@ export const createUmrahForm: ExtendedForm<Umrah> = [
 				placeholder: '',
 				validation: z.string().min(1, 'Date of Entry is required'),
 			},
+			{
+				label: 'Invoice Number',
+				key: 'invoice_number',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '_uid_' as DefaultValueTypes,
+				placeholder: '',
+				validation: z.string().min(1, 'Invoice Number'),
+			},
 		],
 	},
 	{
