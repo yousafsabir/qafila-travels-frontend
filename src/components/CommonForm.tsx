@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
 import { NO_VALUE } from '@/lib/config'
-import { fieldCalculation } from '@/lib/utils'
+import { fieldCalculation, cn } from '@/lib/utils'
 import { type IFormField } from '@/lib/interfaces'
 import { type ITextInputField } from '@/lib/interfaces/formField'
 import {
@@ -57,6 +57,9 @@ export const CommonForm = (props: CommonFormProps) => {
 		 * the default value stringified in `edit` mode
 		 */
 		let _formFields = props.formFields.map((field) => {
+			if (field.type === 'heading') {
+				return field
+			}
 			Object.entries(props.defaultObj || {}).forEach(([key, value]) => {
 				if (key === field.key) {
 					field.defaultValue = String(value) as any
@@ -159,9 +162,13 @@ export const CommonForm = (props: CommonFormProps) => {
 				<div className='grid grid-cols-2 gap-x-2 gap-y-3'>
 					{formFields.map((aField, i) => (
 						<Fragment key={i}>
-							{['email', 'text', 'password', 'number', 'date'].includes(
-								aField.type,
-							) ? (
+							{aField.type === 'heading' ? (
+								<h3 className={cn('col-span-full font-bold border-b border-gray-300 text-blue-500 text-xl mt-5', aField.className)}>
+									{aField.heading}
+								</h3>
+							) : ['email', 'text', 'password', 'number', 'date'].includes(
+									aField.type,
+							  ) ? (
 								<FormField
 									control={form.control}
 									name={(aField as any).key}
@@ -269,7 +276,7 @@ export const CommonForm = (props: CommonFormProps) => {
 function extractSchemaFromField(formFields: IFormField<any>[]) {
 	let schemaObj: Record<string, z.ZodTypeAny> = {}
 	for (let field of formFields) {
-		if (field.validation) {
+		if (field.type !== 'heading' && field.validation) {
 			schemaObj[(field as any).key] = field.validation
 		}
 	}
