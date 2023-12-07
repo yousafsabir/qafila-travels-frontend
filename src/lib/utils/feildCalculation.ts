@@ -1,4 +1,4 @@
-import { IFormField } from '@/lib/interfaces'
+import { ExtendedForm } from '@/lib/interfaces'
 
 /**
  * `arithmeticEvaluate` evaluates arithmetic expressions in the form of strings (e.g. "8 * ( 4 + 5 )")
@@ -111,16 +111,19 @@ function replaceKeyWithValue(obj: Record<string, any>, expression: string): stri
 /**
  * `getDependencyArray` function returns all keys in a stringified expression.
  * For example: for an expression "value_1 * ( value_2 + value_3 )" it will return ["value_1", "value_2", "value_3"]
- * @param {IFormField<any>[]} fields
+ * @param {ExtendedForm<any>} form
  * @param {expression} expression
  * @returns {string[]}
  */
-function getDependencyArray(fields: IFormField<any>[], expression: string): string[] {
+function getDependencyArray(form: ExtendedForm<any>, expression: string): string[] {
 	let returnArr: string[] = []
-	fields.forEach((field) => {
-		if (expression.includes(field.key as string)) {
-			returnArr.push(field.key as string)
-		}
+	form.forEach((group) => {
+		group.fields.forEach((field) => {
+			if (field.type === 'heading') return
+			if (expression.includes(field.key as string)) {
+				returnArr.push(field.key as string)
+			}
+		})
 	})
 	return returnArr
 }
