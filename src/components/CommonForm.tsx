@@ -4,11 +4,12 @@ import { useEffect, Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import { format as fechaDateFormat } from 'fecha'
 
 import { NO_VALUE } from '@/lib/config'
 import { fieldCalculation, cn } from '@/lib/utils'
 import { type IFormField } from '@/lib/interfaces'
-import { type ITextInputField } from '@/lib/interfaces/formField'
+import { defaultValueTypes, DefaultValueTypes } from '@/lib/interfaces/formField'
 import {
 	Form,
 	FormControl,
@@ -61,11 +62,24 @@ export const CommonForm = (props: CommonFormProps) => {
 				return field
 			}
 			if (props.defaultObj && props.defaultObj[field.key]) {
-				field.defaultValue = String(props.defaultObj[field.key]) as any
+				const value =
+					field.type === 'date'
+						? fechaDateFormat(props.defaultObj[field.key], 'YYYY-MM-DD')
+						: String(props.defaultObj[field.key])
+
+				field.defaultValue = value
 				setDefaultValues((prev) => ({
 					...prev,
-					[field.key]: String(props.defaultObj[field.key]),
+					[field.key]: value,
 				}))
+			} else if (defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)) {
+				if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
+					field.defaultValue = fechaDateFormat(new Date(), 'YYYY-MM-DD') as any
+					setDefaultValues((prev) => ({
+						...prev,
+						[field.key]: fechaDateFormat(new Date(), 'YYYY-MM-DD'),
+					}))
+				}
 			}
 			// Looking for calculated values and setting them to calculatedValuesConfig
 			if (field.valueType === 'calculated') {
@@ -171,45 +185,6 @@ export const CommonForm = (props: CommonFormProps) => {
 									)}>
 									{aField.heading}
 								</h3>
-							) : ['email', 'text', 'password', 'number', 'date'].includes(
-									aField.type,
-							  ) ? (
-								<FormField
-									control={form.control}
-									name={(aField as any).key}
-									render={({ field }) => (
-										<FormItem
-											className={
-												aField.classNames && aField.classNames.wrapper
-											}>
-											<FormLabel
-												className={
-													aField.classNames && aField.classNames.label
-												}>
-												{aField.label}
-											</FormLabel>
-											<FormControl>
-												<Input
-													placeholder={aField.placeholder}
-													type={aField.type}
-													{...field}
-													defaultValue={
-														props.operationType === 'edit'
-															? (function () {
-																	return aField.defaultValue
-															  })()
-															: ''
-													}
-													className={
-														(aField as ITextInputField<any>)?.classNames
-															?.input
-													}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
 							) : aField.type === 'select' ? (
 								<FormField
 									control={form.control}
@@ -256,6 +231,36 @@ export const CommonForm = (props: CommonFormProps) => {
 														</SelectGroup>
 													</SelectContent>
 												</Select>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							) : ['email', 'text', 'password', 'number', 'date'].includes(
+									aField.type,
+							  ) ? (
+								<FormField
+									control={form.control}
+									name={(aField as any).key}
+									render={({ field }) => (
+										<FormItem
+											className={
+												aField.classNames && aField.classNames.wrapper
+											}>
+											<FormLabel
+												className={
+													aField.classNames && aField.classNames.label
+												}>
+												{aField.label}
+											</FormLabel>
+											<FormControl>
+												<Input
+													placeholder={aField.placeholder}
+													type={aField.type}
+													{...field}
+													defaultValue={aField.defaultValue}
+													className={aField?.classNames?.input}
+												/>
 											</FormControl>
 											<FormMessage />
 										</FormItem>
