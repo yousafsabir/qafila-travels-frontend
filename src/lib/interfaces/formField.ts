@@ -26,6 +26,13 @@ type CalculatedValue = {
 	expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
 }
 
+export const defaultValueTypes = ['_current_date_'] as const // underscores to keep it separate from other deafult values
+
+/**
+ * Please use typescript's intellisense when using it in form for derived defaultValue
+ */
+export type DefaultValueTypes = (typeof defaultValueTypes)[number]
+
 type CommonInputData<T> = {
 	/**
 	 * @description text of the label of the input field
@@ -38,7 +45,7 @@ type CommonInputData<T> = {
 	/**
 	 * @description to set an input's default value. mainly used for editing
 	 */
-	defaultValue: string
+	defaultValue: DefaultValueTypes | string
 	/**
 	 * @description placeholder of an input
 	 */
@@ -74,6 +81,7 @@ type ISelectField<T> = CommonInputData<T> & {
 	}
 }
 
+// TODO: make an array of such elements which are not form fields
 type ISubHeading = {
 	type: 'heading'
 	heading: string
@@ -84,3 +92,20 @@ type ISubHeading = {
  * @description Common Form Field Type
  */
 export type IFormField<T> = ITextInputField<T> | ISelectField<T> | ISubHeading
+
+type FormGroup<T> = {
+	fields: IFormField<T>[]
+} & (
+	| {
+			type: 'accordion'
+			heading: string
+			classNames?: {
+				wrapper?: string
+				trigger?: string
+				content?: string
+			}
+	  }
+	| { type: 'normal-group'; heading?: string; className?: string }
+)
+
+export type ExtendedForm<T> = Array<FormGroup<T>>
