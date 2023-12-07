@@ -85,7 +85,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 								type='form'
 								defaultObj={searchQuery.filterObj}
 								operationType='edit'
-								formFields={searchTransportationForm}
+								extendedForm={searchTransportationForm}
 								submitText='Search'
 								cancelText='Cancel'
 								submitFunc={searchQuery.setQuery}
@@ -113,13 +113,13 @@ export function TransportationsTable({ className }: { className?: string }) {
 				setPage={searchQuery.setPage}
 				setLimit={searchQuery.setLimit}
 			/>
-			<CommonModal ref={formRef}>
+			<CommonModal ref={formRef} className='sm:min-w-[510px]'>
 				<CommonForm
 					type='modal'
 					defaultObj={detailTransportation}
 					operationType={formType}
 					closeModal={() => formRef.current?.click()}
-					formFields={
+					extendedForm={
 						formType === 'create' ? createTransportationForm : updateTransportationForm
 					}
 					submitText={formType === 'create' ? 'Create' : 'Update'}

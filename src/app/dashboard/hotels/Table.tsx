@@ -69,7 +69,7 @@ export function HotelsTable({ className }: { className?: string }) {
 								type='form'
 								defaultObj={searchQuery.filterObj}
 								operationType='edit'
-								formFields={searchHotelForm}
+								extendedForm={searchHotelForm}
 								submitText='Search'
 								cancelText='Cancel'
 								submitFunc={searchQuery.setQuery}
@@ -97,13 +97,13 @@ export function HotelsTable({ className }: { className?: string }) {
 				setPage={searchQuery.setPage}
 				setLimit={searchQuery.setLimit}
 			/>
-			<CommonModal ref={formRef}>
+			<CommonModal ref={formRef} className='sm:min-w-[510px]'>
 				<CommonForm
 					type='modal'
 					defaultObj={detailHotel}
 					operationType={formType}
 					closeModal={() => formRef.current?.click()}
-					formFields={formType === 'create' ? createHotelForm : updateHotelForm}
+					extendedForm={formType === 'create' ? createHotelForm : updateHotelForm}
 					submitText={formType === 'create' ? 'Create' : 'Update'}
 					cancelText='Cancel'
 					submitFunc={(values) =>

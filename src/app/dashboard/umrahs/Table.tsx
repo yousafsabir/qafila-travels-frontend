@@ -69,7 +69,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 								type='form'
 								defaultObj={searchQuery.filterObj}
 								operationType='edit'
-								formFields={searchUmrahForm}
+								extendedForm={searchUmrahForm}
 								submitText='Search'
 								cancelText='Cancel'
 								submitFunc={searchQuery.setQuery}
@@ -97,13 +97,13 @@ export function UmrahsTable({ className }: { className?: string }) {
 				setPage={searchQuery.setPage}
 				setLimit={searchQuery.setLimit}
 			/>
-			<CommonModal ref={formRef}>
+			<CommonModal ref={formRef} className='sm:min-w-[510px]'>
 				<CommonForm
 					type='modal'
 					defaultObj={detailUmrah}
 					operationType={formType}
 					closeModal={() => formRef.current?.click()}
-					formFields={formType === 'create' ? createUmrahForm : updateUmrahForm}
+					extendedForm={formType === 'create' ? createUmrahForm : updateUmrahForm}
 					submitText={formType === 'create' ? 'Create' : 'Update'}
 					cancelText='Cancel'
 					submitFunc={(values) =>

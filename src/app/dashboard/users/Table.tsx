@@ -67,7 +67,7 @@ export function UsersTable({ className }: { className?: string }) {
 								type='form'
 								defaultObj={searchQuery.filterObj}
 								operationType='edit'
-								formFields={searchUserForm}
+								extendedForm={searchUserForm}
 								submitText='Search'
 								cancelText='Cancel'
 								submitFunc={searchQuery.setQuery}
@@ -95,13 +95,13 @@ export function UsersTable({ className }: { className?: string }) {
 				setPage={searchQuery.setPage}
 				setLimit={searchQuery.setLimit}
 			/>
-			<CommonModal ref={formRef}>
+			<CommonModal ref={formRef} className='sm:min-w-[510px]'>
 				<CommonForm
 					type='modal'
 					defaultObj={detailUser}
 					operationType={formType}
 					closeModal={() => formRef.current?.click()}
-					formFields={formType === 'create' ? createUserForm : updateUserForm}
+					extendedForm={formType === 'create' ? createUserForm : updateUserForm}
 					submitText={formType === 'create' ? 'Create' : 'Update'}
 					cancelText='Cancel'
 					submitFunc={(values) =>
