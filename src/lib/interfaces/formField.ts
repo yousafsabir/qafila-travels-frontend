@@ -26,7 +26,7 @@ type CalculatedValue = {
 	expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
 }
 
-export const defaultValueTypes = ['_current_date_'] as const // underscores to keep it separate from other deafult values
+export const defaultValueTypes = ['_current_date_', '_uid_'] as const // underscores to keep it separate from other deafult values
 
 /**
  * Please use typescript's intellisense when using it in form for derived defaultValue

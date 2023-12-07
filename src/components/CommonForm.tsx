@@ -7,7 +7,7 @@ import * as z from 'zod'
 import { format as fechaDateFormat } from 'fecha'
 
 import { NO_VALUE } from '@/lib/config'
-import { fieldCalculation, cn } from '@/lib/utils'
+import { fieldCalculation, cn, genRandString } from '@/lib/utils'
 import { type ExtendedForm, type IFormField } from '@/lib/interfaces'
 import { defaultValueTypes, DefaultValueTypes } from '@/lib/interfaces/formField'
 import {
@@ -79,13 +79,17 @@ export const CommonForm = (props: CommonFormProps) => {
 					} else if (
 						defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
 					) {
+						let value = ''
 						if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
-							field.defaultValue = fechaDateFormat(new Date(), 'YYYY-MM-DD') as any
-							setDefaultValues((prev) => ({
-								...prev,
-								[field.key]: fechaDateFormat(new Date(), 'YYYY-MM-DD'),
-							}))
+							value = fechaDateFormat(new Date(), 'YYYY-MM-DD')
+						} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
+							value = genRandString(12)
 						}
+						field.defaultValue = value
+						setDefaultValues((prev) => ({
+							...prev,
+							[field.key]: value,
+						}))
 					}
 					// Looking for calculated values and setting them to calculatedValuesConfig
 					if (field.valueType === 'calculated') {
@@ -184,7 +188,7 @@ export const CommonForm = (props: CommonFormProps) => {
 					<Fragment key={group.type + i}>
 						{group.type === 'normal-group' ? (
 							<div
-								className={cn('grid grid-cols-2 gap-x-2 gap-y-3', group.className)}>
+								className={cn('grid grid-cols-1 sm:grid-cols-2 px-1 gap-x-2 gap-y-3', group.className)}>
 								<FormGroup
 									fields={group.fields}
 									form={form}
@@ -207,7 +211,7 @@ export const CommonForm = (props: CommonFormProps) => {
 											wrapper: group.classNames?.wrapper,
 											trigger: group.classNames?.trigger,
 											content: cn(
-												'grid grid-cols-2 gap-x-2 gap-y-3',
+												'grid grid-cols-1 sm:grid-cols-2 px-1 gap-x-2 gap-y-3',
 												group.classNames?.content,
 											),
 										},
