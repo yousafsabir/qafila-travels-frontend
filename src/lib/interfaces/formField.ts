@@ -15,21 +15,20 @@ type CalculatedValue = {
 	calculationType: 'arithmetic' | 'string-interpolated'
 	/**
 	 * @description Expression that would be resolved in calculation
-	 * 
+	 *
 	 * @example
 	 * Arithmetic Expression would be something: "var_1 + var_2 / (var_3 * var_4)"
 	 * While String interpolated one would be something like: "var_1 var_2"
-	 * 
+	 *
 	 * @see Note: Be careful while specifying variable keys in the expression, because
 	 * they can't be validated in any way. This would cause unexpected results
 	 */
 	expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
-
 }
 
 type CommonInputData<T> = {
 	/**
-	 * @description text of the label of the input field 
+	 * @description text of the label of the input field
 	 */
 	label: string
 	/**
@@ -37,7 +36,7 @@ type CommonInputData<T> = {
 	 */
 	key: keyof T
 	/**
-	 * @description to set an input's default value. mainly used for editing 
+	 * @description to set an input's default value. mainly used for editing
 	 */
 	defaultValue: string
 	/**
@@ -75,7 +74,13 @@ type ISelectField<T> = CommonInputData<T> & {
 	}
 }
 
+type ISubHeading = {
+	type: 'heading'
+	heading: string
+	className?: string
+}
+
 /**
  * @description Common Form Field Type
  */
-export type IFormField<T> = ITextInputField<T> | ISelectField<T>
+export type IFormField<T> = ITextInputField<T> | ISelectField<T> | ISubHeading
