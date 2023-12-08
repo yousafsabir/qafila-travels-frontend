@@ -83,7 +83,7 @@ export const CommonForm = (props: CommonFormProps) => {
 						if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
 							value = fechaDateFormat(new Date(), 'YYYY-MM-DD')
 						} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
-							value = genRandString(12)
+							value = genRandString()
 						}
 						field.defaultValue = value
 						setDefaultValues((prev) => ({
