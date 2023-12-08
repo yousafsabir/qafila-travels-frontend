@@ -175,7 +175,6 @@ export const CommonForm = (props: CommonFormProps) => {
 					let filteredObj: Record<string, any> = {}
 					Object.entries(values).forEach(([key, value]) => {
 						if (value !== NO_VALUE && (value || typeof value === 'boolean')) {
-							// TODO: below logic should be this: defaultValues[key] && defaultValues[key] !== value but reducing it due to current backend
 							if (defaultValues[key] !== value) {
 								filteredObj[key] = value
 							}
