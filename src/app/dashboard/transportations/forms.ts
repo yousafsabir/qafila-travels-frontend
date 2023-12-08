@@ -1,27 +1,46 @@
 import * as z from 'zod'
 
-import { ExtendedForm } from '@/lib/interfaces'
+import { type ExtendedForm, type DefaultValueTypes } from '@/lib/interfaces'
 import { Transportation } from './interfaces'
 
 export const createTransportationForm: ExtendedForm<Transportation> = [
 	{
-		type: 'normal-group',
+		type: 'accordion',
+		heading: 'Registration',
 		fields: [
 			{
-				type: 'heading',
-				heading: 'Registration',
-				className: 'mt-0',
+				label: 'Sr. No',
+				key: 'sr_no',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '_uid_' as DefaultValueTypes,
+				placeholder: '',
+				validation: z.string().min(1, 'Sr. No'),
+			},
+			{
+				label: 'Invoice Number',
+				key: 'invoice_number',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '_uid_' as DefaultValueTypes,
+				placeholder: '',
+				validation: z.string().min(1, 'Invoice Number'),
 			},
 			{
 				label: 'Date of Entry',
 				key: 'date_of_entry',
 				type: 'date',
 				valueType: 'normal',
-				defaultValue: '',
+				defaultValue: '_current_date_' as DefaultValueTypes,
 				placeholder: '',
 				validation: z.string().min(1, 'Date of Entry is required'),
 			},
-			{ type: 'heading', heading: 'Booking' },
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Booking',
+		fields: [
 			{
 				label: 'Vehicle Type',
 				key: 'vehicle_type',
@@ -109,10 +128,12 @@ export const createTransportationForm: ExtendedForm<Transportation> = [
 					.min(1, `Vendor Invoice Number is required`)
 					.transform((a) => Number(a)),
 			},
-			{
-				type: 'heading',
-				heading: 'Client',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Client',
+		fields: [
 			{
 				label: 'Client Name',
 				key: 'client_name',
@@ -170,10 +191,12 @@ export const createTransportationForm: ExtendedForm<Transportation> = [
 					.min(1, `Total Sale is required`)
 					.transform((a) => Number(a)),
 			},
-			{
-				type: 'heading',
-				heading: 'Commission',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Commission',
+		fields: [
 			{
 				label: 'Profit',
 				key: 'profit',
@@ -186,10 +209,12 @@ export const createTransportationForm: ExtendedForm<Transportation> = [
 					.min(1, `Profit is required`)
 					.transform((a) => Number(a)),
 			},
-			{
-				type: 'heading',
-				heading: 'Other Fields',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Other Fields',
+		fields: [
 			{
 				label: 'No Of Pax',
 				key: 'no_of_pax',
@@ -308,7 +333,8 @@ export const searchTransportationForm: ExtendedForm<Transportation> = [
 
 export const updateTransportationForm: ExtendedForm<Transportation> = [
 	{
-		type: 'normal-group',
+		type: 'accordion',
+		heading: 'Registration',
 		fields: [
 			{
 				label: 'Date of Entry',
@@ -317,8 +343,14 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, 'Date of Entry is required').optional(),
+				validation: z.string().min(1, 'Date of Entry is required'),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Booking',
+		fields: [
 			{
 				label: 'Vehicle Type',
 				key: 'vehicle_type',
@@ -326,7 +358,7 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Vehicle Type is required`).optional(),
+				validation: z.string().min(1, `Vehicle Type is required`),
 			},
 			{
 				label: 'Arrival Time',
@@ -335,7 +367,7 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Arrival Time is required`).optional(),
+				validation: z.string().min(1, `Arrival Time is required`),
 			},
 			{
 				label: 'Trip Segments',
@@ -344,7 +376,7 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Trip Segments is required`).optional(),
+				validation: z.string().min(1, `Trip Segments is required`),
 			},
 			{
 				label: 'way',
@@ -353,20 +385,20 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Way is required`).optional(),
+				validation: z.string().min(1, `Way is required`),
 			},
 			{
-				label: 'No Of Pax',
-				key: 'no_of_pax',
-				type: 'number',
+				type: 'heading',
+				heading: 'Vendor Details',
+			},
+			{
+				label: 'Vendor Name',
+				key: 'vendor_name',
+				type: 'text',
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `No of Pax is required`)
-					.transform((a) => Number(a))
-					.optional(),
+				validation: z.string().min(1, `Vendor Name is required`),
 			},
 			{
 				label: 'Cost Per Segment',
@@ -378,21 +410,7 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				validation: z
 					.string()
 					.min(1, `Cost Per Segment is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Sale Per Segment',
-				key: 'sale_per_segment',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Sale Per Segment is required`)
-					.transform((a) => Number(a))
-					.optional(),
+					.transform((a) => Number(a)),
 			},
 			{
 				label: 'Total Cost',
@@ -406,69 +424,7 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				validation: z
 					.string()
 					.min(1, `Total Cost is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'VAT (%)',
-				key: 'vat',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `VAT (%) is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Municipality Fee (%)',
-				key: 'municipality_fee',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Municipality Fee (%) is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Total Sale',
-				key: 'total_sale',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Total Sale is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Profit',
-				key: 'profit',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Profit is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Vendor Name',
-				key: 'vendor_name',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Vendor Name is required`).optional(),
+					.transform((a) => Number(a)),
 			},
 			{
 				label: 'Vendor Invoice Number',
@@ -480,9 +436,14 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				validation: z
 					.string()
 					.min(1, `Vendor Invoice Number is required`)
-					.transform((a) => Number(a))
-					.optional(),
+					.transform((a) => Number(a)),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Client',
+		fields: [
 			{
 				label: 'Client Name',
 				key: 'client_name',
@@ -490,16 +451,73 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Client Name is required`).optional(),
+				validation: z.string().min(1, `Client Name is required`),
 			},
 			{
-				label: 'Reservation Status',
-				key: 'reservation_status',
-				type: 'text',
+				label: 'Sale Per Segment',
+				key: 'sale_per_segment',
+				type: 'number',
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Reservation Status is required`).optional(),
+				validation: z
+					.string()
+					.min(1, `Sale Per Segment is required`)
+					.transform((a) => Number(a)),
+			},
+			{
+				label: 'VAT (%)',
+				key: 'vat',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `VAT (%) is required`)
+					.transform((a) => Number(a)),
+			},
+			{
+				label: 'Municipality Fee (%)',
+				key: 'municipality_fee',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Municipality Fee (%) is required`)
+					.transform((a) => Number(a)),
+			},
+			{
+				label: 'Total Sale',
+				key: 'total_sale',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Total Sale is required`)
+					.transform((a) => Number(a)),
+			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Commission',
+		fields: [
+			{
+				label: 'Profit',
+				key: 'profit',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Profit is required`)
+					.transform((a) => Number(a)),
 			},
 		],
 	},

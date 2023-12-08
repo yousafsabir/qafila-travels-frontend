@@ -1,29 +1,46 @@
 import * as z from 'zod'
 
-import { ExtendedForm } from '@/lib/interfaces'
+import { type ExtendedForm, type DefaultValueTypes } from '@/lib/interfaces'
 import { Hotel } from './interfaces'
 
 export const createHotelForm: ExtendedForm<Hotel> = [
 	{
-		type: 'normal-group',
+		type: 'accordion',
+		heading: 'Registration',
 		fields: [
 			{
-				type: 'heading',
-				heading: 'Registration',
+				label: 'Sr. No',
+				key: 'hotel_sr_no',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '_uid_' as DefaultValueTypes,
+				placeholder: '',
+				validation: z.string().min(1, 'Sr. No'),
+			},
+			{
+				label: 'Invoice Number',
+				key: 'invoice_number',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '_uid_' as DefaultValueTypes,
+				placeholder: '',
+				validation: z.string().min(1, 'Invoice Number'),
 			},
 			{
 				label: 'Date of Entry',
 				key: 'date_of_entry',
 				type: 'date',
 				valueType: 'normal',
-				defaultValue: '',
+				defaultValue: '_current_date_' as DefaultValueTypes,
 				placeholder: '',
 				validation: z.string().min(1, 'Date of Entry is required'),
 			},
-			{
-				type: 'heading',
-				heading: 'Guest',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Guest',
+		fields: [
 			{
 				label: 'Guest Name',
 				key: 'guest_name',
@@ -111,10 +128,12 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 				placeholder: '',
 				validation: z.string().min(1, `Meal Plan is required`),
 			},
-			{
-				type: 'heading',
-				heading: 'Vendor Details',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Vendor Details',
+		fields: [
 			{
 				label: 'Vendor Name',
 				key: 'vendor_name',
@@ -171,10 +190,12 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 					.min(1, `Vendor Invoice Number is required`)
 					.transform((a) => Number(a)),
 			},
-			{
-				type: 'heading',
-				heading: 'Client',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Client',
+		fields: [
 			{
 				label: 'Client Name',
 				key: 'client_name',
@@ -232,10 +253,12 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 					.min(1, `Total Sales is required`)
 					.transform((a) => Number(a)),
 			},
-			{
-				type: 'heading',
-				heading: 'Commission',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Commission',
+		fields: [
 			{
 				label: 'Profit',
 				key: 'profit',
@@ -248,10 +271,12 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 					.min(1, `Profit is required`)
 					.transform((a) => Number(a)),
 			},
-			{
-				type: 'heading',
-				heading: 'Other Fields',
-			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Other Fields',
+		fields: [
 			{
 				label: 'Reservation Status',
 				key: 'reservation_status',
@@ -370,7 +395,8 @@ export const searchHotelForm: ExtendedForm<Hotel> = [
 
 export const updateHotelForm: ExtendedForm<Hotel> = [
 	{
-		type: 'normal-group',
+		type: 'accordion',
+		heading: 'Registration',
 		fields: [
 			{
 				label: 'Date of Entry',
@@ -381,6 +407,12 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 				placeholder: '',
 				validation: z.string().min(1, 'Date of Entry is required').optional(),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Guest',
+		fields: [
 			{
 				label: 'Guest Name',
 				key: 'guest_name',
@@ -422,6 +454,24 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 					.optional(),
 			},
 			{
+				label: 'Room Type',
+				key: 'room_type',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().min(1, `Room Type is required`).optional(),
+			},
+			{
+				label: 'Room View',
+				key: 'view',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().min(1, `View is required`).optional(),
+			},
+			{
 				label: 'Number of Rooms',
 				key: 'no_of_rooms',
 				type: 'number',
@@ -435,22 +485,13 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 					.optional(),
 			},
 			{
-				label: 'Room Type',
-				key: 'room_type',
+				label: 'Hotel Name',
+				key: 'hotel_name',
 				type: 'text',
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Room Type is required`).optional(),
-			},
-			{
-				label: 'View',
-				key: 'view',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `View is required`).optional(),
+				validation: z.string().min(1, `Hotel Name is required`).optional(),
 			},
 			{
 				label: 'Meal Plan',
@@ -461,14 +502,20 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 				placeholder: '',
 				validation: z.string().min(1, `Meal Plan is required`).optional(),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Vendor Details',
+		fields: [
 			{
-				label: 'Hotel Name',
-				key: 'hotel_name',
+				label: 'Vendor Name',
+				key: 'vendor_name',
 				type: 'text',
 				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
-				validation: z.string().min(1, `Hotel Name is required`).optional(),
+				validation: z.string().min(1, `Vendor Name is required`).optional(),
 			},
 			{
 				label: 'Cost Per Night',
@@ -484,6 +531,58 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 					.optional(),
 			},
 			{
+				label: 'Total Cost',
+				key: 'total_cost',
+				type: 'number',
+				valueType: 'calculated',
+				calculationType: 'arithmetic',
+				expression: 'no_of_rooms * cost_per_night * number_of_nights',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Total Cost is required`)
+					.transform((a) => Number(a))
+					.optional(),
+			},
+			{
+				label: 'HCN Number',
+				key: 'hcn_number',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().optional().optional(),
+			},
+			{
+				label: 'Vendor Invoice Number',
+				key: 'vendor_invoice',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Vendor Invoice Number is required`)
+					.transform((a) => Number(a))
+					.optional(),
+			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Client',
+		fields: [
+			{
+				label: 'Client Name',
+				key: 'client_name',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().min(1, `Client Name is required`).optional(),
+			},
+			{
 				label: 'Sales Per Night',
 				key: 'sales_per_night',
 				type: 'number',
@@ -497,24 +596,11 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 					.optional(),
 			},
 			{
-				label: 'Total Cost',
-				key: 'total_cost',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Total Cost is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
 				label: 'VAT (%)',
 				key: 'vat',
 				type: 'number',
 				valueType: 'normal',
-				defaultValue: '',
+				defaultValue: '0',
 				placeholder: '',
 				validation: z
 					.string()
@@ -527,7 +613,7 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 				key: 'municipality_fee',
 				type: 'number',
 				valueType: 'normal',
-				defaultValue: '',
+				defaultValue: '0',
 				placeholder: '',
 				validation: z
 					.string()
@@ -548,6 +634,12 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 					.transform((a) => Number(a))
 					.optional(),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Commission',
+		fields: [
 			{
 				label: 'Profit',
 				key: 'profit',
@@ -559,86 +651,6 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 					.string()
 					.min(1, `Profit is required`)
 					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Vendor Name',
-				key: 'vendor_name',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Vendor Name is required`).optional(),
-			},
-			{
-				label: 'Vendor Invoice Number',
-				key: 'vendor_invoice',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Vendor Invoice Number is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Client Name',
-				key: 'client_name',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Client Name is required`).optional(),
-			},
-			{
-				label: 'HCN Number',
-				key: 'hcn_number',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `HCN Number is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Reservation Status',
-				key: 'reservation_status',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Reservation Status is required`).optional(),
-			},
-			{
-				label: 'Finance Status',
-				key: 'finance_status',
-				type: 'select',
-				values: [
-					{
-						label: 'Checked',
-						value: 'checked',
-					},
-					{
-						label: 'Issue',
-						value: 'issue',
-					},
-					{
-						label: 'Un-checked',
-						value: 'unchecked',
-					},
-				],
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.enum(['checked', 'issue', 'unchecked'], {
-						required_error: 'Finance Status is required',
-					})
 					.optional(),
 			},
 		],
