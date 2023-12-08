@@ -9,13 +9,13 @@ export const createUmrahForm: ExtendedForm<Umrah> = [
 		heading: 'Registration',
 		fields: [
 			{
-				label: 'Date of Entry',
-				key: 'date_of_entry',
-				type: 'date',
+				label: 'Sr. No',
+				key: 'umrah_sr_no',
+				type: 'text',
 				valueType: 'normal',
-				defaultValue: '_current_date_' as DefaultValueTypes,
+				defaultValue: '_uid_' as DefaultValueTypes,
 				placeholder: '',
-				validation: z.string().min(1, 'Date of Entry is required'),
+				validation: z.string().min(1, 'Sr. No'),
 			},
 			{
 				label: 'Invoice Number',
@@ -25,6 +25,15 @@ export const createUmrahForm: ExtendedForm<Umrah> = [
 				defaultValue: '_uid_' as DefaultValueTypes,
 				placeholder: '',
 				validation: z.string().min(1, 'Invoice Number'),
+			},
+			{
+				label: 'Date of Entry',
+				key: 'date_of_entry',
+				type: 'date',
+				valueType: 'normal',
+				defaultValue: '_current_date_' as DefaultValueTypes,
+				placeholder: '',
+				validation: z.string().min(1, 'Date of Entry is required'),
 			},
 		],
 	},
@@ -259,17 +268,9 @@ export const searchUmrahForm: ExtendedForm<Umrah> = [
 
 export const updateUmrahForm: ExtendedForm<Umrah> = [
 	{
-		type: 'normal-group',
+		type: 'accordion',
+		heading: 'Visa',
 		fields: [
-			{
-				label: 'Date of Entry',
-				key: 'date_of_entry',
-				type: 'date',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, 'Date of Entry is required').optional(),
-			},
 			{
 				label: 'Guest Name',
 				key: 'guest_name',
@@ -292,6 +293,21 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 					.transform((a) => Number(a))
 					.optional(),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Vendor Details',
+		fields: [
+			{
+				label: 'Vendor Name',
+				key: 'vendor_name',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().min(1, `Vendor Name is required`).optional(),
+			},
 			{
 				label: 'Cost Per Visa',
 				key: 'cost_per_visa',
@@ -302,19 +318,6 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 				validation: z
 					.string()
 					.min(1, `Cost Per Visa is required`)
-					.transform((a) => Number(a))
-					.optional(),
-			},
-			{
-				label: 'Sale Per Visa',
-				key: 'sale_per_visa',
-				type: 'number',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z
-					.string()
-					.min(1, `Sale Per Visa is required`)
 					.transform((a) => Number(a))
 					.optional(),
 			},
@@ -332,11 +335,48 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 					.optional(),
 			},
 			{
+				label: 'Group Id',
+				key: 'group_id',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().min(1, `Vendor Invoice Number is required`).optional(),
+			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Client',
+		fields: [
+			{
+				label: 'Client Name',
+				key: 'client_name',
+				type: 'text',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z.string().min(1, `Client Name is required`).optional(),
+			},
+			{
+				label: 'Sale Per Visa',
+				key: 'sale_per_visa',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Sale Per Visa is required`)
+					.transform((a) => Number(a))
+					.optional(),
+			},
+			{
 				label: 'VAT (%)',
 				key: 'vat',
 				type: 'number',
 				valueType: 'normal',
-				defaultValue: '',
+				defaultValue: '0',
 				placeholder: '',
 				validation: z
 					.string()
@@ -349,7 +389,7 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 				key: 'municipality_fee',
 				type: 'number',
 				valueType: 'normal',
-				defaultValue: '',
+				defaultValue: '0',
 				placeholder: '',
 				validation: z
 					.string()
@@ -370,6 +410,12 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 					.transform((a) => Number(a))
 					.optional(),
 			},
+		],
+	},
+	{
+		type: 'accordion',
+		heading: 'Commission',
+		fields: [
 			{
 				label: 'Profit',
 				key: 'profit',
@@ -382,33 +428,6 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 					.min(1, `Profit is required`)
 					.transform((a) => Number(a))
 					.optional(),
-			},
-			{
-				label: 'Vendor Name',
-				key: 'vendor_name',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Vendor Name is required`).optional(),
-			},
-			{
-				label: 'Group Id',
-				key: 'group_id',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Vendor Invoice Number is required`).optional(),
-			},
-			{
-				label: 'Client Name',
-				key: 'client_name',
-				type: 'text',
-				valueType: 'normal',
-				defaultValue: '',
-				placeholder: '',
-				validation: z.string().min(1, `Client Name is required`).optional(),
 			},
 		],
 	},
