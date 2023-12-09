@@ -113,7 +113,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 				setPage={searchQuery.setPage}
 				setLimit={searchQuery.setLimit}
 			/>
-			<CommonModal ref={formRef} className='sm:min-w-[510px]'>
+			<CommonModal ref={formRef} className='sm:min-w-[510px] lg:min-w-[800px]'>
 				<CommonForm
 					type='modal'
 					defaultObj={detailTransportation}
