@@ -187,7 +187,7 @@ export const CommonForm = (props: CommonFormProps) => {
 					<Fragment key={group.type + i}>
 						{group.type === 'normal-group' ? (
 							<div
-								className={cn('grid grid-cols-1 sm:grid-cols-2 px-1 gap-x-2 gap-y-3', group.className)}>
+								className={cn('grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 px-1 gap-x-2 gap-y-3', group.className)}>
 								<FormGroup
 									fields={group.fields}
 									form={form}
@@ -210,7 +210,7 @@ export const CommonForm = (props: CommonFormProps) => {
 											wrapper: group.classNames?.wrapper,
 											trigger: group.classNames?.trigger,
 											content: cn(
-												'grid grid-cols-1 sm:grid-cols-2 px-1 gap-x-2 gap-y-3',
+												'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-1 gap-x-2 gap-y-3',
 												group.classNames?.content,
 											),
 										},
