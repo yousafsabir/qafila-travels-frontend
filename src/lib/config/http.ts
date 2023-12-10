@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
 import { env } from './env'
 import { HttpError } from '@/lib/interfaces'
@@ -14,29 +14,28 @@ class Http {
 		type: 'get' | 'post' | 'put' | 'patch' | 'delete',
 		url: string,
 		data?: any | undefined,
+		config?: AxiosRequestConfig,
 	): Promise<T & HttpError> {
-		if (['get'].includes(type)) {
-			return (await httpClient.get(url)).data as Promise<T & HttpError>
-		} else if (type === 'delete') {
-			return (await httpClient.delete(url, { data })).data as Promise<T & HttpError>
+		if (['get', 'delete'].includes(type)) {
+			return (await httpClient[type](url, config)).data as Promise<T & HttpError>
 		}
-		return (await httpClient[type](url, data)).data as Promise<T & HttpError>
+		return (await httpClient[type](url, data, config)).data as Promise<T & HttpError>
 	}
 
-	get<T>(url: string) {
-		return this.send<T>('get', url)
+	get<T>(url: string, config?: AxiosRequestConfig) {
+		return this.send<T>('get', url, {}, config)
 	}
-	post<T>(url: string, data: any) {
-		return this.send<T>('post', url, data)
+	post<T>(url: string, data: any, config?: AxiosRequestConfig) {
+		return this.send<T>('post', url, data, config)
 	}
-	put<T>(url: string, data: any) {
-		return this.send<T>('put', url, data)
+	put<T>(url: string, data: any, config?: AxiosRequestConfig) {
+		return this.send<T>('put', url, data, config)
 	}
-	patch<T>(url: string, data: any) {
-		return this.send<T>('patch', url, data)
+	patch<T>(url: string, data: any, config?: AxiosRequestConfig) {
+		return this.send<T>('patch', url, data, config)
 	}
-	delete<T>(url: string, data?: any) {
-		return this.send<T>('delete', url, data)
+	delete<T>(url: string, config?: AxiosRequestConfig) {
+		return this.send<T>('delete', url, {}, config)
 	}
 }
 
