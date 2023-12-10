@@ -1,13 +1,14 @@
 import { http } from '@/lib/config'
 import { apiUrls } from '@/lib/apis'
 import { Hotel, GetHotelsResponse, GetHotelResponse, CreateHotel } from './interfaces'
+import { HttpCommonResponse } from '@/lib/interfaces'
 
 export function createHotel(data: CreateHotel) {
 	return http.post<any>(apiUrls.hotels.create, data)
 }
 
 export function deleteHotels(ids: string[]) {
-	return http.delete<any>(apiUrls.hotels.deleteMultiple, { ids })
+	return http.delete<any>(apiUrls.hotels.deleteMultiple, { data: ids })
 }
 
 export function getHotel(hotelId: string) {

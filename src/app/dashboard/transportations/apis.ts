@@ -1,5 +1,6 @@
 import { http } from '@/lib/config'
 import { apiUrls } from '@/lib/apis'
+import { HttpCommonResponse } from '@/lib/interfaces'
 import {
 	GetTransportationsResponse,
 	GetTransportationResponse,
@@ -12,7 +13,7 @@ export function createTransportation(data: CreateTransportation) {
 }
 
 export function deleteTransportations(ids: string[]) {
-	return http.delete<any>(apiUrls.transportations.deleteMultiple, { ids })
+	return http.delete<any>(apiUrls.transportations.deleteMultiple, { data: ids })
 }
 
 export function getTransportation(transportationId: string) {
@@ -29,4 +30,11 @@ export function getTransportations(searchParams?: string) {
 
 export function updateTransportation(data: UpdateTransportation) {
 	return http.put<GetTransportationResponse>(apiUrls.transportations.updateOne, data)
+}
+
+export function uploadTransportations(excel: File) {
+	const formData = new FormData().append('file', excel)
+	return http.put<HttpCommonResponse>(apiUrls.transportations.upload, formData, {
+		headers: { 'Content-Type': 'multipart/form-data' },
+	})
 }

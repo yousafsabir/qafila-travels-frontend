@@ -16,5 +16,5 @@ export function updateUser(data: User) {
 }
 
 export function deleteUsers(ids: string[]) {
-	return http.delete<TableUser[]>(apiUrls.users.deleteMultiple, { ids })
+	return http.delete<TableUser[]>(apiUrls.users.deleteMultiple, { data: ids })
 }
