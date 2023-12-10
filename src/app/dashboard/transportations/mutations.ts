@@ -7,6 +7,7 @@ import {
 	createTransportation,
 	updateTransportation,
 	deleteTransportations,
+	uploadTransportations,
 } from './apis'
 import { type Transportation, type CreateTransportation } from './interfaces'
 
@@ -48,6 +49,31 @@ export function useUpdateTransportation() {
 			toast.dismiss(loadingToast)
 			if (response.status === 200) {
 				toast.success('Transportation Updated')
+				queryClient.invalidateQueries({ queryKey: ['get_transportations'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
+	})
+}
+
+export function useUploadTransportations() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['upload_transportations'],
+		mutationFn: async (param: File) => {
+			loadingToast = toast.loading('Uploading Transportations')
+			const res = await uploadTransportations(param)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('Transportations Uploaded')
 				queryClient.invalidateQueries({ queryKey: ['get_transportations'] })
 			} else {
 				toast.error(`Error: ${response.message}`)

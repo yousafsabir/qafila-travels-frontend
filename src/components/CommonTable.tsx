@@ -38,6 +38,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import UploadData from './UploadData'
 
 export function CommonTable(props: {
 	data: any
@@ -45,6 +46,7 @@ export function CommonTable(props: {
 	onCreate: () => void
 	onEdit: (index: number) => void
 	onViewDetails: (index: number) => void
+	onUpload: (file: File) => void
 	onDeleteMany: (ids: string[]) => void
 	page: number
 	limit: number
@@ -229,6 +231,7 @@ export function CommonTable(props: {
 							return null
 						}
 					})()}
+					<UploadData onSubmit={props.onUpload} />
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant='outline'>

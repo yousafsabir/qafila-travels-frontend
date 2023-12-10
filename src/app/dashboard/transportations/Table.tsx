@@ -12,6 +12,7 @@ import {
 	useCreateTransportation,
 	useUpdateTransportation,
 	useDeleteTransportations,
+	useUploadTransportations,
 } from './mutations'
 import {
 	createTransportationForm,
@@ -25,6 +26,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 	const transportations = useGetTransportations(searchQuery.queryStr)
 	const createTransportation = useCreateTransportation()
 	const updateTransportation = useUpdateTransportation()
+	const uploadTransportations = useUploadTransportations()
 	const deleteTransportations = useDeleteTransportations()
 	const [detailTransportation, setDetailTransportation] = React.useState<Transportation | null>(
 		null,
@@ -61,6 +63,10 @@ export function TransportationsTable({ className }: { className?: string }) {
 			setDetailTransportation(transportations.data?.transportations[index] as Transportation)
 			formRef.current?.click()
 		}
+	}
+
+	const onUploadTransportations = async (file: File) => {
+		await uploadTransportations.mutateAsync(file)
 	}
 
 	const onDeleteTransportations = async (ids: string[]) => {
@@ -104,6 +110,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 					formRef?.current?.click()
 				}}
 				onEdit={onEditTransportation}
+				onUpload={onUploadTransportations}
 				onViewDetails={viewTransportationDetails}
 				onDeleteMany={onDeleteTransportations}
 				page={searchQuery.pagination.page}

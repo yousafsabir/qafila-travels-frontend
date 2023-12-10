@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { queryClient } from '@/lib/config'
-import { getHotels, createHotel, updateHotel, deleteHotels } from './apis'
+import { getHotels, createHotel, updateHotel, deleteHotels, uploadHotels } from './apis'
 import { type Hotel, type CreateHotel } from './interfaces'
 
 export function useCreateHotel() {
@@ -43,6 +43,31 @@ export function useUpdateHotel() {
 			toast.dismiss(loadingToast)
 			if (response.status === 200) {
 				toast.success('Hotel Updated')
+				queryClient.invalidateQueries({ queryKey: ['get_hotels'] })
+			} else {
+				toast.error(`Error: ${response.message}`)
+			}
+		},
+		onError: (e) => {
+			toast.dismiss(loadingToast)
+			toast.error(String(e))
+		},
+	})
+}
+
+export function useUploadHotels() {
+	let loadingToast: any
+	return useMutation({
+		mutationKey: ['upload_hotels'],
+		mutationFn: async (param: File) => {
+			loadingToast = toast.loading('Uploading Hotels')
+			const res = await uploadHotels(param)
+			return res
+		},
+		onSuccess: (response) => {
+			toast.dismiss(loadingToast)
+			if (response.status === 200) {
+				toast.success('Hotels Uploaded')
 				queryClient.invalidateQueries({ queryKey: ['get_hotels'] })
 			} else {
 				toast.error(`Error: ${response.message}`)

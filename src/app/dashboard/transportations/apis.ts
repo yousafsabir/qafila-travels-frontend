@@ -34,7 +34,7 @@ export function updateTransportation(data: UpdateTransportation) {
 
 export function uploadTransportations(excel: File) {
 	const formData = new FormData().append('file', excel)
-	return http.put<HttpCommonResponse>(apiUrls.transportations.upload, formData, {
+	return http.post<HttpCommonResponse>(apiUrls.transportations.upload, formData, {
 		headers: { 'Content-Type': 'multipart/form-data' },
 	})
 }

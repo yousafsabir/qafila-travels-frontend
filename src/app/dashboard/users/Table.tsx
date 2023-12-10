@@ -7,7 +7,13 @@ import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 import { CommonTable, CommonForm, CommonAccordion, CommonModal, ShowDetails } from '@/components'
 import { type User, type CreateUser, UserClass } from './interfaces'
-import { useCreateUser, useGetUsers, useUpdateUser, useDeleteUsers } from './mutations'
+import {
+	useCreateUser,
+	useGetUsers,
+	useUpdateUser,
+	useDeleteUsers,
+	useUploadUsers,
+} from './mutations'
 import { createUserForm, updateUserForm, searchUserForm } from './forms'
 
 export function UsersTable({ className }: { className?: string }) {
@@ -16,6 +22,7 @@ export function UsersTable({ className }: { className?: string }) {
 	const users = useGetUsers(searchQuery.queryStr)
 	const createUser = useCreateUser()
 	const updateUser = useUpdateUser()
+	const uploadUsers = useUploadUsers()
 	const deleteUsers = useDeleteUsers()
 	const [detailUser, setDetailUser] = React.useState<User | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
@@ -43,6 +50,10 @@ export function UsersTable({ className }: { className?: string }) {
 			setDetailUser(users.data.users[index] as User)
 			formRef.current?.click()
 		}
+	}
+
+	const onUploadUsers = async (file: File) => {
+		await uploadUsers.mutateAsync(file)
 	}
 
 	const onDeleteUsers = async (ids: string[]) => {
@@ -86,6 +97,7 @@ export function UsersTable({ className }: { className?: string }) {
 					formRef?.current?.click()
 				}}
 				onEdit={onEditUser}
+				onUpload={onUploadUsers}
 				onViewDetails={viewCustomerDetails}
 				onDeleteMany={onDeleteUsers}
 				page={searchQuery.pagination.page}

@@ -7,7 +7,7 @@ import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 import { CommonForm, CommonModal, ShowDetails, CommonTable, CommonAccordion } from '@/components'
 import { type Hotel, type CreateHotel, HotelClass } from './interfaces'
-import { useGetHotels, useCreateHotel, useUpdateHotel, useDeleteHotels } from './mutations'
+import { useGetHotels, useCreateHotel, useUpdateHotel, useUploadHotels, useDeleteHotels } from './mutations'
 import { createHotelForm, searchHotelForm, updateHotelForm } from './forms'
 
 export function HotelsTable({ className }: { className?: string }) {
@@ -16,6 +16,7 @@ export function HotelsTable({ className }: { className?: string }) {
 	const hotels = useGetHotels(searchQuery.queryStr)
 	const createHotel = useCreateHotel()
 	const updateHotel = useUpdateHotel()
+	const uploadHotels = useUploadHotels()
 	const deleteHotels = useDeleteHotels()
 	const [detailHotel, setDetailHotel] = React.useState<Hotel | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
@@ -45,6 +46,10 @@ export function HotelsTable({ className }: { className?: string }) {
 			setDetailHotel(hotels.data?.hotels[index] as Hotel)
 			formRef.current?.click()
 		}
+	}
+
+	const onUploadHotels = async (file: File) => {
+		await uploadHotels.mutateAsync(file)
 	}
 
 	const onDeleteHotels = async (ids: string[]) => {
@@ -88,6 +93,7 @@ export function HotelsTable({ className }: { className?: string }) {
 					formRef?.current?.click()
 				}}
 				onEdit={onEditHotel}
+				onUpload={onUploadHotels}
 				onViewDetails={viewHotelDetails}
 				onDeleteMany={onDeleteHotels}
 				page={searchQuery.pagination.page}

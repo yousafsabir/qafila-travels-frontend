@@ -7,7 +7,13 @@ import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 import { CommonForm, CommonModal, ShowDetails, CommonTable, CommonAccordion } from '@/components'
 import { type Umrah, UmrahClass } from './interfaces'
-import { useGetUmrahs, useCreateUmrah, useUpdateUmrah, useDeleteUmrahs } from './mutations'
+import {
+	useGetUmrahs,
+	useCreateUmrah,
+	useUpdateUmrah,
+	useDeleteUmrahs,
+	useUploadUmrahs,
+} from './mutations'
 import { createUmrahForm, searchUmrahForm, updateUmrahForm } from './forms'
 
 export function UmrahsTable({ className }: { className?: string }) {
@@ -16,6 +22,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 	const umrahs = useGetUmrahs()
 	const createUmrah = useCreateUmrah()
 	const updateUmrah = useUpdateUmrah()
+	const uploadUmrahs = useUploadUmrahs()
 	const deleteUmrahs = useDeleteUmrahs()
 	const [detailUmrah, setDetailUmrah] = React.useState<Umrah | null>(null)
 	const [formType, setFormType] = React.useState<'create' | 'edit'>('create')
@@ -37,6 +44,10 @@ export function UmrahsTable({ className }: { className?: string }) {
 				detailsRef.current?.click()
 			}
 		}
+	}
+
+	const onUploadUmrahs = async (file: File) => {
+		await uploadUmrahs.mutateAsync(file)
 	}
 
 	const onEditUmrah = (index: number) => {
@@ -88,6 +99,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 					formRef?.current?.click()
 				}}
 				onEdit={onEditUmrah}
+				onUpload={onUploadUmrahs}
 				onViewDetails={viewUmrahDetails}
 				onDeleteMany={onDeleteUmrahs}
 				page={searchQuery.pagination.page}

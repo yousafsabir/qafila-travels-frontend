@@ -24,3 +24,10 @@ export function getHotels(searchParams?: string) {
 export function updateHotel(data: Partial<Hotel>) {
 	return http.put<GetHotelResponse>(apiUrls.hotels.updateOne, data)
 }
+
+export function uploadHotels(excel: File) {
+	const formData = new FormData().append('file', excel)
+	return http.post<HttpCommonResponse>(apiUrls.hotels.upload, formData, {
+		headers: { 'Content-Type': 'multipart/form-data' },
+	})
+}

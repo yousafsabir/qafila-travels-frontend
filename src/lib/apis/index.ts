@@ -5,6 +5,7 @@ export const apiUrls = {
 		me: 'api/auth/get_me',
 		getAll: 'api/auth/get_users',
 		update: 'api/auth/update_user',
+		upload: 'api/auth/upload',
 		deleteMultiple: 'api/auth/delete_users',
 	},
 	hotels: {
@@ -12,6 +13,7 @@ export const apiUrls = {
 		getAll: 'hotels/get_hotels',
 		getOne: 'hotels/get_hotel_by_id',
 		deleteMultiple: 'hotels/delete_hotels',
+		upload: 'hotels/upload',
 		updateOne: 'hotels/update_hotel_by_id',
 	},
 	umrahs: {
@@ -19,6 +21,7 @@ export const apiUrls = {
 		getAll: 'umrahs',
 		getOne: 'umrahs',
 		updateOne: 'umrahs',
+		upload: 'umrahs/upload',
 		deleteMultiple: 'umrahs/delete_umrahs',
 	},
 	transportations: {
@@ -26,6 +29,7 @@ export const apiUrls = {
 		getAll: 'transportations/get_transportations',
 		getOne: 'transportations/get_transportation_by_id',
 		updateOne: 'transportations/update_transportation_by_id',
+		upload: 'transportations/upload',
 		deleteMultiple: 'transportations/delete_transportations',
 	},
 }

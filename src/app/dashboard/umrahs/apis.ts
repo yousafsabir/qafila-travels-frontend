@@ -27,7 +27,7 @@ export function updateUmrah(data: Partial<Umrah>, umrahId: string) {
 
 export function uploadUmrahs(excel: File) {
 	const formData = new FormData().append('file', excel)
-	return http.put<HttpCommonResponse>(apiUrls.umrahs.upload, formData, {
+	return http.post<HttpCommonResponse>(apiUrls.umrahs.upload, formData, {
 		headers: { 'Content-Type': 'multipart/form-data' },
 	})
 }
