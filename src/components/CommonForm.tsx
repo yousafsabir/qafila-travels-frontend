@@ -9,7 +9,7 @@ import { format as fechaDateFormat } from 'fecha'
 import { NO_VALUE } from '@/lib/config'
 import { fieldCalculation, cn, genRandString } from '@/lib/utils'
 import { type ExtendedForm, type IFormField } from '@/lib/interfaces'
-import { defaultValueTypes, DefaultValueTypes } from '@/lib/interfaces/formField'
+import { defaultValueTypes, DefaultValueTypes, textInputTypes } from '@/lib/interfaces/formField'
 import {
 	Form,
 	FormControl,
@@ -297,7 +297,7 @@ function FormGroup(props: {
 								</FormItem>
 							)}
 						/>
-					) : ['email', 'text', 'password', 'number', 'date'].includes(aField.type) ? (
+					) : textInputTypes.includes(aField.type) ? (
 						<FormField
 							control={props.form.control}
 							name={(aField as any).key}
