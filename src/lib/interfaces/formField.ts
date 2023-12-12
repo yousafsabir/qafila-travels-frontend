@@ -11,8 +11,8 @@ type CalculatedValue = {
 	/**
 	 * @description value that is calculated from other values in the same object
 	 */
-	valueType: 'calculated'
-	calculationType: 'arithmetic' | 'string-interpolated'
+	valueType: 'derived'
+	derivationType: 'arithmetic' | 'composition'
 	/**
 	 * @description Expression that would be resolved in calculation
 	 *
@@ -59,7 +59,7 @@ type CommonInputData<T> = {
 export const textInputTypes = ['text', 'email', 'password', 'date', 'number', 'file'] as const
 
 export type ITextInputField<T> = CommonInputData<T> & {
-	type: typeof textInputTypes[number]
+	type: (typeof textInputTypes)[number]
 	classNames?: {
 		wrapper?: string
 		label?: string
