@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, Fragment, useState } from 'react'
+import { useEffect, Fragment, useState, useMemo } from 'react'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -29,6 +29,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { CommonAccordion } from '.'
+import { group } from 'console'
 
 type CommonForm = {
 	type: 'form'
@@ -49,86 +50,97 @@ type CommonFormProps = {
 } & (CommonForm | CommonModalForm)
 
 export const CommonForm = (props: CommonFormProps) => {
-	let [defaultValues, setDefaultValues] = useState<Record<string, any>>({})
-	let [extendedForm, setExtendedForm] = useState<ExtendedForm<any>>([])
-	let calculatedValuesConfig: Record<string, { expression: string; dependencies: string[] }> = {}
+	const extendedForm = useMemo<ExtendedForm<any>>(
+		() =>
+			props.extendedForm.map((group) => {
+				return {
+					...group,
+					fields: group.fields.map((field) => {
+						if (field.type === 'heading') {
+							return field
+						}
+						let defaultValue = ''
+						if (props.defaultObj && props.defaultObj[field.key]) {
+							defaultValue =
+								field.type === 'date'
+									? fechaDateFormat(props.defaultObj[field.key], 'YYYY-MM-DD')
+									: String(props.defaultObj[field.key])
+						} else if (
+							defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
+						) {
+							if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
+								defaultValue = fechaDateFormat(new Date(), 'YYYY-MM-DD')
+							} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
+								defaultValue = genRandString()
+							}
+						} else if (field.defaultValue) {
+							defaultValue = field.defaultValue
+						}
 
-	useEffect(() => {
-		/**
-		 * @description `_formFields` contains fields with `defaultValue` key set to
-		 * the default value stringified in `edit` mode
-		 */
-		let _formFields = props.extendedForm.map((group) => {
-			return {
-				...group,
-				fields: group.fields.map((field) => {
-					if (field.type === 'heading') {
+						if (defaultValue) {
+							field.defaultValue = defaultValue
+						}
 						return field
+					}),
+				}
+			}),
+		[],
+	)
+	const calculatedValuesConfig = useMemo<
+		Record<string, { expression: string; dependencies: string[] }>
+	>(() => {
+		let returnVal: Record<string, { expression: string; dependencies: string[] }> = {}
+		// Looking for calculated values and setting them to calculatedValuesConfig
+		extendedForm.forEach((group) => {
+			group.fields.forEach((field) => {
+				if (field.type === 'heading') {
+					return
+				}
+				if (field.valueType === 'derived') {
+					let calculationDeps = fieldCalculation.getDependencyArray(
+						props.extendedForm,
+						field.expression.replace(/\n|\t/g, ''),
+					)
+					returnVal[field.key as string] = {
+						expression: field.expression.replace(/\n|\t/g, ''),
+						dependencies: calculationDeps,
 					}
-					if (props.defaultObj && props.defaultObj[field.key]) {
-						const value =
-							field.type === 'date'
-								? fechaDateFormat(props.defaultObj[field.key], 'YYYY-MM-DD')
-								: String(props.defaultObj[field.key])
-
-						field.defaultValue = value
-						setDefaultValues((prev) => ({
-							...prev,
-							[field.key]: value,
-						}))
-					} else if (
-						defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
-					) {
-						let value = ''
-						if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
-							value = fechaDateFormat(new Date(), 'YYYY-MM-DD')
-						} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
-							value = genRandString()
-						}
-						field.defaultValue = value
-						setDefaultValues((prev) => ({
-							...prev,
-							[field.key]: value,
-						}))
-					}
-					// Looking for calculated values and setting them to calculatedValuesConfig
-					if (field.valueType === 'calculated') {
-						let calculationDeps = fieldCalculation.getDependencyArray(
-							props.extendedForm,
-							field.expression,
-						)
-						calculatedValuesConfig[field.key as string] = {
-							expression: field.expression,
-							dependencies: calculationDeps,
-						}
-					}
-					return field
-				}),
-			}
+				}
+			})
 		})
-
-		setExtendedForm(_formFields)
+		return returnVal
 	}, [])
-
+	const defaultValues = useMemo<Record<string, any>>(() => {
+		let returnVal: Record<string, any> = {}
+		extendedForm.forEach((group) => {
+			group.fields.forEach((field) => {
+				if (field.type !== 'heading') {
+					returnVal[String(field.key)] = field.defaultValue
+				}
+			})
+		})
+		return returnVal
+	}, [extendedForm])
 	const zodSchema = extractSchemaFromField(extendedForm)
 
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
-		defaultValues: defaultValues,
-		shouldUnregister: false,
+		defaultValues,
 	})
+
+	useEffect(() => {}, [])
 
 	useEffect(() => {
 		let subscription: any
 		const handler = setTimeout(() => {
 			subscription = form.watch((data) => {
+				// console.log('data: ', data)
+				// console.log('calculatedValuesConfig: ', calculatedValuesConfig)
 				Object.entries(calculatedValuesConfig).forEach(([key, value]) => {
 					if (fieldCalculation.checkFields(data, value.dependencies)) {
-						const expression = fieldCalculation.replaceKeyWithValue(
-							data,
-							value.expression,
+						const result = String(
+							fieldCalculation.multiLineEvaluate(value.expression, data),
 						)
-						const result = String(fieldCalculation.arithmeticEvaluate(expression))
 						const prevValue = data[key]
 						if (result !== prevValue) {
 							form.setValue(key, result)
@@ -146,8 +158,6 @@ export const CommonForm = (props: CommonFormProps) => {
 	}, [form.watch])
 
 	const onCancel = () => {
-		defaultValues = {}
-
 		// Resetting Form values manually because form.reset() won't work
 		extendedForm.forEach((group) => {
 			group.fields.forEach((field) => {
@@ -187,7 +197,10 @@ export const CommonForm = (props: CommonFormProps) => {
 					<Fragment key={group.type + i}>
 						{group.type === 'normal-group' ? (
 							<div
-								className={cn('grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 px-1 gap-x-2 gap-y-3', group.className)}>
+								className={cn(
+									'grid grid-cols-1 gap-x-2 gap-y-3 px-1 sm:grid-cols-2 lg:grid-cols-3',
+									group.className,
+								)}>
 								<FormGroup
 									fields={group.fields}
 									form={form}
