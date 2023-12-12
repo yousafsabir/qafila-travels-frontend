@@ -1,6 +1,35 @@
 import { ExtendedForm } from '@/lib/interfaces'
 
 /**
+ * `multiLineEvaluate()` evaluates multi-lines arithmetic expressions separated by ";" like:
+ * @example
+ * "a = (var1 * var2 * var3) - var4; b = (var5 * a); c = (a + b) * var6; return = a + b + c"
+ *
+ * @description
+ * - **---- Rules ----*
+ * - Each line (except last) must end with semi-colon i.e. ";"
+ * - The structure of the line must be "variable = expression". These 3 elements are required
+ * - The expected return value must be named as "return" in the last line
+ *
+ * @param {string} expression
+ * @param {Record<string, any>} dataObj
+ * @returns {number}
+ */
+function multiLineEvaluate(expression: string, dataObj: Record<string, any>): number {
+	let calculations: Record<string, number> = {}
+	// Separating multiple expressions
+	let expressions = expression.replace(/\n|\t/g, '').split(';')
+	for (let str of expressions) {
+		const key = str.substring(0, str.indexOf('=')).trim()
+		let exp = str.substring(str.indexOf('=') + 1).trim()
+		exp = replaceKeyWithValue({ ...dataObj, ...calculations }, exp)
+		let res = arithmeticEvaluate(exp)
+		calculations[key] = res
+	}
+	return calculations['return'] ?? 0
+}
+
+/**
  * `arithmeticEvaluate` evaluates arithmetic expressions in the form of strings (e.g. "8 * ( 4 + 5 )")
  * @param {string} expression
  * @returns {number}
@@ -136,9 +165,9 @@ function getDependencyArray(form: ExtendedForm<any>, expression: string): string
  * @returns {boolean}
  */
 function checkFields(obj: Record<string, any>, fields: string[]): boolean {
-	for (let i = 0; i < fields.length; i++) {
-		let key = fields[i]
-		if (!obj[key]) return false
+	console.log(obj)
+	for (let field of fields) {
+		if (!obj[field]) return false
 	}
 	return true
 }
@@ -148,4 +177,5 @@ export const fieldCalculation = {
 	getDependencyArray,
 	checkFields,
 	arithmeticEvaluate,
+	multiLineEvaluate,
 }
