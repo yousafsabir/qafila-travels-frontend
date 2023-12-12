@@ -22,6 +22,7 @@ export class HotelClass {
 		public no_of_rooms: string = '',
 		public room_type: string = '',
 		public sales_per_night: string = '',
+		public discount: string = '',
 		public total_cost: string = '',
 		public total_sales: string = '',
 		public vat: string = '',
