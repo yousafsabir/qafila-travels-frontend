@@ -159,9 +159,9 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 				label: 'Total Cost',
 				key: 'total_cost',
 				type: 'number',
-				valueType: 'calculated',
-				calculationType: 'arithmetic',
-				expression: 'no_of_rooms * cost_per_night * number_of_nights',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: 'return = no_of_rooms * cost_per_night * number_of_nights',
 				defaultValue: '',
 				placeholder: '',
 				validation: z
@@ -242,10 +242,29 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 					.transform((a) => Number(a)),
 			},
 			{
+				label: 'Discount',
+				key: 'discount',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '0',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Discount is required`)
+					.transform((a) => Number(a)),
+			},
+			{
 				label: 'Total Sales',
 				key: 'total_sales',
 				type: 'number',
-				valueType: 'normal',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: `
+					a = sales_per_night * number_of_nights * no_of_rooms;
+					b = a * municipality_fee / 100;
+					c = (a + b) * vat / 100;
+					return = a + b + c
+					`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z
@@ -323,9 +342,7 @@ export const searchHotelForm: ExtendedForm<Hotel> = [
 				label: 'Total Cost',
 				key: 'total_cost',
 				type: 'number',
-				valueType: 'calculated',
-				calculationType: 'arithmetic',
-				expression: 'no_of_rooms * cost_per_night * number_of_nights',
+				valueType: 'normal',
 				defaultValue: '',
 				placeholder: '',
 				validation: z.any(),
@@ -534,9 +551,9 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 				label: 'Total Cost',
 				key: 'total_cost',
 				type: 'number',
-				valueType: 'calculated',
-				calculationType: 'arithmetic',
-				expression: 'no_of_rooms * cost_per_night * number_of_nights',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: 'return = no_of_rooms * cost_per_night * number_of_nights',
 				defaultValue: '',
 				placeholder: '',
 				validation: z
