@@ -264,7 +264,7 @@ export const createHotelForm: ExtendedForm<Hotel> = [
 					_b = _a * municipality_fee / 100;
 					_c = ( _a + _b ) * vat / 100;
 					return = _a + _b + _c
-					`,
+				`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z
@@ -642,7 +642,14 @@ export const updateHotelForm: ExtendedForm<Hotel> = [
 				label: 'Total Sales',
 				key: 'total_sales',
 				type: 'number',
-				valueType: 'normal',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: `
+					_a = sales_per_night * number_of_nights * no_of_rooms;
+					_b = _a * municipality_fee / 100;
+					_c = ( _a + _b ) * vat / 100;
+					return = _a + _b + _c
+				`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z

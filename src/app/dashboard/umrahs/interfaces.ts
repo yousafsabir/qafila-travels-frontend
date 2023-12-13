@@ -9,6 +9,7 @@ export class UmrahClass {
 		public guest_name: string = '',
 		public no_of_visas: number = 123,
 		public cost_per_visa: number = 123,
+		public discount: number = 123,
 		public sale_per_visa: number = 123,
 		public vat: number = 123,
 		public municipality_fee: number = 123,

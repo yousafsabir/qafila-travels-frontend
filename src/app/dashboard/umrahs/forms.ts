@@ -162,10 +162,29 @@ export const createUmrahForm: ExtendedForm<Umrah> = [
 					.transform((a) => Number(a)),
 			},
 			{
+				label: 'Discount (%)',
+				key: 'discount',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '0',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Discount is required`)
+					.transform((a) => Number(a)),
+			},
+			{
 				label: 'Total Sales',
 				key: 'total_sales',
 				type: 'number',
-				valueType: 'normal',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: `
+					_a = (sale_per_visa * no_of_visas) - discount / 100
+					_b = _a * municipality_fee / 100;
+					_c = ( _a + _b ) * vat / 100;
+					return = _a + _b + _c
+				`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z
@@ -401,7 +420,14 @@ export const updateUmrahForm: ExtendedForm<Umrah> = [
 				label: 'Total Sales',
 				key: 'total_sales',
 				type: 'number',
-				valueType: 'normal',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: `
+					_a = (sale_per_visa * no_of_visas) - discount / 100
+					_b = _a * municipality_fee / 100;
+					_c = ( _a + _b ) * vat / 100;
+					return = _a + _b + _c
+				`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z

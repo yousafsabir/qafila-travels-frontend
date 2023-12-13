@@ -178,10 +178,29 @@ export const createTransportationForm: ExtendedForm<Transportation> = [
 					.transform((a) => Number(a)),
 			},
 			{
+				label: 'Discount (%)',
+				key: 'discount',
+				type: 'number',
+				valueType: 'normal',
+				defaultValue: '0',
+				placeholder: '',
+				validation: z
+					.string()
+					.min(1, `Discount is required`)
+					.transform((a) => Number(a)),
+			},
+			{
 				label: 'Total Sale',
 				key: 'total_sale',
 				type: 'number',
-				valueType: 'normal',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: `
+					_a = sale_per_segment * trip_segments;
+					_b = _a * municipality_fee / 100;
+					_c = ( _a + _b ) * vat / 100;
+					return = _a + _b + _c
+				`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z
@@ -487,7 +506,14 @@ export const updateTransportationForm: ExtendedForm<Transportation> = [
 				label: 'Total Sale',
 				key: 'total_sale',
 				type: 'number',
-				valueType: 'normal',
+				valueType: 'derived',
+				derivationType: 'arithmetic',
+				expression: `
+					_a = sale_per_segment * trip_segments;
+					_b = _a * municipality_fee / 100;
+					_c = ( _a + _b ) * vat / 100;
+					return = _a + _b + _c
+				`,
 				defaultValue: '',
 				placeholder: '',
 				validation: z

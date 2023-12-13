@@ -15,6 +15,7 @@ export class TransportationClass {
 		public vat: string = '',
 		public municipality_fee: string = '',
 		public sale_per_segment: string = '',
+		public discount: string = '',
 		public total_cost: string = '',
 		public total_sale: string = '',
 		public profit: string = '',
