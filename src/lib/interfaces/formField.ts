@@ -12,19 +12,30 @@ type CalculatedValue = {
 	 * @description value that is calculated from other values in the same object
 	 */
 	valueType: 'derived'
-	derivationType: 'arithmetic' | 'composition'
-	/**
-	 * @description Expression that would be resolved in calculation
-	 *
-	 * @example
-	 * Arithmetic Expression would be something: "var_1 + var_2 / (var_3 * var_4)"
-	 * While String interpolated one would be something like: "var_1 var_2"
-	 *
-	 * @see Note: Be careful while specifying variable keys in the expression, because
-	 * they can't be validated in any way. This would cause unexpected results
-	 */
-	expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
-}
+} & (
+	| {
+			derivationType: 'arithmetic'
+			/**
+			 * @description Multi-line Arithmetic Expression that would be resolved in calculation
+			 * - **---- Rules ----*
+			 * - Each line (except last) must end with semi-colon i.e. ";"
+			 * - Name of the variable (except return) must start with an underscore i.e. "_" (to avoid conflicts with base data object's keys)
+			 * - The structure of the line must be "variable = expression". These 3 elements are required
+			 * - The expected return value must be named as "return" in the last line
+			 *
+			 */
+			expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
+	  }
+	| {
+			derivationType: 'composition'
+			/**
+			 * @description expression that would return a string of composition of variables in it.
+			 * @example
+			 * "first_name last_name" -> "Yousaf Sabir"
+			 */
+			expression: string
+	  }
+)
 
 export const defaultValueTypes = ['_current_date_', '_uid_'] as const // underscores to keep it separate from other deafult values
 
