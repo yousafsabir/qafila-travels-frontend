@@ -8,6 +8,7 @@ import { ExtendedForm } from '@/lib/interfaces'
  * @description
  * - **---- Rules ----*
  * - Each line (except last) must end with semi-colon i.e. ";"
+ * - Name of the variable (except return) must start with an underscore i.e. "_" (to avoid conflicts with base data object's keys)
  * - The structure of the line must be "variable = expression". These 3 elements are required
  * - The expected return value must be named as "return" in the last line
  *
@@ -130,7 +131,7 @@ function arithmeticEvaluate(expression: string): number {
  */
 function replaceKeyWithValue(obj: Record<string, any>, expression: string): string {
 	Object.entries(obj).forEach(([key, value]) => {
-		if (expression.includes(key) && value) {
+		if (expression.includes(key)) {
 			expression = expression.replace(key, value)
 		}
 	})
@@ -165,7 +166,6 @@ function getDependencyArray(form: ExtendedForm<any>, expression: string): string
  * @returns {boolean}
  */
 function checkFields(obj: Record<string, any>, fields: string[]): boolean {
-	console.log(obj)
 	for (let field of fields) {
 		if (!obj[field]) return false
 	}
