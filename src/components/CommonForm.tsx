@@ -29,7 +29,6 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { CommonAccordion } from '.'
-import { group } from 'console'
 
 type CommonForm = {
 	type: 'form'
@@ -134,8 +133,6 @@ export const CommonForm = (props: CommonFormProps) => {
 		let subscription: any
 		const handler = setTimeout(() => {
 			subscription = form.watch((data) => {
-				// console.log('data: ', data)
-				// console.log('calculatedValuesConfig: ', calculatedValuesConfig)
 				Object.entries(calculatedValuesConfig).forEach(([key, value]) => {
 					if (fieldCalculation.checkFields(data, value.dependencies)) {
 						const result = String(
