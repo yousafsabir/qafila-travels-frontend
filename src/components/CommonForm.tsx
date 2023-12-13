@@ -62,7 +62,10 @@ export const CommonForm = (props: CommonFormProps) => {
 						if (props.defaultObj && props.defaultObj[field.key]) {
 							defaultValue =
 								field.type === 'date'
-									? fechaDateFormat(props.defaultObj[field.key], 'YYYY-MM-DD')
+									? fechaDateFormat(
+											new Date(props.defaultObj[field.key]),
+											'YYYY-MM-DD',
+									  )
 									: String(props.defaultObj[field.key])
 						} else if (
 							defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
