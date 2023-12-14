@@ -273,14 +273,7 @@ function FormGroup(props: {
 										{aField.label}
 									</FormLabel>
 									<FormControl>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={
-												props.operationType === 'edit'
-													? aField.defaultValue
-													: ''
-											}
-											{...field}>
+										<Select {...field} onValueChange={field.onChange}>
 											<SelectTrigger
 												className={aField.classNames?.selectTrigger}>
 												<SelectValue
@@ -323,10 +316,9 @@ function FormGroup(props: {
 									</FormLabel>
 									<FormControl>
 										<Input
-											placeholder={aField.placeholder}
 											type={aField.type}
 											{...field}
-											defaultValue={aField.defaultValue}
+											placeholder={aField.placeholder}
 											className={aField?.classNames?.input}
 										/>
 									</FormControl>
