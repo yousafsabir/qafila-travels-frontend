@@ -40,7 +40,7 @@ import {
 import { Button } from '@/components/ui/button'
 import UploadData from './UploadData'
 
-export function CommonTable(props: {
+export type CommonTableProps = {
 	data: any
 	columns: string[]
 	onCreate: () => void
@@ -55,7 +55,11 @@ export function CommonTable(props: {
 	setPage: (page: number) => void
 	setLimit: (limit: number) => void
 	loading: boolean
-}) {
+}
+
+export type TableMeta = Pick<CommonTableProps, 'onEdit'>
+
+export function CommonTable(props: CommonTableProps) {
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const initialVisibleColumns = React.useMemo(() => {
@@ -127,8 +131,10 @@ export function CommonTable(props: {
 			{
 				id: 'actions',
 				enableHiding: false,
-				cell: ({ row }) => {
+				cell: ({ row, table }) => {
 					const index = row.index
+					const meta = table.options.meta
+
 					return (
 						<>
 							<DropdownMenu>
@@ -158,7 +164,12 @@ export function CommonTable(props: {
 							<Button
 								variant='ghost'
 								className='h-8 w-8 p-0'
-								onClick={() => props.onEdit(index)}>
+								// Not using props.onEdit directly due to memoization
+								onClick={() => {
+									if (meta?.onEdit) {
+										meta.onEdit(index)
+									}
+								}}>
 								<span className='sr-only'>Edit</span>
 								<FileEdit className='h-4 w-4 text-green-500' />
 							</Button>
@@ -180,6 +191,9 @@ export function CommonTable(props: {
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
 		onRowSelectionChange: setRowSelection,
+		meta: {
+			onEdit: props.onEdit,
+		},
 		state: {
 			sorting,
 			columnFilters,
