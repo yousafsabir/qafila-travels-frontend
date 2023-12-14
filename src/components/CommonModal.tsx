@@ -5,7 +5,11 @@ import { cn } from '@/lib/utils'
 
 export const CommonModal = forwardRef<
 	HTMLButtonElement,
-	{ closeModal?: (...args: any[]) => void; children: React.ReactNode; className?: string }
+	{
+		closeModal?: (...args: any[]) => void
+		children: React.ReactNode
+		className?: string
+	}
 >((props, triggerRef) => {
 	return (
 		<>
