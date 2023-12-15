@@ -433,7 +433,7 @@ const ActionDropdown = (
 			item: (
 				<DropdownMenuItem>
 					<a
-						href={`${env.NEXT_PUBLIC_API_URL}/${props.tableKey}/invoice/${props.row.original._id}`}
+						href={`${env.NEXT_PUBLIC_API_URL}/invoice/${props.tableKey}/${props.row.original._id}`}
 						target='_blank'>
 						Create Invoice & Voucher
 					</a>
