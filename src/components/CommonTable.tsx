@@ -12,12 +12,13 @@ import {
 	getFilteredRowModel,
 	getSortedRowModel,
 	useReactTable,
+	type CellContext,
 } from '@tanstack/react-table'
 import Loading from 'react-loading'
 import { ChevronRight, ChevronsRight, ChevronLeft, ChevronsLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-import { PAGINATION_LIMIT } from '@/lib/config'
+import { PAGINATION_LIMIT, env } from '@/lib/config'
 import { snakeCaseToNormal, copyObjectToClipBoard } from '@/lib/utils'
 import {
 	DropdownMenu,
@@ -40,9 +41,18 @@ import {
 import { Button } from '@/components/ui/button'
 import UploadData from './UploadData'
 
+const commonTableRowActions = [
+	'view_details',
+	'copy_details',
+	'duplicate',
+	'create_invoice',
+] as const
+
 export type CommonTableProps = {
+	tableKey: string
 	data: any
 	columns: string[]
+	hideRowActions?: (typeof commonTableRowActions)[number][]
 	onCreate: () => void
 	onEdit: (index: number) => void
 	onViewDetails: (index: number) => void
@@ -147,18 +157,12 @@ export function CommonTable(props: CommonTableProps) {
 								<DropdownMenuContent align='end'>
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem onClick={() => props.onViewDetails(index)}>
-										View Details
-									</DropdownMenuItem>
-									<DropdownMenuItem>Duplicate</DropdownMenuItem>
-									<DropdownMenuItem
-										onClick={() => {
-											copyObjectToClipBoard(row.original)
-											toast.success('Copied Details')
-										}}>
-										Copy Details as Text
-									</DropdownMenuItem>
-									<DropdownMenuItem>Create Invoice & Voucher</DropdownMenuItem>
+									<ActionDropdown
+										row={row}
+										hideRowActions={props.hideRowActions}
+										onViewDetails={props.onViewDetails}
+										tableKey={props.tableKey}
+									/>
 								</DropdownMenuContent>
 							</DropdownMenu>
 							<Button
@@ -388,6 +392,65 @@ export function CommonTable(props: CommonTableProps) {
 					</Button>
 				</div>
 			</div>
+		</>
+	)
+}
+
+const ActionDropdown = (
+	props: Pick<CommonTableProps, 'hideRowActions' | 'onViewDetails' | 'tableKey'> &
+		Pick<CellContext<any, any>, 'row'>,
+) => {
+	const dropdownItems: Array<{
+		key: (typeof commonTableRowActions)[number]
+		item: React.ReactNode
+	}> = [
+		{
+			key: 'view_details',
+			item: (
+				<DropdownMenuItem onClick={() => props.onViewDetails(props.row.index)}>
+					View Details
+				</DropdownMenuItem>
+			),
+		},
+		{
+			key: 'copy_details',
+			item: (
+				<DropdownMenuItem
+					onClick={() => {
+						copyObjectToClipBoard(props.row.original)
+						toast.success('Copied Details')
+					}}>
+					Copy Details as Text
+				</DropdownMenuItem>
+			),
+		},
+		{
+			key: 'duplicate',
+			item: <DropdownMenuItem>Duplicate</DropdownMenuItem>,
+		},
+		{
+			key: 'create_invoice',
+			item: (
+				<DropdownMenuItem>
+					<a
+						href={`${env.NEXT_PUBLIC_API_URL}/${props.tableKey}/invoice/${props.row.original._id}`}
+						target='_blank'>
+						Create Invoice & Voucher
+					</a>
+				</DropdownMenuItem>
+			),
+		},
+	]
+
+	return (
+		<>
+			{dropdownItems.map((item) => {
+				if (props.hideRowActions && props.hideRowActions.includes(item.key)) {
+					return null
+				} else {
+					return <React.Fragment key={item.key}>{item.item}</React.Fragment>
+				}
+			})}
 		</>
 	)
 }
