@@ -89,7 +89,9 @@ export function UsersTable({ className }: { className?: string }) {
 			/>
 			<hr className='bg-gray-300' />
 			<CommonTable
+				tableKey='users'
 				columns={columns}
+				hideRowActions={['create_invoice']}
 				data={users.data?.users || []}
 				loading={users.isLoading}
 				onCreate={() => {

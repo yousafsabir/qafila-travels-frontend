@@ -102,6 +102,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 			/>
 			<hr className='bg-gray-300' />
 			<CommonTable
+				tableKey='transportations'
 				columns={columns}
 				data={transportations.data?.transportations || []}
 				loading={transportations.isLoading}

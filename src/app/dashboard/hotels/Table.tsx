@@ -91,6 +91,7 @@ export function HotelsTable({ className }: { className?: string }) {
 			/>
 			<hr className='bg-gray-300' />
 			<CommonTable
+				tableKey='hotels'
 				columns={columns}
 				data={hotels.data?.hotels || []}
 				loading={hotels.isLoading}

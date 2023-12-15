@@ -91,6 +91,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 			/>
 			<hr className='bg-gray-300' />
 			<CommonTable
+				tableKey='umrahs'
 				columns={columns}
 				data={umrahs.data?.umrahs || []}
 				loading={umrahs.isLoading}
