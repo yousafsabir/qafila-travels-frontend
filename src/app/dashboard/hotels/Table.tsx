@@ -7,7 +7,13 @@ import { useSearchQuery } from '@/lib/hooks'
 import { cn } from '@/lib/utils'
 import { CommonForm, CommonModal, ShowDetails, CommonTable, CommonAccordion } from '@/components'
 import { type Hotel, type CreateHotel, HotelClass } from './interfaces'
-import { useGetHotels, useCreateHotel, useUpdateHotel, useUploadHotels, useDeleteHotels } from './mutations'
+import {
+	useGetHotels,
+	useCreateHotel,
+	useUpdateHotel,
+	useUploadHotels,
+	useDeleteHotels,
+} from './mutations'
 import { createHotelForm, searchHotelForm, updateHotelForm } from './forms'
 
 export function HotelsTable({ className }: { className?: string }) {
@@ -56,7 +62,7 @@ export function HotelsTable({ className }: { className?: string }) {
 		await deleteHotels.mutateAsync(ids)
 	}
 
-	const columns = Object.keys(new HotelClass())
+	const columns = Object.keys(new HotelClass()).filter((column) => column !== '_id')
 
 	return (
 		<div className={cn('w-full', className)}>

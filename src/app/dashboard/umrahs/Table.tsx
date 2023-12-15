@@ -62,7 +62,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 		await deleteUmrahs.mutateAsync(ids)
 	}
 
-	const columns = Object.keys(new UmrahClass())
+	const columns = Object.keys(new UmrahClass()).filter((column) => column !== '_id')
 
 	return (
 		<div className={cn('w-full', className)}>

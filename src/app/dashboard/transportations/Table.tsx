@@ -73,7 +73,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 		await deleteTransportations.mutateAsync(ids)
 	}
 
-	const columns = Object.keys(new TransportationClass())
+	const columns = Object.keys(new TransportationClass()).filter((column) => column !== '_id')
 
 	return (
 		<div className={cn('w-full', className)}>

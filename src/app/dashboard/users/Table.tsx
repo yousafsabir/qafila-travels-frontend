@@ -60,7 +60,7 @@ export function UsersTable({ className }: { className?: string }) {
 		await deleteUsers.mutateAsync(ids)
 	}
 
-	const columns = Object.keys(new UserClass())
+	const columns = Object.keys(new UserClass()).filter((column) => column !== '_id')
 
 	return (
 		<div className={cn('w-full', className)}>
