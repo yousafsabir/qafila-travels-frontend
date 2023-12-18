@@ -1,0 +1,38 @@
+import * as z from 'zod'
+
+import { IFormField } from '@/lib/interfaces'
+
+export function getFormFields<T>(
+	form: Record<keyof Omit<T, '_id'>, IFormField<T>>,
+	keys: (keyof T)[],
+	options: {
+		validation?: 'optional' | 'none'
+		calculation?: boolean
+	} = {
+		validation: undefined,
+		calculation: true,
+	},
+): IFormField<T>[] {
+	return keys.map((key) => {
+		let field = form[key as keyof Omit<T, '_id'>]
+		if (field.type === 'heading') {
+			return field
+		} else {
+			if (options.validation === 'optional') {
+				field.validation = field.validation?.optional() as never
+			} else if (options.validation === 'none') {
+				field.validation = z.any()
+			}
+		}
+		if (!options.calculation && field.valueType === 'derived') {
+			// ChanginG Derived Field to Normal
+			// @ts-ignore
+			field.valueType = 'normal'
+			// @ts-ignore
+			delete field.derivationType
+			// @ts-ignore
+			delete field.expression
+		}
+		return field
+	})
+}
