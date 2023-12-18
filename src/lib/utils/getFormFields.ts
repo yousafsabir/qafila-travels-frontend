@@ -4,7 +4,7 @@ import { IFormField } from '@/lib/interfaces'
 import { NO_VALUE } from '@/lib/config'
 
 export function getFormFields<T>(
-	form: Record<keyof Omit<T, '_id'>, IFormField<T>>,
+	form: Record<keyof Omit<T, '_id' | 'created_at' | 'updated_at'>, IFormField<T>>,
 	keys: (keyof T)[],
 	options: {
 		validation?: 'optional' | 'none'
@@ -15,7 +15,7 @@ export function getFormFields<T>(
 	},
 ): IFormField<T>[] {
 	return keys.map((key) => {
-		let field = form[key as keyof Omit<T, '_id'>]
+		let field = form[key as keyof Omit<T, '_id' | 'created_at' | 'updated_at'>]
 		if (field.type === 'heading') {
 			return field
 		} else {
