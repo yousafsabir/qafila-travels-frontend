@@ -106,7 +106,10 @@ type ISubHeading = {
  */
 export type IFormField<T> = ITextInputField<T> | ISelectField<T> | ISubHeading
 
-type FormGroup<T> = {
+/**
+ * @description contains group of type 'normal-group' & 'accordion'
+ */
+export type FormGroup<T> = {
 	fields: IFormField<T>[]
 } & (
 	| {
