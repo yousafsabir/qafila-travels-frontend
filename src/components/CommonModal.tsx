@@ -15,7 +15,9 @@ export const CommonModal = forwardRef<
 		<>
 			<Dialog>
 				<DialogTrigger ref={triggerRef} />
-				<DialogContent className={cn('w-auto p-0', props.className)}>
+				<DialogContent
+					className={cn('w-auto p-0', props.className)}
+					onPointerDownOutside={(e) => e.preventDefault()}>
 					{props.children}
 				</DialogContent>
 			</Dialog>
