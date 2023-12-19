@@ -365,7 +365,7 @@ export const searchHotelForm: ExtendedForm<Hotel> = [
 		fields: getFormFields<Hotel>(
 			hotelForm,
 			['hotel_sr_no', 'invoice_number', 'date_of_entry'],
-			{ validation: 'none', calculation: false },
+			{ validation: 'none', calculation: false, derivedDefaultValue: false },
 		),
 	},
 	{

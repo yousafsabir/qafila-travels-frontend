@@ -294,6 +294,7 @@ export const searchTransportationForm: ExtendedForm<Transportation> = [
 			{
 				validation: 'none',
 				calculation: false,
+				derivedDefaultValue: false,
 			},
 		),
 	},
