@@ -15,7 +15,7 @@ export function getFormFields<T>(
 	},
 ): IFormField<T>[] {
 	return keys.map((key) => {
-		let field = form[key as keyof Omit<T, '_id' | 'created_at' | 'updated_at'>]
+		let field = { ...form[key as keyof Omit<T, '_id' | 'created_at' | 'updated_at'>] }
 		if (field.type === 'heading') {
 			return field
 		} else {
