@@ -96,6 +96,7 @@ export function HotelsTable({ className }: { className?: string }) {
 				data={hotels.data?.hotels || []}
 				loading={hotels.isLoading}
 				onCreate={() => {
+					setDetailHotel(null)
 					setFormType('create')
 					formRef?.current?.click()
 				}}

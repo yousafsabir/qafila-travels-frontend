@@ -96,6 +96,7 @@ export function UmrahsTable({ className }: { className?: string }) {
 				data={umrahs.data?.umrahs || []}
 				loading={umrahs.isLoading}
 				onCreate={() => {
+					setDetailUmrah(null)
 					setFormType('create')
 					formRef?.current?.click()
 				}}

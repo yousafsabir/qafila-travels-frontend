@@ -95,6 +95,7 @@ export function UsersTable({ className }: { className?: string }) {
 				data={users.data?.users || []}
 				loading={users.isLoading}
 				onCreate={() => {
+					setDetailUser(null)
 					setFormType('create')
 					formRef?.current?.click()
 				}}

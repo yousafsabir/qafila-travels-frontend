@@ -107,6 +107,7 @@ export function TransportationsTable({ className }: { className?: string }) {
 				data={transportations.data?.transportations || []}
 				loading={transportations.isLoading}
 				onCreate={() => {
+					setDetailTransportation(null)
 					setFormType('create')
 					formRef?.current?.click()
 				}}
