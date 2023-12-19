@@ -49,16 +49,16 @@ type CommonFormProps = {
 } & (CommonForm | CommonModalForm)
 
 export const CommonForm = (props: CommonFormProps) => {
-	const extendedForm = useMemo<ExtendedForm<any>>(
-		() =>
-			props.extendedForm.map((group) => {
-				return {
-					...group,
-					fields: group.fields.map((field) => {
-						if (field.type === 'heading') {
-							return field
-						}
-						let defaultValue = ''
+	const extendedForm = useMemo<ExtendedForm<any>>(() => {
+		return props.extendedForm.map((group) => {
+			return {
+				...group,
+				fields: group.fields.map((field) => {
+					if (field.type === 'heading') {
+						return field
+					}
+					let defaultValue = ''
+					if (props.operationType === 'edit') {
 						if (props.defaultObj && props.defaultObj[field.key]) {
 							defaultValue =
 								field.type === 'date'
@@ -67,27 +67,27 @@ export const CommonForm = (props: CommonFormProps) => {
 											'YYYY-MM-DD',
 									  )
 									: String(props.defaultObj[field.key])
-						} else if (
-							defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
-						) {
-							if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
-								defaultValue = fechaDateFormat(new Date(), 'YYYY-MM-DD')
-							} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
-								defaultValue = genRandString()
-							}
 						} else if (field.defaultValue) {
 							defaultValue = field.defaultValue
 						}
-
-						if (defaultValue) {
-							field.defaultValue = defaultValue
+					} else if (
+						defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
+					) {
+						if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
+							defaultValue = fechaDateFormat(new Date(), 'YYYY-MM-DD')
+						} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
+							defaultValue = genRandString()
 						}
-						return field
-					}),
-				}
-			}),
-		[],
-	)
+					}
+
+					if (defaultValue) {
+						field.defaultValue = defaultValue
+					}
+					return field
+				}),
+			}
+		})
+	}, [])
 	const calculatedValuesConfig = useMemo<
 		Record<string, { expression: string; dependencies: string[] }>
 	>(() => {
@@ -128,6 +128,9 @@ export const CommonForm = (props: CommonFormProps) => {
 	const form = useForm<any>({
 		resolver: zodResolver(zodSchema),
 		defaultValues,
+		resetOptions: {
+			keepDefaultValues: false,
+		},
 	})
 
 	useEffect(() => {}, [])
@@ -158,7 +161,9 @@ export const CommonForm = (props: CommonFormProps) => {
 	}, [form.watch])
 
 	const onCancel = () => {
-		// Resetting Form values manually because form.reset() won't work
+		// Resetting Form values manually because form.reset() won't work the way it needs to be
+		// what's happening now: form.reset() resets the form to defaultValues, even though I set that to false
+		// form.reset()
 		extendedForm.forEach((group) => {
 			group.fields.forEach((field) => {
 				if (field.type === 'heading') return
@@ -169,7 +174,7 @@ export const CommonForm = (props: CommonFormProps) => {
 				}
 			})
 		})
-		form.reset()
+
 		if (props.type === 'modal') props.closeModal()
 		if (props.type === 'form') props.submitFunc({})
 	}
