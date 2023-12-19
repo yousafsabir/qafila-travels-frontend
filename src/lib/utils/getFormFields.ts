@@ -2,6 +2,7 @@ import * as z from 'zod'
 
 import { IFormField } from '@/lib/interfaces'
 import { NO_VALUE } from '@/lib/config'
+import { defaultValueTypes, type DefaultValueTypes } from '@/lib/interfaces'
 
 export function getFormFields<T>(
 	form: Record<keyof Omit<T, '_id' | 'created_at' | 'updated_at'>, IFormField<T>>,
@@ -9,9 +10,11 @@ export function getFormFields<T>(
 	options: {
 		validation?: 'optional' | 'none'
 		calculation?: boolean
+		derivedDefaultValue?: boolean
 	} = {
 		validation: undefined,
 		calculation: true,
+		derivedDefaultValue: true,
 	},
 ): IFormField<T>[] {
 	return keys.map((key) => {
@@ -41,6 +44,12 @@ export function getFormFields<T>(
 			delete field.derivationType
 			// @ts-ignore
 			delete field.expression
+		}
+		if (
+			!options.derivedDefaultValue &&
+			defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
+		) {
+			field.defaultValue = ''
 		}
 		return field
 	})
