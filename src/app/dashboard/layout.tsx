@@ -103,7 +103,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 											{route.name}
 										</CommonTooltip>
 										<span
-											className={cn('transition-all', {
+											className={cn('transition-all truncate', {
 												invisible: !sidebarToggle,
 												visible: sidebarToggle,
 											})}>
