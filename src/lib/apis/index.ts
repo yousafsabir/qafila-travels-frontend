@@ -32,4 +32,12 @@ export const apiUrls = {
 		upload: 'transportations/upload',
 		deleteMultiple: 'transportations/delete_transportations',
 	},
+	clientDetails: {
+		create: 'client_details/add_client_details',
+		getAll: 'client_details/get_all_client_details',
+		getOne: 'client_details/get_client_details_by_id',
+		deleteMultiple: 'client_details/delete_client_details_by_id',
+		upload: 'client_details/upload',
+		updateOne: 'client_details/update_client_details_by_id',
+	},
 }

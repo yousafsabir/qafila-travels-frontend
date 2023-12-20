@@ -3,7 +3,7 @@
 import { useState, useEffect, cloneElement } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { ChevronRight, LayoutDashboard, Users, Hotel, Plane, Bus } from 'lucide-react'
+import { ChevronRight, LayoutDashboard, Users, Hotel, Plane, Bus, UserRoundCog } from 'lucide-react'
 
 import useStore from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -50,6 +50,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			name: 'Transportations',
 			path: '/dashboard/transportations',
 			icon: <Bus />,
+		},
+		{
+			name: 'Client Details',
+			path: '/dashboard/client-details',
+			icon: <UserRoundCog />,
 		},
 	]
 	if (store.admin) {
