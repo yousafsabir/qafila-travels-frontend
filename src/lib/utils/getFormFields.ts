@@ -6,7 +6,7 @@ import { defaultValueTypes, type DefaultValueTypes } from '@/lib/interfaces'
 
 export function getFormFields<T>(
 	form: Record<keyof Omit<T, '_id' | 'created_at' | 'updated_at'>, IFormField<T>>,
-	keys: (keyof T)[],
+	keys: 'all' | (keyof T)[],
 	options: {
 		validation?: 'optional' | 'none'
 		calculation?: boolean
@@ -17,6 +17,10 @@ export function getFormFields<T>(
 		derivedDefaultValue: true,
 	},
 ): IFormField<T>[] {
+	if (keys === 'all') {
+		let excludedKeys = ['_id', 'created_at', 'updated_at']
+		keys = Object.keys(form).filter((key) => !excludedKeys.includes(key)) as (keyof T)[]
+	}
 	return keys.map((key) => {
 		let field = { ...form[key as keyof Omit<T, '_id' | 'created_at' | 'updated_at'>] }
 		if (field.type === 'heading') {
