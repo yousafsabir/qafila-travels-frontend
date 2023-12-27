@@ -1,3 +1,4 @@
+import { OpUnitType, QUnitType } from 'dayjs'
 import * as z from 'zod'
 
 type NormalValue = {
@@ -7,35 +8,50 @@ type NormalValue = {
 	valueType: 'normal'
 }
 
-type CalculatedValue = {
+// ------------- Calculated Types -------------
+
+type ArithmeticDerivation = {
+	derivationType: 'arithmetic'
+	/**
+	 * @description Multi-line Arithmetic Expression that would be resolved in calculation
+	 * - **---- Rules ----*
+	 * - Each line (except last) must end with semi-colon i.e. ";"
+	 * - Name of the variable (except return) must start with an underscore i.e. "_" (to avoid conflicts with base data object's keys)
+	 * - The structure of the line must be "variable = expression". These 3 elements are required
+	 * - The expected return value must be named as "return" in the last line
+	 *
+	 */
+	expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
+}
+
+type CompositionDerivation = {
+	derivationType: 'composition'
+	/**
+	 * @description expression that would return a string of composition of variables in it.
+	 * @example
+	 * "first_name last_name" -> "Yousaf Sabir"
+	 */
+	expression: string
+}
+
+type DateDiffDerivation = {
+	derivationType: 'date-diff'
+	/**
+	 * @description expression that would return difference of two dates in form of number of days/months/year. NOTE: both the values must be date values else it'd return 0
+	 * @example
+	 * "27-12-2023 *-* 24-12-2023 -> days" -> 3
+	 */
+	expression: `${string} *-* ${string} *-* ${QUnitType | OpUnitType}`
+}
+
+export type CalculatedValue = {
 	/**
 	 * @description value that is calculated from other values in the same object
 	 */
 	valueType: 'derived'
-} & (
-	| {
-			derivationType: 'arithmetic'
-			/**
-			 * @description Multi-line Arithmetic Expression that would be resolved in calculation
-			 * - **---- Rules ----*
-			 * - Each line (except last) must end with semi-colon i.e. ";"
-			 * - Name of the variable (except return) must start with an underscore i.e. "_" (to avoid conflicts with base data object's keys)
-			 * - The structure of the line must be "variable = expression". These 3 elements are required
-			 * - The expected return value must be named as "return" in the last line
-			 *
-			 */
-			expression: string // arithmetic regexp: ^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[+\-*/])(?=.*[ _]).+$
-	  }
-	| {
-			derivationType: 'composition'
-			/**
-			 * @description expression that would return a string of composition of variables in it.
-			 * @example
-			 * "first_name last_name" -> "Yousaf Sabir"
-			 */
-			expression: string
-	  }
-)
+} & (ArithmeticDerivation | CompositionDerivation | DateDiffDerivation)
+
+// --------------------------------------------
 
 export const defaultValueTypes = ['_current_date_', '_uid_'] as const // underscores to keep it separate from other deafult values
 
