@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect, Fragment, useState, useMemo } from 'react'
+import { useEffect, Fragment, useMemo } from 'react'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { format as fechaDateFormat } from 'fecha'
+import dayjs from 'dayjs'
 
 import { NO_VALUE } from '@/lib/config'
 import { fieldCalculation, cn, genRandString } from '@/lib/utils'
-import { type ExtendedForm, type IFormField } from '@/lib/interfaces'
+import { type ExtendedForm, type IFormField, type CalculatedValue } from '@/lib/interfaces'
 import { defaultValueTypes, DefaultValueTypes, textInputTypes } from '@/lib/interfaces/formField'
 import {
 	Form,
@@ -62,10 +62,7 @@ export const CommonForm = (props: CommonFormProps) => {
 						if (props.defaultObj && props.defaultObj[field.key]) {
 							defaultValue =
 								field.type === 'date'
-									? fechaDateFormat(
-											new Date(props.defaultObj[field.key]),
-											'YYYY-MM-DD',
-									  )
+									? dayjs(props.defaultObj[field.key]).format('YYYY-MM-DD')
 									: String(props.defaultObj[field.key])
 						} else if (field.defaultValue) {
 							defaultValue = field.defaultValue
@@ -74,7 +71,7 @@ export const CommonForm = (props: CommonFormProps) => {
 						defaultValueTypes.includes(field.defaultValue as DefaultValueTypes)
 					) {
 						if ((field.defaultValue as DefaultValueTypes) === '_current_date_') {
-							defaultValue = fechaDateFormat(new Date(), 'YYYY-MM-DD')
+							defaultValue = dayjs().format('YYYY-MM-DD')
 						} else if ((field.defaultValue as DefaultValueTypes) === '_uid_') {
 							defaultValue = genRandString()
 						}
@@ -89,9 +86,23 @@ export const CommonForm = (props: CommonFormProps) => {
 		})
 	}, [])
 	const calculatedValuesConfig = useMemo<
-		Record<string, { expression: string; dependencies: string[] }>
+		Record<
+			string,
+			{
+				derivationType: CalculatedValue['derivationType']
+				expression: string
+				dependencies: string[]
+			}
+		>
 	>(() => {
-		let returnVal: Record<string, { expression: string; dependencies: string[] }> = {}
+		let returnVal: Record<
+			string,
+			{
+				derivationType: CalculatedValue['derivationType']
+				expression: string
+				dependencies: string[]
+			}
+		> = {}
 		// Looking for calculated values and setting them to calculatedValuesConfig
 		extendedForm.forEach((group) => {
 			group.fields.forEach((field) => {
@@ -104,6 +115,7 @@ export const CommonForm = (props: CommonFormProps) => {
 						field.expression.replace(/\n|\t/g, ''),
 					)
 					returnVal[field.key as string] = {
+						derivationType: field.derivationType,
 						expression: field.expression.replace(/\n|\t/g, ''),
 						dependencies: calculationDeps,
 					}
@@ -141,10 +153,23 @@ export const CommonForm = (props: CommonFormProps) => {
 			subscription = form.watch((data) => {
 				Object.entries(calculatedValuesConfig).forEach(([key, value]) => {
 					if (fieldCalculation.checkFields(data, value.dependencies)) {
-						const result = String(
-							fieldCalculation.multiLineEvaluate(value.expression, data),
-						)
-						const prevValue = data[key]
+						let prevValue = String(data[key])
+						let result = ''
+						if (value.derivationType === 'arithmetic') {
+							result = fieldCalculation
+								.multiLineEvaluate(data, value.expression)
+								.toString()
+						} else if (value.derivationType === 'composition') {
+							result = fieldCalculation.replaceKeyWithValue(data, value.expression)
+						} else if (value.derivationType === 'date-diff') {
+							const valueArr = fieldCalculation
+								.replaceKeyWithValue(data, value.expression)
+								.split('*-*')
+								.map((value) => value.trim())
+							result = dayjs(valueArr[0])
+								.diff(valueArr[1], valueArr[2] as any)
+								.toString()
+						}
 						if (result !== prevValue) {
 							form.setValue(key, result)
 						}
