@@ -16,7 +16,7 @@ import { ExtendedForm } from '@/lib/interfaces'
  * @param {Record<string, any>} dataObj
  * @returns {number}
  */
-function multiLineEvaluate(expression: string, dataObj: Record<string, any>): number {
+function multiLineEvaluate(dataObj: Record<string, any>, expression: string): number {
 	let calculations: Record<string, number> = {}
 	// Separating multiple expressions
 	let expressions = expression.replace(/\n|\t/g, '').split(';')
