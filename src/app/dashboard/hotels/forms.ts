@@ -66,7 +66,9 @@ const hotelForm: Record<
 		label: 'Number Of Nights',
 		key: 'number_of_nights',
 		type: 'number',
-		valueType: 'normal',
+		valueType: 'derived',
+		derivationType: 'date-diff',
+		expression: 'check_out_date *-* check_in_date *-* day',
 		defaultValue: '',
 		placeholder: '',
 		validation: z
